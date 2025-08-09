@@ -15,35 +15,14 @@ const state = reactive({
     password: ''
 })
 
-const { $repositories } = useNuxtApp();
+const { $useCases } = useNuxtApp();
 
 async function handleLogin(event: FormSubmitEvent<Schema>) {
     event.preventDefault();
-    // const { data } = await useFetch<{ success: boolean; message: string }>('/api/auth/login', {
-    //     method: 'POST',
-    //     body: {
-    //         email: state.email,
-    //         password: state.password
-    //     },
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
-
-    // if (!data.value?.success) {
-    //     toast.add({
-    //         title: 'Login Failed',
-    //         description: data.value?.message,
-    //         color: "error",
-    //     });
-    //     return;
-    // }
-    // toast.add({
-    //     title: 'Login Success',
-    //     description: 'You have successfully logged in.',
-    //     color: "success",
-    // });
-    await $repositories.auth.login(state.email, state.password);
+    const userData = await $useCases.auth.login.execute(state.email, state.password);
+    if (userData) {
+        await $useCases.auth.setUserSession.execute({ ...userData.data, loggedInAt: new Date() });
+    }
 }
 </script>
 

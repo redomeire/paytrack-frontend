@@ -1,6 +1,6 @@
 import type { IUser } from "../../domain/entity/user";
 import AuthRepository from "../../domain/repository/authRepository";
-import type { AuthRemoteDataSourceImpl } from "../datasource/remote";
+import type { AuthRemoteDataSourceImpl } from "../datasource/authRemoteDataSource";
 
 export class AuthRepositoryImpl extends AuthRepository {
   private authRemoteDataSource: AuthRemoteDataSourceImpl;
@@ -8,7 +8,17 @@ export class AuthRepositoryImpl extends AuthRepository {
     super();
     this.authRemoteDataSource = authRemoteDataSource;
   }
-  login(email: string, password: string): Promise<string> {
+  setUserSession(sessionData: ISession): Promise<void> {
+    return this.authRemoteDataSource.setUserSession(sessionData);
+  }
+  login(
+    email: string,
+    password: string
+  ): Promise<{
+    success: boolean;
+    message: string;
+    data: { user: IUser; token: string };
+  }> {
     return this.authRemoteDataSource.login(email, password);
   }
   logout(): Promise<void> {

@@ -28,5 +28,9 @@ export default defineNuxtConfig({
       appVersion: "1.0.0",
     },
   },
-  plugins: ["~/plugins/repositories.ts"],
+  plugins: [
+    "~/plugins/api.ts",
+    "~/plugins/repositories.ts",
+    "~/plugins/useCases.ts",
+  ],
 });
