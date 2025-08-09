@@ -22,11 +22,12 @@ export default defineEventHandler(async (event) => {
   console.log("Login response:", data);
 
   if (data.success) {
+    console.log("Login successful, setting user session");
     await setUserSession(event, {
-      user: data?.user,
-      token: data?.token,
+      user: data?.data.user,
+      token: data?.data.token,
       loggedInAt: new Date(),
     });
   }
-  return { data };
+  return data;
 });

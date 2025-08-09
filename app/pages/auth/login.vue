@@ -18,7 +18,7 @@ const state = reactive({
 async function handleLogin(event: FormSubmitEvent<Schema>) {
     event.preventDefault();
     const toast = useToast();
-    const { data, error, status } = await useFetch('/api/auth/login', {
+    const { data } = await useFetch<{ success: boolean; message: string }>('/api/auth/login', {
         method: 'POST',
         body: {
             email: state.email,
@@ -28,13 +28,11 @@ async function handleLogin(event: FormSubmitEvent<Schema>) {
             'Content-Type': 'application/json'
         }
     })
-    console.log('error:', error.value);
-    console.log('data:', data.value);
-    console.log('status:', status.value);
-    if (error.value) {
+
+    if (!data.value?.success) {
         toast.add({
             title: 'Login Failed',
-            description: error.value?.data.message,
+            description: data.value?.message,
             color: "error",
         });
         return;
