@@ -28,4 +28,5 @@ export default defineNuxtConfig({
       appVersion: "1.0.0",
     },
   },
+  plugins: ["~/plugins/repositories.ts"],
 });
