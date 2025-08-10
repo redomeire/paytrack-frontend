@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import type { IUser } from '~~/lib/domain/entity/user'
 
 const schema = v.object({
     email: v.pipe(v.string(), v.email('Invalid email')),
@@ -19,9 +20,20 @@ const { $useCases } = useNuxtApp();
 
 async function handleLogin(event: FormSubmitEvent<Schema>) {
     event.preventDefault();
-    const userData = await $useCases.auth.login.execute(state);
-    if (userData) {
-        await $useCases.auth.setUserSession.execute({ ...userData.data, loggedInAt: new Date() });
+    const { data: { value } } = await $useCases.auth.login.execute({
+        payload: {
+            email: state.email,
+            password: state.password
+        },
+        options: {}
+    });
+    if (value) {
+        await $useCases.auth.setUserSession.execute(
+            {
+                token: value.data?.token as string,
+                user: value.data?.user as IUser, loggedInAt: new Date()
+            }
+        );
     }
 }
 </script>

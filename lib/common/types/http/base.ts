@@ -4,3 +4,5 @@ export interface IHttpResponse<T = unknown> {
   data?: T;
   errors?: Record<string, string[]>;
 }
+
+export type KeysOf<T> = (keyof T)[];

@@ -1,6 +1,6 @@
 import type {
+  IRegisterAsyncDataResponse,
   IRegisterRequest,
-  IRegisterResponse,
 } from "../../../common/types/http/auth/register";
 import type AuthRepository from "../../repository/authRepository";
 
@@ -9,7 +9,9 @@ export class Register {
   constructor(authRepository: AuthRepository) {
     this.authRepository = authRepository;
   }
-  async execute(request: IRegisterRequest): Promise<IRegisterResponse> {
+  async execute(
+    request: IRegisterRequest
+  ): Promise<IRegisterAsyncDataResponse> {
     return await this.authRepository.register(request);
   }
 }

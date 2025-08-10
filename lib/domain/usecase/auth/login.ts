@@ -1,6 +1,6 @@
 import type {
+  ILoginAsyncDataResponse,
   ILoginRequest,
-  ILoginResponse,
 } from "~~/lib/common/types/http/auth/login";
 import type AuthRepository from "../../repository/authRepository";
 
@@ -9,7 +9,7 @@ export class Login {
   constructor(authRepository: AuthRepository) {
     this.authRepository = authRepository;
   }
-  async execute(request: ILoginRequest): Promise<ILoginResponse> {
+  async execute(request: ILoginRequest): Promise<ILoginAsyncDataResponse> {
     return await this.authRepository.login(request);
   }
 }

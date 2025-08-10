@@ -1,13 +1,13 @@
 import type {
+  ILoginAsyncDataResponse,
   ILoginRequest,
-  ILoginResponse,
 } from "~~/lib/common/types/http/auth/login";
 import type { IUser } from "../../domain/entity/user";
 import AuthRepository from "../../domain/repository/authRepository";
 import type { AuthRemoteDataSourceImpl } from "../datasource/authRemoteDataSource";
 import type {
+  IRegisterAsyncDataResponse,
   IRegisterRequest,
-  IRegisterResponse,
 } from "~~/lib/common/types/http/auth/register";
 
 export class AuthRepositoryImpl extends AuthRepository {
@@ -19,10 +19,10 @@ export class AuthRepositoryImpl extends AuthRepository {
   setUserSession(sessionData: ISession): Promise<void> {
     return this.authRemoteDataSource.setUserSession(sessionData);
   }
-  login(request: ILoginRequest): Promise<ILoginResponse> {
+  login(request: ILoginRequest): Promise<ILoginAsyncDataResponse> {
     return this.authRemoteDataSource.login(request);
   }
-  register(request: IRegisterRequest): Promise<IRegisterResponse> {
+  register(request: IRegisterRequest): Promise<IRegisterAsyncDataResponse> {
     return this.authRemoteDataSource.register(request);
   }
   logout(): Promise<void> {

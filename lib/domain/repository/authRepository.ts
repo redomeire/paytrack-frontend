@@ -1,16 +1,18 @@
 import type {
+  ILoginAsyncDataResponse,
   ILoginRequest,
-  ILoginResponse,
 } from "~~/lib/common/types/http/auth/login";
 import type { IUser } from "../entity/user";
 import type {
+  IRegisterAsyncDataResponse,
   IRegisterRequest,
-  IRegisterResponse,
 } from "~~/lib/common/types/http/auth/register";
 abstract class AuthRepository {
-  abstract login(request: ILoginRequest): Promise<ILoginResponse>;
+  abstract login(request: ILoginRequest): Promise<ILoginAsyncDataResponse>;
   abstract setUserSession(sessionData: ISession): Promise<void>;
-  abstract register(request: IRegisterRequest): Promise<IRegisterResponse>;
+  abstract register(
+    request: IRegisterRequest
+  ): Promise<IRegisterAsyncDataResponse>;
   abstract logout(): Promise<void>;
   abstract isAuthenticated(): Promise<boolean>;
   abstract getUserInfo(): Promise<IUser>;
