@@ -1,18 +1,15 @@
 import type { $Fetch } from "ofetch";
 import type { IUser } from "../../domain/entity/user";
+import type {
+  ILoginRequest,
+  ILoginResponse,
+} from "../../common/types/http/auth/login";
 
 abstract class AuthRemoteDataSource {
-  abstract login(
-    email: string,
-    password: string
-  ): Promise<{
-    success: boolean;
-    message: string;
-    data: { user: IUser; token: string };
-  }>;
+  abstract login(request: ILoginRequest): Promise<ILoginResponse>;
   abstract setUserSession(sessionData: ISession): Promise<void>;
+  abstract register(): Promise<void>;
   abstract logout(): Promise<void>;
-  abstract isAuthenticated(): Promise<boolean>;
   abstract getUserInfo(): Promise<IUser>;
 }
 
@@ -37,26 +34,23 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     });
     console.log("Set user session response from datasource: ", response);
   }
-  async login(
-    email: string,
-    password: string
-  ): Promise<{
-    success: boolean;
-    message: string;
-    data: { user: IUser; token: string };
-  }> {
-    // Assuming the API endpoint for login is '/auth/login'
+  async login(request: ILoginRequest): Promise<ILoginResponse> {
     const response = await this.fetcher("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(request),
     });
-    console.log("Login response from datasource: ", response);
     return response;
   }
-  logout(): Promise<void> {
-    throw new Error("Method not implemented.");
+  async register(): Promise<void> {
+    const response = await this.fetcher("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        /* registration data */
+      }),
+    });
+    console.log("Register response from datasource: ", response);
   }
-  isAuthenticated(): Promise<boolean> {
+  logout(): Promise<void> {
     throw new Error("Method not implemented.");
   }
   getUserInfo(): Promise<IUser> {

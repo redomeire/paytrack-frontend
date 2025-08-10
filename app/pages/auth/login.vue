@@ -19,7 +19,7 @@ const { $useCases } = useNuxtApp();
 
 async function handleLogin(event: FormSubmitEvent<Schema>) {
     event.preventDefault();
-    const userData = await $useCases.auth.login.execute(state.email, state.password);
+    const userData = await $useCases.auth.login.execute(state);
     if (userData) {
         await $useCases.auth.setUserSession.execute({ ...userData.data, loggedInAt: new Date() });
     }

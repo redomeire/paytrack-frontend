@@ -1,3 +1,7 @@
+import type {
+  ILoginRequest,
+  ILoginResponse,
+} from "~~/lib/common/types/http/auth/login";
 import type { IUser } from "../../domain/entity/user";
 import AuthRepository from "../../domain/repository/authRepository";
 import type { AuthRemoteDataSourceImpl } from "../datasource/authRemoteDataSource";
@@ -11,15 +15,8 @@ export class AuthRepositoryImpl extends AuthRepository {
   setUserSession(sessionData: ISession): Promise<void> {
     return this.authRemoteDataSource.setUserSession(sessionData);
   }
-  login(
-    email: string,
-    password: string
-  ): Promise<{
-    success: boolean;
-    message: string;
-    data: { user: IUser; token: string };
-  }> {
-    return this.authRemoteDataSource.login(email, password);
+  login(request: ILoginRequest): Promise<ILoginResponse> {
+    return this.authRemoteDataSource.login(request);
   }
   logout(): Promise<void> {
     throw new Error("Method not implemented.");
