@@ -1,14 +1,14 @@
 // index.d.ts (in your project root)
-declare module "#app" {
+declare module '#app' {
   interface NuxtApp {
-    $api: typeof $fetch;
+    $api: typeof $fetch
   }
 }
 
-declare module "vue" {
+declare module 'vue' {
   interface ComponentCustomProperties {
-    $api: typeof $fetch;
+    $api: typeof $fetch
   }
 }
 
-export {};
+export {}

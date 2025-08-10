@@ -1,26 +1,26 @@
-import type { $Fetch } from "ofetch";
+import type { $Fetch } from 'ofetch'
 
-import { AuthRepositoryImpl } from "~~/lib/data/repository/authRepositoryImpl";
-import { AuthRemoteDataSourceImpl } from "~~/lib/data/datasource/authRemoteDataSource";
+import { AuthRepositoryImpl } from '~~/lib/data/repository/authRepositoryImpl'
+import { AuthRemoteDataSourceImpl } from '~~/lib/data/datasource/authRemoteDataSource'
 
 export default defineNuxtPlugin({
-  name: "repositories",
-  dependsOn: ["api"],
+  name: 'repositories',
+  dependsOn: ['api'],
   async setup() {
-    const { $api } = useNuxtApp();
-    const api = $api as $Fetch;
+    const { $api } = useNuxtApp()
+    const api = $api as $Fetch
 
     // register repositories
-    const authRemoteDataSource = new AuthRemoteDataSourceImpl(api);
+    const authRemoteDataSource = new AuthRemoteDataSourceImpl(api)
 
     const repositories = {
-      auth: new AuthRepositoryImpl(authRemoteDataSource),
-    };
+      auth: new AuthRepositoryImpl(authRemoteDataSource)
+    }
 
     return {
       provide: {
-        repositories,
-      },
-    };
-  },
-});
+        repositories
+      }
+    }
+  }
+})
