@@ -18,13 +18,19 @@ export default defineNuxtPlugin({
           }
         }
       },
+      async onRequestError({ error }) {
+        const toast = useToast();
+        toast.add({
+          title: "Request Error",
+          description: error.message || "An error occurred during the request",
+          color: "error",
+        });
+      },
       onResponseError({ response }) {
         const toast = useToast();
         toast.add({
           title: "Error Occurred",
-          description: `${
-            response._data.message || "API request failed"
-          } (Status: ${response.status})`,
+          description: `${response._data.message || "API request failed"}`,
           color: "error",
         });
       },
