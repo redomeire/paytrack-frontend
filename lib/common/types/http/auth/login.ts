@@ -1,17 +1,14 @@
 import type { IUser } from "../../../../domain/entity/user";
-
-interface ILoginResponse {
-  email: string;
-  password: string;
-  data: {
-    user: IUser;
-    token: string;
-  };
-}
+import type { IHttpResponse } from "../base";
 
 interface ILoginRequest {
   email: string;
   password: string;
 }
+
+type ILoginResponse = IHttpResponse<{
+  user: IUser;
+  token: string;
+}>;
 
 export type { ILoginResponse, ILoginRequest };

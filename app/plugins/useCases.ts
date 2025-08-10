@@ -1,6 +1,7 @@
 import type AuthRepository from "~~/lib/domain/repository/authRepository";
 import { Login } from "../../lib/domain/usecase/auth/login";
 import { SetUserSession } from "../../lib/domain/usecase/auth/setUserSession";
+import { Register } from "../../lib/domain/usecase/auth/register";
 
 export default defineNuxtPlugin({
   name: "useCases",
@@ -16,6 +17,7 @@ export default defineNuxtPlugin({
       auth: {
         login: new Login(authRepository),
         setUserSession: new SetUserSession(authRepository),
+        register: new Register(authRepository),
       },
     };
 

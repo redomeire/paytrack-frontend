@@ -5,10 +5,15 @@ import type {
   ILoginResponse,
 } from "../../common/types/http/auth/login";
 
+import type {
+  IRegisterRequest,
+  IRegisterResponse,
+} from "../../common/types/http/auth/register";
+
 abstract class AuthRemoteDataSource {
   abstract login(request: ILoginRequest): Promise<ILoginResponse>;
   abstract setUserSession(sessionData: ISession): Promise<void>;
-  abstract register(): Promise<void>;
+  abstract register(request: IRegisterRequest): Promise<IRegisterResponse>;
   abstract logout(): Promise<void>;
   abstract getUserInfo(): Promise<IUser>;
 }
@@ -41,14 +46,12 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     });
     return response;
   }
-  async register(): Promise<void> {
+  async register(request: IRegisterRequest): Promise<IRegisterResponse> {
     const response = await this.fetcher("/auth/register", {
       method: "POST",
-      body: JSON.stringify({
-        /* registration data */
-      }),
+      body: JSON.stringify(request),
     });
-    console.log("Register response from datasource: ", response);
+    return response;
   }
   logout(): Promise<void> {
     throw new Error("Method not implemented.");
