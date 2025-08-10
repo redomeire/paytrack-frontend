@@ -1,6 +1,6 @@
-import type { IHttpResponse, KeysOf } from "../base";
+import type { IHttpResponse } from "../base";
 import type { IUser } from "../../../../domain/entity/user";
-import type { AsyncData, AsyncDataOptions, NuxtError } from "#app";
+import type { FetchOptions } from "ofetch";
 
 interface IRegisterRequest {
   payload: {
@@ -13,19 +13,9 @@ interface IRegisterRequest {
     language?: string;
     currency?: "IDR" | "USD";
   };
-  options?: AsyncDataOptions<
-    IRegisterResponse,
-    IRegisterResponse,
-    KeysOf<IRegisterResponse>,
-    undefined
-  >;
+  options?: FetchOptions;
 }
 
 type IRegisterResponse = IHttpResponse<{ user: IUser }>;
 
-type IRegisterAsyncDataResponse = AsyncData<
-  IRegisterResponse | undefined,
-  NuxtError<unknown> | undefined
->;
-
-export type { IRegisterRequest, IRegisterResponse, IRegisterAsyncDataResponse };
+export type { IRegisterRequest, IRegisterResponse };

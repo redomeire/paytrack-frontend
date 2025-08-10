@@ -1,6 +1,6 @@
 import type { IUser } from "../../../../domain/entity/user";
-import type { IHttpResponse, KeysOf } from "../base";
-import type { AsyncData, AsyncDataOptions, NuxtError } from "#app";
+import type { IHttpResponse } from "../base";
+import type { FetchOptions } from "ofetch";
 
 type ILoginResponse = IHttpResponse<{
   user: IUser;
@@ -11,17 +11,7 @@ interface ILoginRequest {
     email: string;
     password: string;
   };
-  options?: AsyncDataOptions<
-    ILoginResponse,
-    ILoginResponse,
-    KeysOf<ILoginResponse>,
-    undefined
-  >;
+  options?: FetchOptions;
 }
 
-type ILoginAsyncDataResponse = AsyncData<
-  ILoginResponse | undefined,
-  NuxtError<unknown> | undefined
->;
-
-export type { ILoginResponse, ILoginRequest, ILoginAsyncDataResponse };
+export type { ILoginResponse, ILoginRequest };

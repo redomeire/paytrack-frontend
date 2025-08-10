@@ -37,7 +37,6 @@
 <script setup lang="ts">
 import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { IUser } from '~~/lib/domain/entity/user'
 
 definePageMeta({
     layout: "auth",
@@ -52,31 +51,25 @@ type Schema = v.InferOutput<typeof schema>
 
 const state = reactive({
     email: '',
-    password: ''
-})
+    password: '',
+});
 
 const { $useCases } = useNuxtApp();
 
-const { data: { value }, execute, status } = await $useCases.auth.login.execute({
+const { execute, status } = await useAsyncData('login',
+    async () => await $useCases.auth.login.execute({
     payload: {
         email: state.email,
-        password: state.password
+        password: state.password,
     },
-    options: {
+    }), {
         immediate: false,
-    }
-});
+    });
 
 async function handleLogin(event: FormSubmitEvent<Schema>) {
     event.preventDefault();
+    console.log("user state: ", state);
+    
     await execute();
-    if (value && status.value !== 'error') {
-        await $useCases.auth.setUserSession.execute(
-            {
-                token: value.data?.token as string,
-                user: value.data?.user as IUser, loggedInAt: new Date()
-            }
-        );
-    }
 }
 </script>

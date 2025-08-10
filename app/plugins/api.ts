@@ -26,6 +26,16 @@ export default defineNuxtPlugin({
           color: "error",
         });
       },
+      onResponse({ response }) {
+        if (response.ok) {
+          const toast = useToast();
+          toast.add({
+            title: "Success",
+            description: response._data.message || "Request completed successfully",
+            color: "success",
+          });
+        }
+      },
       onResponseError({ response }) {
         const toast = useToast();
         toast.add({

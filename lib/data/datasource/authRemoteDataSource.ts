@@ -1,25 +1,22 @@
 import type { $Fetch } from "ofetch";
 import type { IUser } from "../../domain/entity/user";
 import type {
-  ILoginAsyncDataResponse,
   ILoginRequest,
   ILoginResponse,
 } from "../../common/types/http/auth/login";
 
 import type {
-  IRegisterAsyncDataResponse,
   IRegisterRequest,
   IRegisterResponse,
 } from "../../common/types/http/auth/register";
 
 abstract class AuthRemoteDataSource {
-  abstract login(request: ILoginRequest): Promise<ILoginAsyncDataResponse>;
-  abstract setUserSession(sessionData: ISession): Promise<void>;
+  abstract login(request: ILoginRequest): Promise<ILoginResponse>;
   abstract register(
     request: IRegisterRequest
-  ): Promise<IRegisterAsyncDataResponse>;
+  ): Promise<IRegisterResponse>;
   abstract logout(): Promise<void>;
-  abstract getUserInfo(): Promise<IUser>;
+  abstract getUserSession(): Promise<IUser>;
 }
 
 export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -36,42 +33,39 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     }
     return AuthRemoteDataSourceImpl.instance;
   }
-  async setUserSession(sessionData: ISession): Promise<void> {
-    const response = await $fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(sessionData),
-    });
-    console.log("Set user session response from datasource: ", response);
-  }
-  async login(request: ILoginRequest): Promise<ILoginAsyncDataResponse> {
-    const response = await useAsyncData<ILoginResponse>(
-      "login",
-      () =>
-        this.fetcher("/auth/login", {
-          method: "POST",
-          body: JSON.stringify(request.payload),
-        }),
-      {
+  async login(request: ILoginRequest): Promise<ILoginResponse> {
+    const response = await
+      this.fetcher("/auth/login", {
+        method: "POST",
+        body: JSON.stringify(request.payload),
         ...request.options,
-      }
-    );
+      }) as ILoginResponse;
+
+    if (response.success) {
+      await $fetch("/api/auth/create-session", {
+        method: "POST",
+        body: JSON.stringify({
+          user: response.data?.user,
+          token: response.data?.token,
+          loggedInAt: new Date(),
+        }),
+      });
+    }
     return response;
   }
   async register(
     request: IRegisterRequest
-  ): Promise<IRegisterAsyncDataResponse> {
-    const response = await useAsyncData<IRegisterResponse>("register", () =>
-      this.fetcher("/auth/register", {
-        method: "POST",
-        body: JSON.stringify(request),
-      })
-    );
+  ): Promise<IRegisterResponse> {
+    const response = this.fetcher("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(request),
+    })
     return response;
   }
   logout(): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  getUserInfo(): Promise<IUser> {
+  getUserSession(): Promise<IUser> {
     throw new Error("Method not implemented.");
   }
 }
