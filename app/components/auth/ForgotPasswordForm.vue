@@ -1,41 +1,52 @@
 <template>
-  <div>
-    <NuxtForm
-      :schema="forgotPasswordSchema"
-      :state="state"
-      class="flex flex-col gap-2"
-      @submit="handleForgotPassword"
+  <NuxtForm
+    :schema="forgotPasswordSchema"
+    :state="state"
+    class="flex flex-col gap-2"
+    @submit="handleForgotPassword"
+  >
+    <NuxtFormField
+      label="Email Address*"
+      name="email"
     >
-      <NuxtFormField
-        label="Email Address*"
-        name="email"
-      >
-        <NuxtInput
-          v-model="state.email"
-          color="primary"
-          size="xl"
-          class="w-full"
-          placeholder="Email"
-          icon="i-material-symbols-mail-outline"
-        />
-      </NuxtFormField>
-      <span
-        v-if="timerCountSeconds > 0 && timerCountSeconds !== 30"
-      >
-        {{ timerDisplayer }}
-      </span>
-      <NuxtButton
-        type="submit"
-        class="flex justify-center mt-3"
+      <NuxtInput
+        v-model="state.email"
+        color="primary"
         size="xl"
-        :variant="startCountdownTimer ? 'outline' : 'solid'"
+        class="w-full"
+        placeholder="Email"
+        icon="i-material-symbols-mail-outline"
+      />
+    </NuxtFormField>
+    <span
+      v-if="timerCountSeconds > 0 && timerCountSeconds !== 30"
+    >
+      {{ timerDisplayer }}
+    </span>
+    <NuxtButton
+      type="submit"
+      class="flex justify-center mt-3"
+      size="xl"
+      :variant="startCountdownTimer ? 'outline' : 'solid'"
+      :loading="status === 'pending'"
+      :disabled="status === 'pending' || startCountdownTimer"
+    >
+      Submit
+    </NuxtButton>
+    <NuxtLink to="/auth/login">
+      <NuxtButton
+        type="button"
+        class="flex justify-center w-full"
+        size="xl"
+        icon="i-tabler-arrow-back-up"
+        variant="outline"
         :loading="status === 'pending'"
         :disabled="status === 'pending' || startCountdownTimer"
       >
-        Submit
+        Go Back
       </NuxtButton>
-    </NuxtForm>
-  </div>
+    </NuxtLink>
+  </NuxtForm>
 </template>
 
 <script setup lang="ts">

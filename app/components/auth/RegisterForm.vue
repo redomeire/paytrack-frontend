@@ -15,9 +15,10 @@
       >
         <template #credentials>
           <NuxtFormField
-            label="Email Address*"
+            label="Email Address"
             name="email"
             class="mb-3"
+            required
           >
             <NuxtInput
               v-model="state.email"
@@ -29,9 +30,10 @@
             />
           </NuxtFormField>
           <NuxtFormField
-            label="Password*"
+            label="Password"
             name="password"
             class="mb-3"
+            required
           >
             <NuxtInput
               v-model="state.password"
@@ -55,10 +57,11 @@
             </NuxtInput>
           </NuxtFormField>
           <NuxtFormField
-            label="Password Confirm*"
+            label="Password Confirm"
             name="password"
             class="mb-3"
             rules
+            required
           >
             <NuxtInput
               v-model="state.password_confirm"
@@ -66,7 +69,7 @@
               size="xl"
               :type="state.is_password_visible ? 'text' : 'password'"
               class="w-full"
-              placeholder="Password"
+              placeholder="Password confirm"
               icon="i-material-symbols-lock-outline"
             >
               <template #trailing>
@@ -101,9 +104,10 @@
         <template #info>
           <div class="grid md:grid-cols-2 gap-5">
             <NuxtFormField
-              label="First name*"
+              label="First name"
               name="first_name"
               class="mb-3"
+              required
             >
               <NuxtInput
                 v-model="state.first_name"
@@ -114,9 +118,10 @@
               />
             </NuxtFormField>
             <NuxtFormField
-              label="Last name*"
+              label="Last name"
               name="last_name"
               class="mb-3"
+              required
             >
               <NuxtInput
                 v-model="state.last_name"
@@ -128,9 +133,10 @@
             </NuxtFormField>
           </div>
           <NuxtFormField
+            label="Phone number"
             name="phone"
-            required
             class="mt-3"
+            required
           >
             <NuxtButtonGroup
               class="w-full"

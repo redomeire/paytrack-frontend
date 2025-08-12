@@ -1,6 +1,6 @@
 <template>
   <section class="grid md:grid-cols-2 items-center">
-    <div class="flex flex-col items-stretch justify-between font-sans p-10">
+    <div class="flex flex-col items-stretch justify-between font-sans p-10 max-h-screen overflow-auto">
       <h1 class="text-h5 mb-2">
         Login to your account
       </h1>
@@ -8,10 +8,11 @@
         Welcome back, please enter your detail
       </p>
       <AuthLoginForm />
-      <NuxtSeparator class="mt-5" />
-      <span class="bg-white -translate-y-[13px] px-2 block w-fit mx-auto text-neutral-400">
-        or
-      </span>
+      <NuxtSeparator class="my-5">
+        <template #default>
+          <span class="text-muted text-sm">or continue with</span>
+        </template>
+      </NuxtSeparator>
       <div class="grid gap-3">
         <NuxtButton
           color="neutral"
@@ -41,7 +42,7 @@
       </p>
     </div>
     <div class="h-screen relative">
-      <div class="absolute inset-5 bg-[url('https://images.unsplash.com/photo-1630659509436-7397fbda30e2')] bg-cover bg-center rounded-2xl" />
+      <div class="absolute inset-3 bg-[url('https://images.unsplash.com/photo-1630659509436-7397fbda30e2')] bg-cover bg-center rounded-2xl" />
     </div>
   </section>
 </template>

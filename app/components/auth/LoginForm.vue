@@ -6,8 +6,9 @@
     @submit="handleLogin"
   >
     <NuxtFormField
-      label="Email Address*"
+      label="Email Address"
       name="email"
+      required
     >
       <NuxtInput
         v-model="state.email"
@@ -19,8 +20,9 @@
       />
     </NuxtFormField>
     <NuxtFormField
-      label="Password*"
+      label="Password"
       name="password"
+      required
     >
       <NuxtInput
         v-model="state.password"

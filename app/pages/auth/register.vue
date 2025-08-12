@@ -8,10 +8,11 @@
         Please fill in the form below to create a new account
       </p>
       <AuthRegisterForm />
-      <NuxtSeparator class="mt-5" />
-      <span class="bg-white -translate-y-[13px] px-2 block w-fit mx-auto text-neutral-400">
-        or
-      </span>
+      <NuxtSeparator class="my-5">
+        <template #default>
+          <span class="text-muted text-sm">or continue with</span>
+        </template>
+      </NuxtSeparator>
       <div class="grid gap-3">
         <NuxtButton
           color="neutral"
