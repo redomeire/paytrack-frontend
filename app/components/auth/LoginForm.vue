@@ -89,7 +89,7 @@ const state = reactive({
 })
 
 // data fetching and functions
-const { execute, status } = await useAsyncData('login',
+const { data, execute, status } = await useAsyncData('login',
   async () => await $useCases.auth.login.execute({
     payload: {
       email: state.email,
@@ -104,5 +104,11 @@ async function handleLogin(event: FormSubmitEvent<InferedLoginSchema>) {
   console.log('user state: ', state)
 
   await execute()
+
+  if (data.value?.success) {
+    setTimeout(() => {
+      navigateTo('/dashboard')
+    }, 1000)
+  }
 }
 </script>

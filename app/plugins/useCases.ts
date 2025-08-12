@@ -3,6 +3,7 @@ import { Login } from '../../lib/domain/usecase/auth/login'
 import { Register } from '../../lib/domain/usecase/auth/register'
 import { ForgotPassword } from '../../lib/domain/usecase/auth/forgotPassword'
 import { ResetPassword } from '../../lib/domain/usecase/auth/resetPassword'
+import { Logout } from '../../lib/domain/usecase/auth/logout'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -19,7 +20,8 @@ export default defineNuxtPlugin({
         login: new Login(authRepository),
         register: new Register(authRepository),
         forgotPassword: new ForgotPassword(authRepository),
-        resetPassword: new ResetPassword(authRepository)
+        resetPassword: new ResetPassword(authRepository),
+        logout: new Logout(authRepository)
       }
     }
 

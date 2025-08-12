@@ -40,8 +40,6 @@
         size="xl"
         icon="i-tabler-arrow-back-up"
         variant="outline"
-        :loading="status === 'pending'"
-        :disabled="status === 'pending' || startCountdownTimer"
       >
         Go Back
       </NuxtButton>

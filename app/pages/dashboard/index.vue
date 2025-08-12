@@ -1,14 +1,3 @@
-<script setup lang="ts">
-const { clear } = useUserSession()
-const router = useRouter()
-const handleLogout = async () => {
-  await clear()
-  setTimeout(() => {
-    router.replace('/auth/login')
-  }, 1000)
-}
-</script>
-
 <template>
   <div class="dashboard">
     <h1>Dashboard</h1>
@@ -19,3 +8,24 @@ const handleLogout = async () => {
     </button>
   </div>
 </template>
+
+<script setup lang="ts">
+// context data
+const { $useCases } = useNuxtApp()
+const { clear } = useUserSession()
+const router = useRouter()
+
+// api fetch and function
+const handleLogout = async () => {
+  Promise.all([
+    $useCases.auth.logout.execute(),
+    clear()
+  ]).catch((error) => {
+    console.error('Error during logout:', error)
+  }).finally(() => {
+    setTimeout(() => {
+      router.replace('/auth/login')
+    }, 1000)
+  })
+}
+</script>

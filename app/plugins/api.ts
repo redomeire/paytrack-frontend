@@ -2,7 +2,7 @@ import type { FetchOptions } from 'ofetch'
 
 export default defineNuxtPlugin({
   name: 'api',
-  async setup(nuxtApp) {
+  async setup() {
     const config = useRuntimeConfig()
     const fetchOptions: FetchOptions = {
       baseURL: config.public.apiBase,
@@ -10,12 +10,17 @@ export default defineNuxtPlugin({
         options.headers.set('Content-Type', 'application/json')
         options.headers.set('Accept', 'application/json')
 
-        const appEvent = nuxtApp.ssrContext?.event
-        if (appEvent) {
-          const session = await getUserSession(appEvent)
-          if (session.token) {
-            options.headers.set('Authorization', `Bearer ${session.token}`)
+        // get session if available
+        const session = await $fetch('/api/auth/get-session', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           }
+        })
+
+        if (session.token) {
+          options.headers.set('Authorization', `Bearer ${session.token}`)
         }
       },
       async onRequestError({ error }) {

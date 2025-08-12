@@ -16,13 +16,14 @@ import type {
   IResetPasswordRequest,
   IResetPasswordResponse
 } from '~~/lib/common/types/http/auth/resetPassword'
+import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
 
 abstract class AuthRemoteDataSource {
   abstract login(request: ILoginRequest): Promise<ILoginResponse>
   abstract register(
     request: IRegisterRequest
   ): Promise<IRegisterResponse>
-  abstract logout(): Promise<void>
+  abstract logout(): Promise<ILogoutResponse>
   abstract getUserSession(): Promise<IUser>
   abstract forgotPassword(
     request: IForgotPasswordRequest
@@ -78,8 +79,11 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return response
   }
 
-  logout(): Promise<void> {
-    throw new Error('Method not implemented.')
+  logout(): Promise<ILogoutResponse> {
+    const response = this.fetcher('/auth/logout', {
+      method: 'POST'
+    })
+    return response
   }
 
   getUserSession(): Promise<IUser> {
@@ -89,13 +93,14 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   forgotPassword(request: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
     const response = this.fetcher('/auth/forgot-password', {
       method: 'POST',
-      body: JSON.stringify(request)
+      body: JSON.stringify(request.payload),
+      ...request.options
     })
     return response
   }
 
   resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse> {
-    const response = this.fetcher('/auth/reset-password', {
+    const response = this.fetcher(`/auth/reset-password/${request.payload.token}`, {
       method: 'POST',
       body: JSON.stringify(request.payload),
       ...request.options

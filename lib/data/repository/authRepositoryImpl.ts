@@ -11,6 +11,7 @@ import type {
 } from '~~/lib/common/types/http/auth/register'
 import type { IForgotPasswordRequest, IForgotPasswordResponse } from '~~/lib/common/types/http/auth/forgotPassword'
 import type { IResetPasswordRequest, IResetPasswordResponse } from '~~/lib/common/types/http/auth/resetPassword'
+import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
 
 export class AuthRepositoryImpl extends AuthRepository {
   private authRemoteDataSource: AuthRemoteDataSourceImpl
@@ -27,8 +28,8 @@ export class AuthRepositoryImpl extends AuthRepository {
     return this.authRemoteDataSource.register(request)
   }
 
-  logout(): Promise<void> {
-    throw new Error('Method not implemented.')
+  logout(): Promise<ILogoutResponse> {
+    return this.authRemoteDataSource.logout()
   }
 
   isAuthenticated(): Promise<boolean> {

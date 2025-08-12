@@ -27,6 +27,10 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_URL || 'https://api.example.com',
       appName: 'My Nuxt App',
       appVersion: '1.0.0'
+    },
+    session: {
+      maxAge: 60 * 60 * 24 * 15, // 15 days
+      password: process.env.NUXT_SESSION_PASSWORD || 'default_password'
     }
   },
   compatibilityDate: '2025-07-15',

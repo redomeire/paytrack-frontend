@@ -12,13 +12,16 @@ import type {
   IResetPasswordRequest,
   IResetPasswordResponse
 } from '~~/lib/common/types/http/auth/resetPassword'
+import type {
+  ILogoutResponse
+} from '~~/lib/common/types/http/auth/logout'
 
 abstract class AuthRepository {
   abstract login(request: ILoginRequest): Promise<ILoginResponse>
   abstract register(
     request: IRegisterRequest
   ): Promise<IRegisterResponse>
-  abstract logout(): Promise<void>
+  abstract logout(): Promise<ILogoutResponse>
   abstract isAuthenticated(): Promise<boolean>
   abstract getUserInfo(): Promise<IUser>
   abstract forgotPassword(

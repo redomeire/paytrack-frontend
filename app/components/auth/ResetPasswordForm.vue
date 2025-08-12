@@ -6,8 +6,9 @@
     @submit="handleResetPassword"
   >
     <NuxtFormField
-      label="Password*"
+      label="New Password"
       name="password"
+      required
     >
       <NuxtInput
         v-model="state.password"
@@ -31,8 +32,9 @@
       </NuxtInput>
     </NuxtFormField>
     <NuxtFormField
-      label="Confirm Password*"
+      label="Confirm Password"
       name="password_confirm"
+      required
     >
       <NuxtInput
         v-model="state.password_confirm"
@@ -102,7 +104,7 @@ const { status, execute } = useAsyncData('resetPassword', async () =>
       email,
       token,
       password: state.password,
-      password_confirm: state.password_confirm
+      password_confirmation: state.password_confirm
     }
   }), {
   immediate: false

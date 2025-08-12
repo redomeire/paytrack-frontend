@@ -8,7 +8,7 @@ interface IResetPasswordRequest {
     token: string
     email: string
     password: string
-    password_confirm: string
+    password_confirmation: string
   }
   options?: FetchOptions
 }
