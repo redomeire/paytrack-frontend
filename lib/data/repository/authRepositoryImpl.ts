@@ -12,6 +12,7 @@ import type {
 import type { IForgotPasswordRequest, IForgotPasswordResponse } from '~~/lib/common/types/http/auth/forgotPassword'
 import type { IResetPasswordRequest, IResetPasswordResponse } from '~~/lib/common/types/http/auth/resetPassword'
 import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
+import type { IAuthorizeSocialLoginRequest, IAuthorizeSocialLoginResponse } from '~~/lib/common/types/http/auth/authorizeSocialLogin'
 
 export class AuthRepositoryImpl extends AuthRepository {
   private authRemoteDataSource: AuthRemoteDataSourceImpl
@@ -46,5 +47,9 @@ export class AuthRepositoryImpl extends AuthRepository {
 
   resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse> {
     return this.authRemoteDataSource.resetPassword(request)
+  }
+
+  authorizeSocialLogin(request: IAuthorizeSocialLoginRequest): Promise<IAuthorizeSocialLoginResponse> {
+    return this.authRemoteDataSource.authorizeSocialLogin(request)
   }
 }

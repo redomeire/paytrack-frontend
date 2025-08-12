@@ -11,6 +11,6 @@ export class Login {
   }
 
   async execute(request: ILoginRequest): Promise<ILoginResponse> {
-    return await this.authRepository.login(request)
+    return this.authRepository.login(request)
   }
 }

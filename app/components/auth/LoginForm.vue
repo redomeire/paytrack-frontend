@@ -89,14 +89,15 @@ const state = reactive({
 })
 
 // data fetching and functions
-const { data, execute, status } = await useAsyncData('login',
-  async () => await $useCases.auth.login.execute({
+const { data, execute, status } = useAsyncData(
+  () => $useCases.auth.login.execute({
     payload: {
       email: state.email,
       password: state.password
     }
   }), {
-    immediate: false
+    immediate: false,
+    server: false
   })
 
 async function handleLogin(event: FormSubmitEvent<InferedLoginSchema>) {

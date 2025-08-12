@@ -17,6 +17,7 @@ import type {
   IResetPasswordResponse
 } from '~~/lib/common/types/http/auth/resetPassword'
 import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
+import type { IAuthorizeSocialLoginRequest, IAuthorizeSocialLoginResponse } from '~~/lib/common/types/http/auth/authorizeSocialLogin'
 
 abstract class AuthRemoteDataSource {
   abstract login(request: ILoginRequest): Promise<ILoginResponse>
@@ -31,6 +32,9 @@ abstract class AuthRemoteDataSource {
   abstract resetPassword(
     request: IResetPasswordRequest
   ): Promise<IResetPasswordResponse>
+  abstract authorizeSocialLogin(
+    request: IAuthorizeSocialLoginRequest
+  ): Promise<IAuthorizeSocialLoginResponse>
 }
 
 export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -105,6 +109,22 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       body: JSON.stringify(request.payload),
       ...request.options
     })
+    return response
+  }
+
+  async authorizeSocialLogin(request: IAuthorizeSocialLoginRequest): Promise<IAuthorizeSocialLoginResponse> {
+    const response = await this.fetcher(`/auth/${request.payload.provider}/callback?code=${request.payload.code}`)
+
+    if (response.success) {
+      await $fetch('/api/auth/create-session', {
+        method: 'POST',
+        body: JSON.stringify({
+          user: response.data?.user,
+          token: response.data?.token,
+          loggedInAt: new Date()
+        })
+      })
+    }
     return response
   }
 }

@@ -14,24 +14,8 @@
         </template>
       </NuxtSeparator>
       <div class="grid gap-3">
-        <NuxtButton
-          color="neutral"
-          variant="subtle"
-          class="flex justify-center"
-          size="xl"
-          icon="i-logos-google-icon"
-        >
-          Continue with Google
-        </NuxtButton>
-        <NuxtButton
-          color="neutral"
-          variant="subtle"
-          class="flex justify-center"
-          size="xl"
-          icon="i-logos-github-icon"
-        >
-          Continue with Github
-        </NuxtButton>
+        <AuthSocialButton provider="google" />
+        <AuthSocialButton provider="github" />
       </div>
 
       <p class="text-sm text-center flex items-center justify-center gap-2 mt-8">
