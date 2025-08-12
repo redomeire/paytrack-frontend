@@ -9,6 +9,8 @@ import type {
   IRegisterRequest,
   IRegisterResponse
 } from '~~/lib/common/types/http/auth/register'
+import type { IForgotPasswordRequest, IForgotPasswordResponse } from '~~/lib/common/types/http/auth/forgotPassword'
+import type { IResetPasswordRequest, IResetPasswordResponse } from '~~/lib/common/types/http/auth/resetPassword'
 
 export class AuthRepositoryImpl extends AuthRepository {
   private authRemoteDataSource: AuthRemoteDataSourceImpl
@@ -35,5 +37,13 @@ export class AuthRepositoryImpl extends AuthRepository {
 
   getUserInfo(): Promise<IUser> {
     throw new Error('Method not implemented.')
+  }
+
+  forgotPassword(request: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
+    return this.authRemoteDataSource.forgotPassword(request)
+  }
+
+  resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse> {
+    return this.authRemoteDataSource.resetPassword(request)
   }
 }

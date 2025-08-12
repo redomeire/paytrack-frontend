@@ -263,6 +263,7 @@ watch(country, (newState, oldState) => {
   if (newState !== oldState && newState) {
     state.currency = newState.currencies
     state.timezone = newState.timezone
+    state.phone = state.phone.replace(country.value?.dial_code || '', '')
   }
 })
 watch(
