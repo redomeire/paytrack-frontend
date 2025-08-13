@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 bottom-0 left-0 w-1/5 bg-white z-10 p-5 shadow-xl">
+  <div class="fixed lg:visible invisible top-0 bottom-0 left-0  w-1/5 bg-white z-30 p-5 shadow-xl">
     <div class="grid grid-rows-12 h-screen">
       <div class="flex items-center gap-2">
         <NuxtButton

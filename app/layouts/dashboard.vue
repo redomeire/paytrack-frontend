@@ -1,9 +1,9 @@
 <template>
   <div>
     <AppSidebar />
-    <div class="ml-64">
+    <div class="lg:ml-64">
       <AppNavbar />
-      <main class="px-10 py-7">
+      <main class="px-5 py-7 pt-28">
         <slot />
       </main>
     </div>
