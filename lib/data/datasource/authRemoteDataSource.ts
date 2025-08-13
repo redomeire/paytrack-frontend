@@ -1,77 +1,130 @@
-import type { $Fetch } from "ofetch";
-import type { IUser } from "../../domain/entity/user";
+import type { $Fetch } from 'ofetch'
+import type { IUser } from '../../domain/entity/user'
 import type {
-  ILoginAsyncDataResponse,
   ILoginRequest,
-  ILoginResponse,
-} from "../../common/types/http/auth/login";
-
+  ILoginResponse
+} from '../../common/types/http/auth/login'
 import type {
-  IRegisterAsyncDataResponse,
   IRegisterRequest,
-  IRegisterResponse,
-} from "../../common/types/http/auth/register";
+  IRegisterResponse
+} from '../../common/types/http/auth/register'
+import type {
+  IForgotPasswordRequest,
+  IForgotPasswordResponse
+} from '~~/lib/common/types/http/auth/forgotPassword'
+import type {
+  IResetPasswordRequest,
+  IResetPasswordResponse
+} from '~~/lib/common/types/http/auth/resetPassword'
+import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
+import type { IAuthorizeSocialLoginRequest, IAuthorizeSocialLoginResponse } from '~~/lib/common/types/http/auth/authorizeSocialLogin'
 
 abstract class AuthRemoteDataSource {
-  abstract login(request: ILoginRequest): Promise<ILoginAsyncDataResponse>;
-  abstract setUserSession(sessionData: ISession): Promise<void>;
+  abstract login(request: ILoginRequest): Promise<ILoginResponse>
   abstract register(
     request: IRegisterRequest
-  ): Promise<IRegisterAsyncDataResponse>;
-  abstract logout(): Promise<void>;
-  abstract getUserInfo(): Promise<IUser>;
+  ): Promise<IRegisterResponse>
+  abstract logout(): Promise<ILogoutResponse>
+  abstract getUserSession(): Promise<IUser>
+  abstract forgotPassword(
+    request: IForgotPasswordRequest
+  ): Promise<IForgotPasswordResponse>
+  abstract resetPassword(
+    request: IResetPasswordRequest
+  ): Promise<IResetPasswordResponse>
+  abstract authorizeSocialLogin(
+    request: IAuthorizeSocialLoginRequest
+  ): Promise<IAuthorizeSocialLoginResponse>
 }
 
 export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
-  private static instance: AuthRemoteDataSourceImpl;
-  fetcher: $Fetch;
+  private static instance: AuthRemoteDataSourceImpl
+  fetcher: $Fetch
   constructor(fetcher: $Fetch) {
-    super();
-    this.fetcher = fetcher;
+    super()
+    this.fetcher = fetcher
   }
 
   public static getInstance(fetcher: $Fetch): AuthRemoteDataSourceImpl {
     if (!AuthRemoteDataSourceImpl.instance) {
-      AuthRemoteDataSourceImpl.instance = new AuthRemoteDataSourceImpl(fetcher);
+      AuthRemoteDataSourceImpl.instance = new AuthRemoteDataSourceImpl(fetcher)
     }
-    return AuthRemoteDataSourceImpl.instance;
+    return AuthRemoteDataSourceImpl.instance
   }
-  async setUserSession(sessionData: ISession): Promise<void> {
-    const response = await $fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(sessionData),
-    });
-    console.log("Set user session response from datasource: ", response);
+
+  async login(request: ILoginRequest): Promise<ILoginResponse> {
+    const response = await
+    this.fetcher('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(request.payload),
+      ...request.options
+    }) as ILoginResponse
+
+    if (response.success) {
+      await $fetch('/api/auth/create-session', {
+        method: 'POST',
+        body: JSON.stringify({
+          user: response.data?.user,
+          token: response.data?.token,
+          loggedInAt: new Date()
+        })
+      })
+    }
+    return response
   }
-  async login(request: ILoginRequest): Promise<ILoginAsyncDataResponse> {
-    const response = await useAsyncData<ILoginResponse>(
-      "login",
-      () =>
-        this.fetcher("/auth/login", {
-          method: "POST",
-          body: JSON.stringify(request.payload),
-        }),
-      {
-        ...request.options,
-      }
-    );
-    return response;
-  }
+
   async register(
     request: IRegisterRequest
-  ): Promise<IRegisterAsyncDataResponse> {
-    const response = await useAsyncData<IRegisterResponse>("register", () =>
-      this.fetcher("/auth/register", {
-        method: "POST",
-        body: JSON.stringify(request),
+  ): Promise<IRegisterResponse> {
+    const response = this.fetcher('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(request)
+    })
+    return response
+  }
+
+  logout(): Promise<ILogoutResponse> {
+    const response = this.fetcher('/auth/logout', {
+      method: 'POST'
+    })
+    return response
+  }
+
+  getUserSession(): Promise<IUser> {
+    throw new Error('Method not implemented.')
+  }
+
+  forgotPassword(request: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
+    const response = this.fetcher('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify(request.payload),
+      ...request.options
+    })
+    return response
+  }
+
+  resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse> {
+    const response = this.fetcher(`/auth/reset-password/${request.payload.token}`, {
+      method: 'POST',
+      body: JSON.stringify(request.payload),
+      ...request.options
+    })
+    return response
+  }
+
+  async authorizeSocialLogin(request: IAuthorizeSocialLoginRequest): Promise<IAuthorizeSocialLoginResponse> {
+    const response = await this.fetcher(`/auth/${request.payload.provider}/callback?code=${request.payload.code}`)
+
+    if (response.success) {
+      await $fetch('/api/auth/create-session', {
+        method: 'POST',
+        body: JSON.stringify({
+          user: response.data?.user,
+          token: response.data?.token,
+          loggedInAt: new Date()
+        })
       })
-    );
-    return response;
-  }
-  logout(): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  getUserInfo(): Promise<IUser> {
-    throw new Error("Method not implemented.");
+    }
+    return response
   }
 }

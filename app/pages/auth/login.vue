@@ -1,60 +1,45 @@
-<script setup lang="ts">
-import * as v from 'valibot'
-import type { FormSubmitEvent } from '@nuxt/ui'
-import type { IUser } from '~~/lib/domain/entity/user'
-
-const schema = v.object({
-    email: v.pipe(v.string(), v.email('Invalid email')),
-    password: v.pipe(v.string(), v.minLength(8, 'Must be at least 8 characters'))
-})
-
-type Schema = v.InferOutput<typeof schema>
-
-const state = reactive({
-    username: '',
-    email: '',
-    password: ''
-})
-
-const { $useCases } = useNuxtApp();
-
-async function handleLogin(event: FormSubmitEvent<Schema>) {
-    event.preventDefault();
-    const { data: { value } } = await $useCases.auth.login.execute({
-        payload: {
-            email: state.email,
-            password: state.password
-        },
-        options: {}
-    });
-    if (value) {
-        await $useCases.auth.setUserSession.execute(
-            {
-                token: value.data?.token as string,
-                user: value.data?.user as IUser, loggedInAt: new Date()
-            }
-        );
-    }
-}
-</script>
-
 <template>
-    <div class="login">
-        <h1>Login</h1>
-        <p>Please log in to access your account.</p>
-        <NuxtForm :schema="schema" :state="state" @submit="handleLogin">
-            <NuxtFormField label="Username" name="username">
-                <NuxtInput v-model="state.username" />
-            </NuxtFormField>
-            <NuxtFormField label="Email" name="email">
-                <NuxtInput v-model="state.email" />
-            </NuxtFormField>
-            <NuxtFormField label="Password" name="password">
-                <NuxtInput v-model="state.password" type="password" />
-            </NuxtFormField>
-            <NuxtButton type="submit">
-                Submit
-            </NuxtButton>
-        </NuxtForm>
+  <section class="grid md:grid-cols-2 items-center">
+    <div class="flex flex-col items-stretch justify-between font-sans p-10 max-h-screen overflow-auto">
+      <h1 class="text-h5 mb-2">
+        Login to your account
+      </h1>
+      <p class="text-body-sm mb-5">
+        Welcome back, please enter your detail
+      </p>
+      <AuthLoginForm />
+      <NuxtSeparator class="my-5">
+        <template #default>
+          <span class="text-muted text-sm">or continue with</span>
+        </template>
+      </NuxtSeparator>
+      <div class="grid gap-3">
+        <AuthSocialButton provider="google" />
+        <AuthSocialButton provider="github" />
+      </div>
+
+      <p class="text-sm text-center flex items-center justify-center gap-2 mt-8">
+        Not registered yet? <NuxtLink
+          to="/auth/register"
+          class="block w-fit"
+        ><span class="font-semibold underline">Create an account</span></NuxtLink>
+      </p>
     </div>
+    <div class="h-screen relative">
+      <div class="absolute inset-3 bg-[url('https://images.unsplash.com/photo-1630659509436-7397fbda30e2')] bg-cover bg-center rounded-2xl" />
+    </div>
+  </section>
 </template>
+
+<script setup lang="ts">
+definePageMeta({
+  layout: 'auth'
+})
+useSeoMeta({
+  title: 'Login',
+  ogTitle: 'Login to Paytrack',
+  titleTemplate: '%s - Paytrack',
+  description: 'Login to your account on Paytrack',
+  ogDescription: 'Login to your account on Paytrack'
+})
+</script>

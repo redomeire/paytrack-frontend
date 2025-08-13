@@ -1,8 +1,7 @@
 export interface IHttpResponse<T = unknown> {
-  status: number;
-  message: string;
-  data?: T;
-  errors?: Record<string, string[]>;
+  success: boolean
+  message: string
+  data?: T
 }
 
-export type KeysOf<T> = (keyof T)[];
+export type KeysOf<T> = (keyof T)[]

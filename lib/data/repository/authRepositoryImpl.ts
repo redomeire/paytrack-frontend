@@ -1,37 +1,55 @@
 import type {
-  ILoginAsyncDataResponse,
   ILoginRequest,
-} from "~~/lib/common/types/http/auth/login";
-import type { IUser } from "../../domain/entity/user";
-import AuthRepository from "../../domain/repository/authRepository";
-import type { AuthRemoteDataSourceImpl } from "../datasource/authRemoteDataSource";
+  ILoginResponse
+} from '~~/lib/common/types/http/auth/login'
+import type { IUser } from '../../domain/entity/user'
+import AuthRepository from '../../domain/repository/authRepository'
+import type { AuthRemoteDataSourceImpl } from '../datasource/authRemoteDataSource'
 import type {
-  IRegisterAsyncDataResponse,
   IRegisterRequest,
-} from "~~/lib/common/types/http/auth/register";
+  IRegisterResponse
+} from '~~/lib/common/types/http/auth/register'
+import type { IForgotPasswordRequest, IForgotPasswordResponse } from '~~/lib/common/types/http/auth/forgotPassword'
+import type { IResetPasswordRequest, IResetPasswordResponse } from '~~/lib/common/types/http/auth/resetPassword'
+import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
+import type { IAuthorizeSocialLoginRequest, IAuthorizeSocialLoginResponse } from '~~/lib/common/types/http/auth/authorizeSocialLogin'
 
 export class AuthRepositoryImpl extends AuthRepository {
-  private authRemoteDataSource: AuthRemoteDataSourceImpl;
+  private authRemoteDataSource: AuthRemoteDataSourceImpl
   constructor(authRemoteDataSource: AuthRemoteDataSourceImpl) {
-    super();
-    this.authRemoteDataSource = authRemoteDataSource;
+    super()
+    this.authRemoteDataSource = authRemoteDataSource
   }
-  setUserSession(sessionData: ISession): Promise<void> {
-    return this.authRemoteDataSource.setUserSession(sessionData);
+
+  login(request: ILoginRequest): Promise<ILoginResponse> {
+    return this.authRemoteDataSource.login(request)
   }
-  login(request: ILoginRequest): Promise<ILoginAsyncDataResponse> {
-    return this.authRemoteDataSource.login(request);
+
+  register(request: IRegisterRequest): Promise<IRegisterResponse> {
+    return this.authRemoteDataSource.register(request)
   }
-  register(request: IRegisterRequest): Promise<IRegisterAsyncDataResponse> {
-    return this.authRemoteDataSource.register(request);
+
+  logout(): Promise<ILogoutResponse> {
+    return this.authRemoteDataSource.logout()
   }
-  logout(): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
+
   isAuthenticated(): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.')
   }
+
   getUserInfo(): Promise<IUser> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.')
+  }
+
+  forgotPassword(request: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
+    return this.authRemoteDataSource.forgotPassword(request)
+  }
+
+  resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse> {
+    return this.authRemoteDataSource.resetPassword(request)
+  }
+
+  authorizeSocialLogin(request: IAuthorizeSocialLoginRequest): Promise<IAuthorizeSocialLoginResponse> {
+    return this.authRemoteDataSource.authorizeSocialLogin(request)
   }
 }

@@ -8,3 +8,52 @@
 .dark {
   --ui-primary: var(--ui-color-primary-200);
 }
+
+@theme static {
+  /* font size */
+  --text-heading-1: var(--text-5xl);
+  --text-heading-2: var(--text-4xl);
+  --text-heading-3: var(--text-3xl);
+  --text-heading-4: var(--text-2xl);
+  --text-heading-5: var(--text-xl);
+  --text-heading-6: var(--text-lg);
+
+  --text-body-lg: var(--text-base);
+  --text-body-sm: var(--text-sm);
+
+  /* font family */
+  --font-sans: "Poppins", sans-serif;
+}
+
+/* Heading Styles */
+.text-h1 {
+  @apply text-5xl font-bold leading-tight;
+}
+.text-h2 {
+  @apply text-4xl font-bold leading-snug;
+}
+.text-h3 {
+  @apply text-3xl font-semibold leading-snug;
+}
+.text-h4 {
+  @apply text-2xl font-semibold leading-snug;
+}
+.text-h5 {
+  @apply text-xl font-semibold leading-snug;
+}
+.text-h6 {
+  @apply text-lg font-semibold leading-snug;
+}
+
+/* Body Styles */
+.text-body-lg {
+  @apply text-base leading-relaxed;
+}
+.text-body-sm {
+  @apply text-sm leading-relaxed;
+}
+
+/* Muted text (untuk deskripsi, hint, dsb) */
+.text-muted {
+  @apply text-sm leading-relaxed;
+}
