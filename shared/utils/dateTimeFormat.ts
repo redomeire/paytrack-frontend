@@ -15,7 +15,7 @@ function dateTimeFormat({ date: inputDate, timezone = 'Asia/Jakarta' }: IDateTim
     second: '2-digit'
   }
 
-  const formattedDate = date.toLocaleString(navigator.language, options)
+  const formattedDate = date.toLocaleString(navigator?.language ?? 'id-ID', options)
   return formattedDate
 }
 
