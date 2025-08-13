@@ -1,7 +1,7 @@
-import type { IUser } from "~~/lib/domain/entity/user";
+import type { IUser } from '~~/lib/domain/entity/user'
 
 export interface ISession {
-  user: IUser;
-  token: string;
-  loggedInAt: Date;
+  user: IUser
+  token: string
+  loggedInAt: Date
 }

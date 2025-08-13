@@ -1,27 +1,17 @@
-import type { IUser } from "../../../../domain/entity/user";
-import type { IHttpResponse, KeysOf } from "../base";
-import type { AsyncData, AsyncDataOptions, NuxtError } from "#app";
+import type { IUser } from '../../../../domain/entity/user'
+import type { IHttpResponse } from '../base'
+import type { FetchOptions } from 'ofetch'
 
 type ILoginResponse = IHttpResponse<{
-  user: IUser;
-  token: string;
-}>;
+  user: IUser
+  token: string
+}>
 interface ILoginRequest {
   payload: {
-    email: string;
-    password: string;
-  };
-  options?: AsyncDataOptions<
-    ILoginResponse,
-    ILoginResponse,
-    KeysOf<ILoginResponse>,
-    undefined
-  >;
+    email: string
+    password: string
+  }
+  options?: FetchOptions
 }
 
-type ILoginAsyncDataResponse = AsyncData<
-  ILoginResponse | undefined,
-  NuxtError<unknown> | undefined
->;
-
-export type { ILoginResponse, ILoginRequest, ILoginAsyncDataResponse };
+export type { ILoginResponse, ILoginRequest }
