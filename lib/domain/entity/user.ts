@@ -7,6 +7,6 @@ export interface IUser {
   avatar_url?: string
   timezone?: string
   currency?: string
-  is_verified: boolean
+  is_verified: number
   email_verified_at?: string
 }
