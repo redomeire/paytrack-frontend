@@ -1,20 +1,22 @@
 <template>
   <div class="fixed lg:visible invisible top-0 bottom-0 left-0  w-1/5 z-30 p-5 shadow-xl">
     <div class="grid grid-rows-12 h-screen">
-      <div class="flex items-center gap-2">
-        <NuxtButton
-          icon="i-material-symbols-mail-outline"
-          class="rounded-lg p-2"
-        />
-        <div>
-          <h1 class="text-h5">
-            Paytrack
-          </h1>
-          <p class="text-sm text-gray-500">
-            Billing Solutions
-          </p>
+      <NuxtLink to="/dashboard">
+        <div class="flex items-center gap-2">
+          <NuxtButton
+            icon="i-material-symbols-mail-outline"
+            class="rounded-lg p-2"
+          />
+          <div>
+            <h1 class="text-h5">
+              Paytrack
+            </h1>
+            <p class="text-sm text-gray-500">
+              Billing Solutions
+            </p>
+          </div>
         </div>
-      </div>
+      </NuxtLink>
       <nav class="mt-10 row-span-9">
         <ul class="flex flex-col gap-3">
           <li

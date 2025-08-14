@@ -52,9 +52,10 @@
       class="mt-5"
     >
       <NuxtTable
-        :data="mockBills"
+        :data="bills?.data"
         :columns="columns"
         class="flex-1 max-h"
+        :loading="status === 'pending'"
       >
         <template #action-cell="{ row }">
           <NuxtDropdownMenu :items="getDropdownActions(row.original)">
@@ -73,7 +74,7 @@
         </p>
         <NuxtPagination
           v-model:page="page"
-          :total="mockBills.length"
+          :total="bills?.data?.length"
           class="float-end"
           show-edges
         />
@@ -84,10 +85,13 @@
 
 <script lang="ts" setup>
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
+import type { IBill } from '~~/lib/domain/entity/bill'
 
 definePageMeta({
   layout: 'dashboard'
 })
+
+const { $useCases } = useNuxtApp()
 
 const statusSelect = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
 const statusSelectValue = ref('')
@@ -99,108 +103,9 @@ const NuxtBadge = resolveComponent('NuxtBadge')
 const toast = useToast()
 
 // table data
-interface Bill {
-  id: number
-  name: string
-  company: string
-  amount: number
-  dueDate: string
-  status: string
-  category: string
-  recurring: string
-  lastPaid: string
-}
-const mockBills: Bill[] = [
-  {
-    id: 1,
-    name: 'Listrik PLN',
-    company: 'PT PLN Persero',
-    amount: 450000,
-    dueDate: '2024-01-15',
-    status: 'pending',
-    category: 'Utilities',
-    recurring: 'monthly',
-    lastPaid: '2023-12-15'
-  },
-  {
-    id: 2,
-    name: 'Internet Indihome',
-    company: 'Telkom Indonesia',
-    amount: 350000,
-    dueDate: '2024-01-10',
-    status: 'overdue',
-    category: 'Internet',
-    recurring: 'monthly',
-    lastPaid: '2023-11-10'
-  },
-  {
-    id: 3,
-    name: 'Asuransi Kesehatan',
-    company: 'Allianz Indonesia',
-    amount: 1200000,
-    dueDate: '2024-01-20',
-    status: 'paid',
-    category: 'Insurance',
-    recurring: 'monthly',
-    lastPaid: '2024-01-18'
-  },
-  {
-    id: 4,
-    name: 'Netflix Subscription',
-    company: 'Netflix',
-    amount: 186000,
-    dueDate: '2024-01-25',
-    status: 'pending',
-    category: 'Entertainment',
-    recurring: 'monthly',
-    lastPaid: '2023-12-25'
-  },
-  {
-    id: 5,
-    name: 'Spotify Premium',
-    company: 'Spotify',
-    amount: 65000,
-    dueDate: '2024-01-08',
-    status: 'paid',
-    category: 'Entertainment',
-    recurring: 'monthly',
-    lastPaid: '2024-01-08'
-  },
-  {
-    id: 6,
-    name: 'Kartu Kredit BCA',
-    company: 'Bank BCA',
-    amount: 2500000,
-    dueDate: '2024-01-30',
-    status: 'pending',
-    category: 'Credit Card',
-    recurring: 'monthly',
-    lastPaid: '2023-12-28'
-  },
-  {
-    id: 7,
-    name: 'Air PDAM',
-    company: 'PDAM Jakarta',
-    amount: 125000,
-    dueDate: '2024-01-12',
-    status: 'overdue',
-    category: 'Utilities',
-    recurring: 'monthly',
-    lastPaid: '2023-11-12'
-  },
-  {
-    id: 8,
-    name: 'Gas PGN',
-    company: 'PT PGN',
-    amount: 85000,
-    dueDate: '2024-01-18',
-    status: 'pending',
-    category: 'Utilities',
-    recurring: 'monthly',
-    lastPaid: '2023-12-18'
-  }
-]
-const columns: TableColumn<Bill>[] = [
+const { data: bills, status } = useAsyncData('bills',
+  () => $useCases.bill.getAllBills.execute({}))
+const columns: TableColumn<IBill>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -211,19 +116,19 @@ const columns: TableColumn<Bill>[] = [
     cell: ({ row }) => `${row.getValue('name')}`
   },
   {
-    accessorKey: 'company',
-    header: 'Company',
-    cell: ({ row }) => row.getValue('company')
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ row }) => row.getValue('description')
   },
   {
     accessorKey: 'amount',
     header: 'Amount',
-    cell: ({ row }) => `Rp ${row.getValue('amount')}`
+    cell: ({ row }) => `${currencyFormat(row.getValue('amount'), row.getValue('currency'))}`
   },
   {
-    accessorKey: 'dueDate',
+    accessorKey: 'due_date',
     header: 'Due Date',
-    cell: ({ row }) => new Date(row.getValue('dueDate')).toLocaleDateString('id-ID', {
+    cell: ({ row }) => new Date(row.getValue('due_date')).toLocaleDateString('id-ID', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -246,23 +151,19 @@ const columns: TableColumn<Bill>[] = [
     }
   },
   {
-    accessorKey: 'category',
-    header: 'Category',
-    cell: ({ row }) => row.getValue('category')
+    accessorKey: 'billing_type',
+    header: 'Billing type',
+    cell: ({ row }) => row.getValue('billing_type')
   },
   {
-    accessorKey: 'recurring',
-    header: 'Recurring',
-    cell: ({ row }) => row.getValue('recurring')
+    accessorKey: 'frequency',
+    header: 'Frequency',
+    cell: ({ row }) => row.getValue('frequency')
   },
   {
-    accessorKey: 'lastPaid',
-    header: 'Last Paid',
-    cell: ({ row }) => new Date(row.getValue('lastPaid')).toLocaleDateString('id-ID', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
+    accessorKey: 'attachment_url',
+    header: 'Attachment',
+    cell: ({ row }) => row.getValue('attachment_url')
   },
   {
     id: 'action'
@@ -270,7 +171,7 @@ const columns: TableColumn<Bill>[] = [
 ]
 const page = ref(1)
 
-function getDropdownActions(bill: Bill): DropdownMenuItem[][] {
+function getDropdownActions(bill: IBill): DropdownMenuItem[][] {
   return [
     [
       {
@@ -293,7 +194,11 @@ function getDropdownActions(bill: Bill): DropdownMenuItem[][] {
       {
         label: 'Delete',
         icon: 'i-lucide-trash',
-        color: 'error'
+        color: 'error',
+        onSelect: async () => {
+          await $useCases.bill.deleteBill.execute({ payload: { id: bill.id } })
+          await refreshNuxtData('bills')
+        }
       }
     ]
   ]

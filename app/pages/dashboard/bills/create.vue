@@ -234,6 +234,12 @@ const { data: billCategories } = useAsyncData('bill-categories', () =>
     }))
   }
 })
+watch(billCategories, (newCategories) => {
+  if (newCategories && newCategories.length > 0) {
+    state.bill_category_id = newCategories[0]!
+  }
+})
+
 const { status, execute } = await useAsyncData(() => $useCases.bill.createBill.execute({
   payload: {
     ...state,

@@ -3,7 +3,9 @@ export function currencyFormat(amount: number, currency = 'IDR', locale = 'id-ID
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
+    currencyDisplay: 'symbol',
+    currencySign: 'standard'
   })
 
   return formatter.format(amount)

@@ -3,6 +3,8 @@ import type { ICreateBillRequest, ICreateBillResponse } from '../../common/types
 import BillRepository from '../../domain/repository/billRepository'
 import type { BillRemoteDataSourceImpl } from '../datasource/billRemoteDataSource'
 import type { IGetAllBillCategoriesRequest, IGetAllBillCategoriesResponse } from '~~/lib/common/types/http/bill/getAllBillCategories'
+import type { IGetAllBillsRequest, IGetAllBillsResponse } from '~~/lib/common/types/http/bill/getAllBills'
+import type { IDeleteBillRequest, IDeleteBillResponse } from '~~/lib/common/types/http/bill/deleteBIll'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -21,5 +23,13 @@ export class BillRepositoryImpl extends BillRepository {
 
   getAllBillCategories(request: IGetAllBillCategoriesRequest): Promise<IGetAllBillCategoriesResponse> {
     return this.billRemoteDataSource.getAllBillCategories(request)
+  }
+
+  getAllBills(request: IGetAllBillsRequest): Promise<IGetAllBillsResponse> {
+    return this.billRemoteDataSource.getAllBills(request)
+  }
+
+  deleteBill(request: IDeleteBillRequest): Promise<IDeleteBillResponse> {
+    return this.billRemoteDataSource.deleteBill(request)
   }
 }
