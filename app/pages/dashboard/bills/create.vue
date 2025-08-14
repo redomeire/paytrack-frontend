@@ -36,21 +36,14 @@
             required
           >
             <NuxtSelectMenu
-              v-model="selectedBillCategory"
-              :items="mockBillCategories"
+              v-model="state.bill_category_id"
+              :items="billCategories"
               :ui="{ leading: 'pr-3' }"
               class="w-full"
               size="xl"
               create-item
               @create="onCreateCategory"
-            >
-              <template #item-label="{ item }">
-                {{ item.id }} - {{ item.name }}
-              </template>
-              <template #default="{ modelValue }">
-                {{ modelValue?.id }} - {{ modelValue?.name }}
-              </template>
-            </NuxtSelectMenu>
+            />
           </NuxtFormField>
         </div>
         <NuxtFormField
@@ -206,9 +199,9 @@
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { InferedBillsSchema } from '~~/shared/types/bills/billsSchema'
 import { BillingFrequency, BillingType, billsSchema } from '~~/shared/types/bills/billsSchema'
-import type { IBillCategory } from '~~/lib/domain/entity/bill-category'
 import { NuxtFormField, NuxtTextarea } from '#components'
 import countries from '~/assets/country/countries_with_all_data.json'
+import type { IGetAllBillCategoriesResponse } from '~~/lib/common/types/http/bill/getAllBillCategories'
 
 definePageMeta({
   layout: 'dashboard'
@@ -217,30 +210,9 @@ definePageMeta({
 const { $useCases } = useNuxtApp()
 
 const currencies: string[] = countries.map((country) => country.currencies!)
-const mockBillCategories = ref<IBillCategory[]>([
-  {
-    id: '1',
-    name: 'Electricity',
-    description: 'Monthly electricity bill',
-    icon: 'mdi-lightning-bolt',
-    color: 'blue',
-    created_at: new Date(),
-    updated_at: new Date()
-  },
-  {
-    id: '2',
-    name: 'Social Media Subscription',
-    description: 'Monthly electricity bill',
-    icon: 'mdi-lightning-bolt',
-    color: 'blue',
-    created_at: new Date(),
-    updated_at: new Date()
-  }
-])
-const selectedBillCategory = ref<IBillCategory>(mockBillCategories.value[0]!)
 const state = reactive({
   name: '',
-  bill_category_id: '1',
+  bill_category_id: { label: '', value: '' },
   description: '',
   amount: 0,
   currency: 'IDR',
@@ -251,20 +223,21 @@ const state = reactive({
   attachment_url: '',
   due_date: ''
 })
-watch(
-  () => selectedBillCategory,
-  (newValue, oldValue) => {
-    if (newValue.value !== oldValue.value) {
-      state.bill_category_id = newValue.value.id
-    }
-  }
-)
 
+const { data: billCategories } = useAsyncData('bill-categories', () =>
+  $useCases.bill.getAllBillCategories.execute({}), {
+  immediate: true,
+  transform: (data: IGetAllBillCategoriesResponse) => {
+    return data?.data?.map((billCategory) => ({
+      label: billCategory.name,
+      value: billCategory.id
+    }))
+  }
+})
 const { status, execute } = await useAsyncData(() => $useCases.bill.createBill.execute({
   payload: {
     ...state,
-    // due_date is d-m-y
-    due_date: state.due_date ? new Date(state.due_date).toISOString() : undefined
+    bill_category_id: state.bill_category_id.value
   }
 }), {
   immediate: false
@@ -272,8 +245,11 @@ const { status, execute } = await useAsyncData(() => $useCases.bill.createBill.e
 
 const handleCreateBill = async (event: FormSubmitEvent<InferedBillsSchema>) => {
   event.preventDefault()
-  console.log(state)
   await execute()
+
+  if (status.value !== 'error') {
+    navigateTo('/dashboard/bills')
+  }
 }
 const onCreateCategory = (name: string) => {
   navigateTo(`/dashboard/bills/category/create?name=${encodeURIComponent(name)}`)

@@ -7,6 +7,8 @@ import { Logout } from '../../lib/domain/usecase/auth/logout'
 import { AuthorizeSocialLogin } from '../../lib/domain/usecase/auth/authorizeSocialLogin'
 import type BillRepository from '~~/lib/domain/repository/billRepository'
 import { CreateBill } from '../../lib/domain/usecase/bill/createBill'
+import { CreateBillCategory } from '../../lib/domain/usecase/bill/createBillCategory'
+import { GetAllBillCategories } from '../../lib/domain/usecase/bill/getAllBillCategories'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -29,7 +31,9 @@ export default defineNuxtPlugin({
         authorizeSocialLogin: new AuthorizeSocialLogin(authRepository)
       },
       bill: {
-        createBill: new CreateBill(billRepository)
+        createBill: new CreateBill(billRepository),
+        createBillCategory: new CreateBillCategory(billRepository),
+        getAllBillCategories: new GetAllBillCategories(billRepository)
       }
     }
 
