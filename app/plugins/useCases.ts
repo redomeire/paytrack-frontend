@@ -5,6 +5,8 @@ import { ForgotPassword } from '../../lib/domain/usecase/auth/forgotPassword'
 import { ResetPassword } from '../../lib/domain/usecase/auth/resetPassword'
 import { Logout } from '../../lib/domain/usecase/auth/logout'
 import { AuthorizeSocialLogin } from '../../lib/domain/usecase/auth/authorizeSocialLogin'
+import type BillRepository from '~~/lib/domain/repository/billRepository'
+import { CreateBill } from '../../lib/domain/usecase/bill/createBill'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -14,6 +16,7 @@ export default defineNuxtPlugin({
 
     // repositories
     const authRepository = $repositories.auth as AuthRepository
+    const billRepository = $repositories.bill as BillRepository
 
     // register use cases
     const useCases = {
@@ -24,6 +27,9 @@ export default defineNuxtPlugin({
         resetPassword: new ResetPassword(authRepository),
         logout: new Logout(authRepository),
         authorizeSocialLogin: new AuthorizeSocialLogin(authRepository)
+      },
+      bill: {
+        createBill: new CreateBill(billRepository)
       }
     }
 
