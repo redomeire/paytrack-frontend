@@ -5,7 +5,7 @@
         <h1 class="text-2xl font-bold">
           Bills
         </h1>
-        <p class="text-gray-600">
+        <p>
           Manage your bills and expenses in once place.
         </p>
       </div>

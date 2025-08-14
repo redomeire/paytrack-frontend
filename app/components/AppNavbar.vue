@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white border-b border-b-accented items-center p-5 fixed top-0 right-0 lg:left-64 left-0 z-30">
+  <header class="bg-default border-b border-b-accented items-center p-5 fixed top-0 right-0 lg:left-64 left-0 z-30">
     <div class="lg:grid lg:grid-cols-5 flex justify-between lg:gap-10 gap-2 relative">
       <div class="flex items-center lg:col-span-2">
         <AppDrawer />
@@ -45,7 +45,7 @@
                 <li
                   v-for="notification of notifications"
                   :key="notification.time"
-                  :class="`${!notification.is_read ? 'bg-neutral-100 hover:brightness-95' : 'hover:bg-neutral-100'} transition p-3`"
+                  :class="`${!notification.is_read ? 'hover:bg-elevated' : 'bg-elevated hover:bg-accented'} transition p-3`"
                 >
                   <p class="text-body-sm">
                     {{ notification.text }}
@@ -69,6 +69,12 @@
             Instant Report
           </p>
         </NuxtButton>
+        <NuxtButton
+          :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
+          color="neutral"
+          variant="outline"
+          @click="isDark = !isDark"
+        />
         <NuxtChip
           size="lg"
         >
@@ -102,7 +108,7 @@
                   <li
                     v-for="notification of notifications"
                     :key="notification.time"
-                    :class="`${!notification.is_read ? 'bg-neutral-100 hover:brightness-95' : 'hover:bg-neutral-100'} transition p-3`"
+                    :class="`${!notification.is_read ? 'hover:bg-elevated' : 'bg-elevated hover:bg-accented'} transition p-3`"
                   >
                     <p class="text-body-sm">
                       {{ notification.text }}
@@ -137,6 +143,15 @@
 
 <script lang="ts" setup>
 import { NuxtButton, NuxtSeparator } from '#components'
+
+// dark mode
+const colorMode = useColorMode()
+const isDark = computed({
+  get: () => colorMode.value === 'dark',
+  set: (value) => {
+    colorMode.preference = value ? 'dark' : 'light'
+  }
+})
 
 const notifications = [
   {
