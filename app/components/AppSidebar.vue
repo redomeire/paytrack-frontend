@@ -67,7 +67,7 @@ const navItems = [
   {
     title: 'Tagihan',
     icon: 'i-material-symbols-receipt-long-outline',
-    route: '/invoices'
+    route: '/dashboard/bills'
   },
   {
     title: 'Klien',

@@ -12,9 +12,8 @@
         />
       </div>
       <NuxtChip
-        :text="1"
-        size="3xl"
         class="lg:hidden"
+        size="lg"
       >
         <NuxtPopover
           :content="{
@@ -71,8 +70,7 @@
           </p>
         </NuxtButton>
         <NuxtChip
-          :text="1"
-          size="3xl"
+          size="lg"
         >
           <NuxtPopover
             :content="{
