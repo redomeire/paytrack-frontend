@@ -123,16 +123,17 @@
           </NuxtPopover>
         </NuxtChip>
         <div class="flex items-center gap-3">
-          <NuxtAvatar
-            src="https://github.com/benjamincanac.png"
-            size="xl"
-          />
-          <div class="text-right">
+          <img
+            :src="data?.user?.avatar_url ?? ''"
+            :alt="`${data?.user?.first_name} ${data?.user?.last_name}`"
+            class="w-10 h-10 rounded-full object-cover"
+          >
+          <div>
             <p class="text-body-sm font-semibold">
-              Benjamin Canac
+              {{ data?.user?.first_name }} {{ data?.user?.last_name }}
             </p>
             <p class="text-xs text-neutral-500">
-              assistant manager
+              {{ data?.user?.email }}
             </p>
           </div>
         </div>
@@ -143,6 +144,10 @@
 
 <script lang="ts" setup>
 import { NuxtButton, NuxtSeparator } from '#components'
+import type { IUser } from '~~/lib/domain/entity/user'
+
+const { data } = await useAsyncData<{ user: IUser }>('userData',
+  () => $fetch('/api/auth/get-session'))
 
 // dark mode
 const colorMode = useColorMode()

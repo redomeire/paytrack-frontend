@@ -102,6 +102,7 @@ definePageMeta({
   layout: 'dashboard'
 })
 const route = useRoute()
+const router = useRouter()
 const { $useCases } = useNuxtApp()
 
 const state = reactive({
@@ -126,7 +127,7 @@ const handleCreateBillCategory = async (event: FormSubmitEvent<InferenBillsCateg
   await execute()
 
   if (status.value !== 'error') {
-    navigateTo('/dashboard/bills/create')
+    router.back()
   }
 }
 </script>

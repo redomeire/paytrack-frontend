@@ -7,6 +7,8 @@ import { Logout } from '../../lib/domain/usecase/auth/logout'
 import { AuthorizeSocialLogin } from '../../lib/domain/usecase/auth/authorizeSocialLogin'
 import type BillRepository from '~~/lib/domain/repository/billRepository'
 import { GetAllBills } from '../../lib/domain/usecase/bill/getAllBills'
+import { GetBillDetail } from '../../lib/domain/usecase/bill/getBillDetail'
+import { UpdateBill } from '../../lib/domain/usecase/bill/updateBill'
 import { DeleteBill } from '../../lib/domain/usecase/bill/deleteBill'
 import { CreateBill } from '../../lib/domain/usecase/bill/createBill'
 import { CreateBillCategory } from '../../lib/domain/usecase/bill/createBillCategory'
@@ -34,7 +36,9 @@ export default defineNuxtPlugin({
       },
       bill: {
         getAllBills: new GetAllBills(billRepository),
+        getBillDetail: new GetBillDetail(billRepository),
         createBill: new CreateBill(billRepository),
+        updateBill: new UpdateBill(billRepository),
         deleteBill: new DeleteBill(billRepository),
         createBillCategory: new CreateBillCategory(billRepository),
         getAllBillCategories: new GetAllBillCategories(billRepository)

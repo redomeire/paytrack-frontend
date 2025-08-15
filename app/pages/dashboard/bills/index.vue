@@ -189,7 +189,10 @@ function getDropdownActions(bill: IBill): DropdownMenuItem[][] {
     [
       {
         label: 'Edit',
-        icon: 'i-lucide-edit'
+        icon: 'i-lucide-edit',
+        onSelect() {
+          navigateTo(`/dashboard/bills/${bill.id}`)
+        }
       },
       {
         label: 'Delete',

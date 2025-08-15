@@ -3,6 +3,8 @@ import type { ICreateBillRequest, ICreateBillResponse } from '../../common/types
 import type { ICreateBillCategoryRequest, ICreateBillCategoryResponse } from '../../common/types/http/bill/createBillCategory'
 import type { IGetAllBillCategoriesRequest, IGetAllBillCategoriesResponse } from '../../common/types/http/bill/getAllBillCategories'
 import type { IGetAllBillsRequest, IGetAllBillsResponse } from '../../common/types/http/bill/getAllBills'
+import type { IGetBillDetailRequest, IGetBillDetailResponse } from '../../common/types/http/bill/getBillDetail'
+import type { IUpdateBillRequest, IUpdateBillResponse } from '../../common/types/http/bill/updateBill'
 import type { IDeleteBillRequest, IDeleteBillResponse } from '../../common/types/http/bill/deleteBIll'
 
 abstract class BillRemoteDataSource {
@@ -10,6 +12,8 @@ abstract class BillRemoteDataSource {
   abstract createBillCategory(request: ICreateBillCategoryRequest): Promise<ICreateBillCategoryResponse>
   abstract getAllBillCategories(request: IGetAllBillCategoriesRequest): Promise<IGetAllBillCategoriesResponse>
   abstract getAllBills(request: IGetAllBillsRequest): Promise<IGetAllBillsResponse>
+  abstract getBillDetail(request: IGetBillDetailRequest): Promise<IGetBillDetailResponse>
+  abstract updateBill(request: IUpdateBillRequest): Promise<IUpdateBillResponse>
   abstract deleteBill(request: IDeleteBillRequest): Promise<IDeleteBillResponse>
 }
 
@@ -55,6 +59,22 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
 
   getAllBills(request: IGetAllBillsRequest): Promise<IGetAllBillsResponse> {
     const response = this.fetcher('/bills', {
+      ...request.options
+    })
+    return response
+  }
+
+  getBillDetail(request: IGetBillDetailRequest): Promise<IGetBillDetailResponse> {
+    const response = this.fetcher(`/bills/${request.payload.id}`, {
+      ...request.options
+    })
+    return response
+  }
+
+  updateBill(request: IUpdateBillRequest): Promise<IUpdateBillResponse> {
+    const response = this.fetcher(`/bills/${request.payload.bill.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(request.payload.bill),
       ...request.options
     })
     return response
