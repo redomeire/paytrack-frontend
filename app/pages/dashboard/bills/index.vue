@@ -26,25 +26,37 @@
       class="rounded-lg mt-5"
     >
       <NuxtInput
+        v-model="search"
         name="search"
         icon="i-lucide-search"
         placeholder="Cari tagihan"
         class="w-full"
         size="xl"
+        @keyup.enter="execute"
       />
       <div class="grid md:grid-cols-4 gap-4 mt-5">
-        <NuxtSelect
-          v-model="statusSelectValue"
-          :items="statusSelect"
-          size="xl"
-          placeholder="Select status"
-        />
-        <NuxtSelect
+        <NuxtSelectMenu
           v-model="categorySelectValue"
-          :items="categorySelect"
+          :items="categories?.data"
+          :ui="{ leading: 'pr-3' }"
+          class="w-full"
           size="xl"
-          placeholder="Select category"
-        />
+          create-item
+          placeholder="Select Category"
+          :trailing="false"
+        >
+          <template #trailing="{ modelValue }">
+            <NuxtButton
+              v-if="modelValue?.value !== ''"
+              variant="ghost"
+              class="rounded-full -translate-x-1"
+              icon="i-ix-clear"
+              size="md"
+              color="error"
+              @click="categorySelectValue = { label: '', value: '' }"
+            />
+          </template>
+        </NuxtSelectMenu>
       </div>
     </div>
     <div
@@ -52,7 +64,7 @@
       class="mt-5"
     >
       <NuxtTable
-        :data="bills?.data"
+        :data="bills?.data?.data"
         :columns="columns"
         class="flex-1 max-h"
         :loading="status === 'pending'"
@@ -70,11 +82,12 @@
       </NuxtTable>
       <div class="flex items-center flex-wrap gap-5 justify-between mt-5">
         <p class="text-sm">
-          Menampilkan 1 - 5 dari 8 tagihan
+          Menampilkan {{ bills?.data?.from }} - {{ bills?.data?.to }} dari {{ bills?.data?.total }} tagihan
         </p>
         <NuxtPagination
           v-model:page="page"
-          :total="bills?.data?.length"
+          :items-per-page="10"
+          :total="bills?.data?.total"
           class="float-end"
           show-edges
         />
@@ -91,20 +104,44 @@ definePageMeta({
   layout: 'dashboard'
 })
 
+// global state
 const { $useCases } = useNuxtApp()
-
-const statusSelect = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
-const statusSelectValue = ref('')
-
-const categorySelect = ref(['Internet', 'Utilities'])
-const categorySelectValue = ref('')
-
-const NuxtBadge = resolveComponent('NuxtBadge')
 const toast = useToast()
 
+// queries
+const search = ref('')
+const page = ref(1)
+
+// category filter
+const { data: categories } = await useAsyncData('categories',
+  () => $useCases.bill.getAllBillCategories.execute({}),
+  {
+    transform: (data) => {
+      return {
+        data: data.data?.map((category: { id: string, name: string }) => ({
+          label: category.name,
+          value: category.id
+        }))
+      }
+    }
+  })
+const categorySelectValue = ref({ label: '', value: '' })
+
 // table data
-const { data: bills, status } = useAsyncData('bills',
-  () => $useCases.bill.getAllBills.execute({}))
+const { data: bills, status, execute } = useAsyncData('bills',
+  () => $useCases.bill.getAllBills.execute({
+    options: {
+      query: {
+        search: search.value,
+        page: page.value,
+        bill_category_id: categorySelectValue.value?.value
+      }
+    }
+  }), {
+    watch: [page, categorySelectValue]
+  })
+
+// table column
 const columns: TableColumn<IBill>[] = [
   {
     accessorKey: 'id',
@@ -123,7 +160,7 @@ const columns: TableColumn<IBill>[] = [
   {
     accessorKey: 'amount',
     header: 'Amount',
-    cell: ({ row }) => `${currencyFormat(row.getValue('amount'), row.getValue('currency'))}`
+    cell: ({ row }) => `${currencyFormat(row.getValue('amount'), row.original.currency)}`
   },
   {
     accessorKey: 'due_date',
@@ -133,22 +170,6 @@ const columns: TableColumn<IBill>[] = [
       month: 'long',
       day: 'numeric'
     })
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.getValue('status')
-      const statusColors = {
-        pending: 'neutral' as const,
-        overdue: 'error' as const,
-        paid: 'success' as const
-      }[row.getValue('status') as string]
-
-      return h(NuxtBadge, { class: 'capitalize', variant: 'subtle', color: statusColors }, () =>
-        status
-      )
-    }
   },
   {
     accessorKey: 'billing_type',
@@ -169,8 +190,8 @@ const columns: TableColumn<IBill>[] = [
     id: 'action'
   }
 ]
-const page = ref(1)
 
+// functions
 function getDropdownActions(bill: IBill): DropdownMenuItem[][] {
   return [
     [

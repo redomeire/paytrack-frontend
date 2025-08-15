@@ -2,7 +2,7 @@ import type { IBill } from '../../../../domain/entity/bill'
 import type { IHttpResponse } from '../base'
 import type { FetchOptions } from 'ofetch'
 
-type IGetAllBillsResponse = IHttpResponse<IBill[]>
+type IGetAllBillsResponse = IHttpResponse<IBill[], true>
 interface IGetAllBillsRequest {
   options?: FetchOptions
 }
