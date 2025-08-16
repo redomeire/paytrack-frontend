@@ -5,6 +5,7 @@ import { ForgotPassword } from '../../lib/domain/usecase/auth/forgotPassword'
 import { ResetPassword } from '../../lib/domain/usecase/auth/resetPassword'
 import { Logout } from '../../lib/domain/usecase/auth/logout'
 import { AuthorizeSocialLogin } from '../../lib/domain/usecase/auth/authorizeSocialLogin'
+import { ChangePassword } from '../../lib/domain/usecase/auth/changePassword'
 import type BillRepository from '~~/lib/domain/repository/billRepository'
 import { GetAllBills } from '../../lib/domain/usecase/bill/getAllBills'
 import { GetBillDetail } from '../../lib/domain/usecase/bill/getBillDetail'
@@ -32,7 +33,8 @@ export default defineNuxtPlugin({
         forgotPassword: new ForgotPassword(authRepository),
         resetPassword: new ResetPassword(authRepository),
         logout: new Logout(authRepository),
-        authorizeSocialLogin: new AuthorizeSocialLogin(authRepository)
+        authorizeSocialLogin: new AuthorizeSocialLogin(authRepository),
+        changePassword: new ChangePassword(authRepository)
       },
       bill: {
         getAllBills: new GetAllBills(billRepository),
