@@ -5,6 +5,14 @@ import { ForgotPassword } from '../../lib/domain/usecase/auth/forgotPassword'
 import { ResetPassword } from '../../lib/domain/usecase/auth/resetPassword'
 import { Logout } from '../../lib/domain/usecase/auth/logout'
 import { AuthorizeSocialLogin } from '../../lib/domain/usecase/auth/authorizeSocialLogin'
+import type BillRepository from '~~/lib/domain/repository/billRepository'
+import { GetAllBills } from '../../lib/domain/usecase/bill/getAllBills'
+import { GetBillDetail } from '../../lib/domain/usecase/bill/getBillDetail'
+import { UpdateBill } from '../../lib/domain/usecase/bill/updateBill'
+import { DeleteBill } from '../../lib/domain/usecase/bill/deleteBill'
+import { CreateBill } from '../../lib/domain/usecase/bill/createBill'
+import { CreateBillCategory } from '../../lib/domain/usecase/bill/createBillCategory'
+import { GetAllBillCategories } from '../../lib/domain/usecase/bill/getAllBillCategories'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -14,6 +22,7 @@ export default defineNuxtPlugin({
 
     // repositories
     const authRepository = $repositories.auth as AuthRepository
+    const billRepository = $repositories.bill as BillRepository
 
     // register use cases
     const useCases = {
@@ -24,6 +33,15 @@ export default defineNuxtPlugin({
         resetPassword: new ResetPassword(authRepository),
         logout: new Logout(authRepository),
         authorizeSocialLogin: new AuthorizeSocialLogin(authRepository)
+      },
+      bill: {
+        getAllBills: new GetAllBills(billRepository),
+        getBillDetail: new GetBillDetail(billRepository),
+        createBill: new CreateBill(billRepository),
+        updateBill: new UpdateBill(billRepository),
+        deleteBill: new DeleteBill(billRepository),
+        createBillCategory: new CreateBillCategory(billRepository),
+        getAllBillCategories: new GetAllBillCategories(billRepository)
       }
     }
 

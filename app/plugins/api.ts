@@ -43,9 +43,13 @@ export default defineNuxtPlugin({
       },
       onResponseError({ response }) {
         const toast = useToast()
+        const errorMessage = response._data?.message
         toast.add({
           title: 'Error Occurred',
-          description: `${response._data.message || 'API request failed'}`,
+          description: typeof errorMessage === 'object'
+            ? Object.keys(errorMessage)
+                .map((key) => `${key}: ${errorMessage[key]}`).join(', ')
+            : errorMessage || 'An error occurred',
           color: 'error'
         })
       }
