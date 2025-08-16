@@ -78,7 +78,7 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   ): Promise<IRegisterResponse> {
     const response = this.fetcher('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(request)
+      body: JSON.stringify(request.payload)
     })
     return response
   }

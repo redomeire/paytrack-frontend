@@ -13,7 +13,7 @@ const isAuthRoute = (pathname: string): boolean => {
 }
 
 const isPrivateRoute = (pathname: string): boolean => {
-  return privateRoutes.includes(pathname)
+  return privateRoutes.includes(pathname) || pathname.startsWith('/dashboard/')
 }
 
 export { isAuthRoute, isPrivateRoute }
