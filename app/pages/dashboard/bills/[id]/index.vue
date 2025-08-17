@@ -9,6 +9,18 @@
           Fill in the details of your new bill.
         </p>
       </div>
+      <div>
+        <NuxtButton
+          :to="`/dashboard/bills/${billId}/payments`"
+          color="primary"
+          size="xl"
+          class="flex items-center justify-center"
+          variant="outline"
+        >
+          <NuxtIcon name="i-material-symbols-visibility" />
+          <span class="ml-2">View payment history</span>
+        </NuxtButton>
+      </div>
     </div>
     <div class="mt-10">
       <NuxtForm

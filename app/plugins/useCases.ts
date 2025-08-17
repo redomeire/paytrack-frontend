@@ -14,6 +14,12 @@ import { DeleteBill } from '../../lib/domain/usecase/bill/deleteBill'
 import { CreateBill } from '../../lib/domain/usecase/bill/createBill'
 import { CreateBillCategory } from '../../lib/domain/usecase/bill/createBillCategory'
 import { GetAllBillCategories } from '../../lib/domain/usecase/bill/getAllBillCategories'
+import type PaymentRepository from '~~/lib/domain/repository/paymentRepository'
+import { GetAllPayments } from '../../lib/domain/usecase/payment/getAllPayment'
+import { CreatePayment } from '../../lib/domain/usecase/payment/createPayment'
+import { GetPaymentDetail } from '../../lib/domain/usecase/payment/getPaymentDetail'
+import { UpdatePayment } from '../../lib/domain/usecase/payment/updatePayment'
+import { DeletePayment } from '../../lib/domain/usecase/payment/deletePayment'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -24,6 +30,7 @@ export default defineNuxtPlugin({
     // repositories
     const authRepository = $repositories.auth as AuthRepository
     const billRepository = $repositories.bill as BillRepository
+    const paymentRepository = $repositories.payment as PaymentRepository
 
     // register use cases
     const useCases = {
@@ -44,6 +51,13 @@ export default defineNuxtPlugin({
         deleteBill: new DeleteBill(billRepository),
         createBillCategory: new CreateBillCategory(billRepository),
         getAllBillCategories: new GetAllBillCategories(billRepository)
+      },
+      payment: {
+        getAllPayments: new GetAllPayments(paymentRepository),
+        createPayment: new CreatePayment(paymentRepository),
+        getPaymentDetail: new GetPaymentDetail(paymentRepository),
+        updatePayment: new UpdatePayment(paymentRepository),
+        deletePayment: new DeletePayment(paymentRepository)
       }
     }
 
