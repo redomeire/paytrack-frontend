@@ -1,8 +1,8 @@
 <template>
   <div>
-    <AppSidebar />
+    <SharedSidebarDashboardSidebar />
     <div class="lg:ml-64">
-      <AppNavbar />
+      <SharedNavbarAppNavbar />
       <main class="px-5 py-7 pt-28">
         <div v-if="!data?.user?.is_verified">
           <div
