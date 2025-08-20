@@ -1,0 +1,45 @@
+import type { ICreateBillCategoryRequest, ICreateBillCategoryResponse } from '~~/lib/common/types/http/bill/createBillCategory'
+import type { ICreateBillRequest, ICreateBillResponse } from '../../common/types/http/bill/createBill'
+import BillRepository from '../../domain/repository/billRepository'
+import type { BillRemoteDataSourceImpl } from '../datasource/billRemoteDataSource'
+import type { IGetAllBillCategoriesRequest, IGetAllBillCategoriesResponse } from '~~/lib/common/types/http/bill/getAllBillCategories'
+import type { IGetAllBillsRequest, IGetAllBillsResponse } from '~~/lib/common/types/http/bill/getAllBills'
+import type { IDeleteBillRequest, IDeleteBillResponse } from '~~/lib/common/types/http/bill/deleteBIll'
+import type { IGetBillDetailRequest, IGetBillDetailResponse } from '~~/lib/common/types/http/bill/getBillDetail'
+import type { IUpdateBillRequest, IUpdateBillResponse } from '~~/lib/common/types/http/bill/updateBill'
+
+export class BillRepositoryImpl extends BillRepository {
+  private billRemoteDataSource: BillRemoteDataSourceImpl
+  constructor(billRemoteDataSource: BillRemoteDataSourceImpl) {
+    super()
+    this.billRemoteDataSource = billRemoteDataSource
+  }
+
+  createBill(request: ICreateBillRequest): Promise<ICreateBillResponse> {
+    return this.billRemoteDataSource.createBill(request)
+  }
+
+  createBillCategory(request: ICreateBillCategoryRequest): Promise<ICreateBillCategoryResponse> {
+    return this.billRemoteDataSource.createBillCategory(request)
+  }
+
+  getAllBillCategories(request: IGetAllBillCategoriesRequest): Promise<IGetAllBillCategoriesResponse> {
+    return this.billRemoteDataSource.getAllBillCategories(request)
+  }
+
+  getAllBills(request: IGetAllBillsRequest): Promise<IGetAllBillsResponse> {
+    return this.billRemoteDataSource.getAllBills(request)
+  }
+
+  getBillDetail(request: IGetBillDetailRequest): Promise<IGetBillDetailResponse> {
+    return this.billRemoteDataSource.getBillDetail(request)
+  }
+
+  updateBill(request: IUpdateBillRequest): Promise<IUpdateBillResponse> {
+    return this.billRemoteDataSource.updateBill(request)
+  }
+
+  deleteBill(request: IDeleteBillRequest): Promise<IDeleteBillResponse> {
+    return this.billRemoteDataSource.deleteBill(request)
+  }
+}
