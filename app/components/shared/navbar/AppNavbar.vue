@@ -72,9 +72,8 @@ const navbarDatas = [
 @reference '~/assets/css/main.css';
 
 .main__header {
-  @apply p-5 px-10 rounded-full bg-white;
-  @apply fixed inset-x-10 top-10 z-40;
-  @apply border border-neutral-200 hover:shadow-xl shadow-lg shadow-primary-100 transition;
+  @apply p-3 px-10 mx-28 mt-10 rounded-full bg-white;
+  @apply border border-neutral-200 hover:shadow-xl shadow-primary-100 transition;
   @apply flex items-center justify-between;
 }
 </style>
