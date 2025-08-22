@@ -24,7 +24,7 @@
       <NuxtFormField
         id="payments-date-range"
         class="rounded-lg mt-5"
-        label="Date Range"
+        label="Due Date Range"
       >
         <NuxtPopover>
           <NuxtInput

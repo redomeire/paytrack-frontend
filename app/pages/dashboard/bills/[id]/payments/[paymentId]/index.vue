@@ -261,7 +261,9 @@ const state = reactive({
   ...payment.value?.data,
   due_date: due_date.value.toString(),
   paid_date: paid_date.value?.toString() || undefined,
-  notes: ''
+  notes: payment.value?.data?.notes || '',
+  payment_method: payment.value?.data?.payment_method || '',
+  payment_reference: payment.value?.data?.payment_reference || ''
 })
 
 const { data: createdPayment, status, execute } = await useAsyncData(
@@ -289,14 +291,14 @@ const handleUpdatePayment = async (event: FormSubmitEvent<InferedPaymentSchema>)
 
   await execute()
   if (createdPayment.value) {
-    navigateTo(`/dashboard/bills/${state.bill_id}/payments`)
+    await navigateTo(`/dashboard/bills/${state.bill_id}/payments`)
   }
 }
 
 const handleDeletePayment = async () => {
   await executeDelete()
   if (deleteData.value?.success) {
-    navigateTo(`/dashboard/bills/${state.bill_id}/payments`)
+    await navigateTo(`/dashboard/bills/${state.bill_id}/payments`)
   }
 }
 </script>

@@ -60,7 +60,7 @@
         </div>
         <NuxtFormField
           label="Description"
-          name="desription"
+          name="description"
           class="mt-5"
         >
           <NuxtTextarea
@@ -70,126 +70,126 @@
             class="w-full"
             placeholder="ex: Monthly electricity bill for January 2024"
           />
-          <div class="form group grid md:grid-cols-3 gap-3 mt-5">
-            <NuxtFormField
-              label="Amount"
-              name="amount"
-              required
-            >
-              <NuxtInputNumber
-                v-model="state.amount"
-                :format-options="{
-                  style: 'currency',
-                  currency: state.currency,
-                  currencyDisplay: 'symbol',
-                  currencySign: 'standard'
-                }"
-                :min="0"
-                :locale="'id-ID'"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
-              >
-                <template #decrement>
-                  <div />
-                </template>
-                <template #increment>
-                  <div />
-                </template>
-              </NuxtInputNumber>
-            </NuxtFormField>
-            <NuxtFormField
-              label="Currency"
-              name="currency"
-              required
-            >
-              <NuxtSelectMenu
-                v-model="state.currency"
-                :items="currencies"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Billing Type"
-              name="billing_type"
-              required
-            >
-              <NuxtSelect
-                v-model="state.billing_type"
-                :items="Object.values(BillingType)"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Billing Frequency"
-              name="billing_frequency"
-              required
-            >
-              <NuxtSelect
-                v-model="state.frequency"
-                :items="Object.values(BillingFrequency)"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Custom Frequency (Days)"
-              name="custom_frequency_days"
-            >
-              <NuxtInputNumber
-                v-model="state.custom_frequency_days"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
-                :disabled="state.frequency !== BillingFrequency.CUSTOM"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Due Date"
-              name="due_date"
-              required
-            >
-              <NuxtInput
-                v-model="state.due_date"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                type="date"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Attachment URL"
-              name="attachment_url"
-            >
-              <NuxtInput
-                v-model="state.attachment_url"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
+        </NuxtFormField>
+        <div class="form group grid md:grid-cols-3 gap-3 mt-5">
           <NuxtFormField
-            label="Notes"
-            name="notes"
-            class="mt-5"
+            label="Amount"
+            name="amount"
+            required
           >
-            <NuxtTextarea
-              v-model="state.notes"
+            <NuxtInputNumber
+              v-model="state.amount"
+              :format-options="{
+                style: 'currency',
+                currency: state.currency,
+                currencyDisplay: 'symbol',
+                currencySign: 'standard'
+              }"
+              :min="0"
+              :locale="'id-ID'"
+              orientation="vertical"
+              size="xl"
+              class="w-full"
+            >
+              <template #decrement>
+                <div />
+              </template>
+              <template #increment>
+                <div />
+              </template>
+            </NuxtInputNumber>
+          </NuxtFormField>
+          <NuxtFormField
+            label="Currency"
+            name="currency"
+            required
+          >
+            <NuxtSelectMenu
+              v-model="state.currency"
+              :items="currencies"
               :ui="{ leading: 'pr-3' }"
               class="w-full"
               size="xl"
             />
           </NuxtFormField>
+          <NuxtFormField
+            label="Billing Type"
+            name="billing_type"
+            required
+          >
+            <NuxtSelect
+              v-model="state.billing_type"
+              :items="Object.values(BillingType)"
+              :ui="{ leading: 'pr-3' }"
+              class="w-full"
+              size="xl"
+            />
+          </NuxtFormField>
+        </div>
+        <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
+          <NuxtFormField
+            label="Billing Frequency"
+            name="billing_frequency"
+            required
+          >
+            <NuxtSelect
+              v-model="state.frequency"
+              :items="Object.values(BillingFrequency)"
+              :ui="{ leading: 'pr-3' }"
+              class="w-full"
+              size="xl"
+            />
+          </NuxtFormField>
+          <NuxtFormField
+            label="Custom Frequency (Days)"
+            name="custom_frequency_days"
+          >
+            <NuxtInputNumber
+              v-model="state.custom_frequency_days"
+              orientation="vertical"
+              size="xl"
+              class="w-full"
+              :disabled="state.frequency !== BillingFrequency.CUSTOM"
+            />
+          </NuxtFormField>
+        </div>
+        <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
+          <NuxtFormField
+            label="Due Date"
+            name="due_date"
+            required
+          >
+            <NuxtInput
+              v-model="state.due_date"
+              :ui="{ leading: 'pr-3' }"
+              class="w-full"
+              size="xl"
+              type="date"
+            />
+          </NuxtFormField>
+          <NuxtFormField
+            label="Attachment URL"
+            name="attachment_url"
+          >
+            <NuxtInput
+              v-model="state.attachment_url"
+              :ui="{ leading: 'pr-3' }"
+              class="w-full"
+              size="xl"
+            />
+          </NuxtFormField>
+        </div>
+        <NuxtFormField
+          label="Notes"
+          name="notes"
+          class="mt-5"
+        >
+          <NuxtTextarea
+            v-model="state.notes"
+            :ui="{ leading: 'pr-3' }"
+            class="w-full"
+            size="xl"
+          />
         </NuxtFormField>
         <NuxtButton
           type="submit"
@@ -302,6 +302,7 @@ const { data } = await useAsyncData(async () => {
 const state = reactive({
   ...data.value?.billDetail.data,
   due_date: data.value?.billDetail?.data?.due_date ? new Date(data.value?.billDetail?.data?.due_date).toISOString().split('T')[0] : '',
+  description: data.value?.billDetail.data?.description ?? '',
   notes: data.value?.billDetail.data?.notes ?? '',
   attachment_url: data.value?.billDetail.data?.attachment_url ?? '',
   bill_category_id: data.value?.billCategories?.find((category) => category.value === data.value?.billDetail.data?.bill_category_id) ?? null
