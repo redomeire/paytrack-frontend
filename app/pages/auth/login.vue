@@ -33,7 +33,8 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  middleware: ['auth']
 })
 useSeoMeta({
   title: 'Login',

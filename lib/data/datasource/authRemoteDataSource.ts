@@ -80,6 +80,8 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         })
       })
     }
+    const session = useUserSession()
+    await session.fetch()
     return response
   }
 
@@ -135,6 +137,8 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         })
       })
     }
+    const session = useUserSession()
+    await session.fetch()
     return response
   }
 

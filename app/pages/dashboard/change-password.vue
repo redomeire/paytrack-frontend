@@ -74,7 +74,8 @@ import { changePasswordSchema } from '~~/shared/types/auth/changePasswordSchema'
 import type { InferedChangePasswordSchema } from '~~/shared/types/auth/changePasswordSchema'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 
 const { $useCases } = useNuxtApp()

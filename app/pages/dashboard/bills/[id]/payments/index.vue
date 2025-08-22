@@ -107,7 +107,8 @@ import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { IPayment } from '~~/lib/domain/entity/payment'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 
 // global state

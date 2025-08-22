@@ -2,7 +2,7 @@
   <div>
     <SharedSidebarDashboardSidebar />
     <div class="lg:ml-64">
-      <SharedNavbarAppNavbar />
+      <SharedNavbarDashboardNavbar />
       <main class="px-5 py-7 pt-28">
         <div v-if="!data?.user?.is_verified">
           <div

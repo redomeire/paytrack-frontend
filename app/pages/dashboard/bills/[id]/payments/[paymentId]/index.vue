@@ -219,7 +219,8 @@ import { paymentSchema } from '~~/shared/types/payment/paymentSchema'
 import countries from '~/assets/country/countries_with_all_data.json'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 
 onMounted(() => {

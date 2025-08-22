@@ -204,7 +204,8 @@ import countries from '~/assets/country/countries_with_all_data.json'
 import type { IGetAllBillCategoriesResponse } from '~~/lib/common/types/http/bill/getAllBillCategories'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 
 const { $useCases } = useNuxtApp()

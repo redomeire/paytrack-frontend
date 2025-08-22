@@ -17,6 +17,10 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  layout: 'auth',
+  middleware: ['auth']
+})
 const { $useCases } = useNuxtApp()
 // get code from query params
 const route = useRoute()
