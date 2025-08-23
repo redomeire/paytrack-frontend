@@ -9,8 +9,8 @@ export interface IBill {
   amount: number
   currency: string
   billing_type: BillingType
-  frequency?: BillingFrequency
-  custom_frequency_days?: number
+  frequency?: BillingFrequency | null
+  custom_frequency_days?: number | null
   due_date: string
   notes?: string
   attachment_url?: string
