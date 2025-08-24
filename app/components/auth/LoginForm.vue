@@ -102,8 +102,6 @@ const { data, execute, status } = useAsyncData(
 
 async function handleLogin(event: FormSubmitEvent<InferedLoginSchema>) {
   event.preventDefault()
-  console.log('user state: ', state)
-
   await execute()
 
   if (data.value?.success) {

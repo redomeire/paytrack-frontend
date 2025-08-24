@@ -1,16 +1,8 @@
 import * as v from 'valibot'
 
-export enum BillingType {
-  RECURRING = 'recurring',
-  ONE_TIME = 'one-time',
-  FIXED = 'fixed'
-}
+export type BillingType = 'recurring' | 'fixed'
 
-export enum BillingFrequency {
-  MONTHLY = 'monthly',
-  ANNUAL = 'annual',
-  CUSTOM = 'custom'
-}
+export type BillingFrequency = 'monthly' | 'annual' | 'custom'
 
 const billsSchema = v.pipe(v.object({
   name: v.pipe(v.string(), v.minLength(1, 'Name is required')),
@@ -21,9 +13,9 @@ const billsSchema = v.pipe(v.object({
   description: v.optional(v.string()),
   amount: v.pipe(v.number(), v.minValue(1, 'Amount must be more than zero')),
   currency: v.pipe(v.string(), v.minLength(1, 'Currency is required')),
-  billing_type: v.pipe(v.enum(BillingType), v.minLength(1, 'Billing type is required')),
-  frequency: v.optional(v.enum(BillingFrequency)),
-  custom_frequency_days: v.optional(v.number()),
+  billing_type: v.pipe(v.picklist(['recurring', 'fixed']), v.minLength(1, 'Billing type is required')),
+  frequency: v.nullable(v.picklist(['monthly', 'annual', 'custom'])),
+  custom_frequency_days: v.nullable(v.number()),
   notes: v.optional(v.string()),
   attachment_url: v.optional(v.string()),
   due_date: v.pipe(v.string(), v.minLength(1, 'Due date is required'))
@@ -31,7 +23,7 @@ const billsSchema = v.pipe(v.object({
   v.partialCheck(
     [['frequency'], ['custom_frequency_days']],
     (input) => {
-      if (input.frequency === BillingFrequency.CUSTOM) {
+      if (input.frequency === 'custom' && input.custom_frequency_days) {
         return input.custom_frequency_days !== undefined && input.custom_frequency_days >= 1
       }
       return true

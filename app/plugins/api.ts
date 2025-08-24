@@ -11,19 +11,14 @@ export default defineNuxtPlugin({
         options.headers.set('Accept', 'application/json')
 
         // get session if available
-        const session = await $fetch('/api/auth/get-session', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
-        })
+        const session = useUserSession()
 
-        if (session.token) {
-          options.headers.set('Authorization', `Bearer ${session.token}`)
+        if (session.session.value?.token) {
+          options.headers.set('Authorization', `Bearer ${session.session.value.token}`)
         }
       },
       async onRequestError({ error }) {
+        if (import.meta.server) return
         const toast = useToast()
         toast.add({
           title: 'Request Error',
@@ -32,6 +27,7 @@ export default defineNuxtPlugin({
         })
       },
       onResponse({ response }) {
+        if (import.meta.server) return
         if (response.ok) {
           const toast = useToast()
           toast.add({
@@ -42,6 +38,7 @@ export default defineNuxtPlugin({
         }
       },
       onResponseError({ response }) {
+        if (import.meta.server) return
         const toast = useToast()
         const errorMessage = response._data?.message
         toast.add({

@@ -16,6 +16,7 @@ import type {
   ILogoutResponse
 } from '~~/lib/common/types/http/auth/logout'
 import type { IAuthorizeSocialLoginRequest, IAuthorizeSocialLoginResponse } from '~~/lib/common/types/http/auth/authorizeSocialLogin'
+import type { IChangePasswordRequest, IChangePasswordResponse } from '~~/lib/common/types/http/auth/changePassword'
 
 abstract class AuthRepository {
   abstract login(request: ILoginRequest): Promise<ILoginResponse>
@@ -31,6 +32,9 @@ abstract class AuthRepository {
   abstract resetPassword(
     request: IResetPasswordRequest
   ): Promise<IResetPasswordResponse>
+  abstract changePassword(
+    request: IChangePasswordRequest
+  ): Promise<IChangePasswordResponse>
   abstract authorizeSocialLogin(
     request: IAuthorizeSocialLoginRequest
   ): Promise<IAuthorizeSocialLoginResponse>

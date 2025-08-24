@@ -1,5 +1,9 @@
 <template>
-  <main>
-    <slot />
-  </main>
+  <div>
+    <SharedNavbarAppNavbar />
+    <main>
+      <slot />
+    </main>
+    <SharedFooterAppFooter />
+  </div>
 </template>

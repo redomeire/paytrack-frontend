@@ -99,7 +99,8 @@ import type { InferenBillsCategorySchema } from '~~/shared/types/bills-category/
 import { billsCategorySchema } from '~~/shared/types/bills-category/billCategorySchema'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 const route = useRoute()
 const router = useRouter()

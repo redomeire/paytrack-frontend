@@ -26,14 +26,15 @@
       </p>
     </div>
     <div class="h-screen relative">
-      <div class="absolute inset-5 bg-[url('https://images.unsplash.com/photo-1630659509436-7397fbda30e2')] bg-cover bg-center rounded-2xl" />
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1630659509436-7397fbda30e2')] bg-cover bg-center" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  middleware: ['auth']
 })
 useSeoMeta({
   title: 'Register',
