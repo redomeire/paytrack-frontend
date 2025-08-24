@@ -2,7 +2,7 @@
   <header class="bg-default border-b border-b-accented items-center p-5 fixed top-0 right-0 lg:left-64 left-0 z-30">
     <div class="lg:grid lg:grid-cols-5 flex justify-between lg:gap-10 gap-2 relative">
       <div class="flex items-center lg:col-span-2">
-        <AppDrawer />
+        <SharedDrawerAppDrawer />
         <NuxtInput
           icon="i-lucide-search"
           size="xl"
@@ -124,16 +124,16 @@
         </NuxtChip>
         <div class="flex items-center gap-3">
           <img
-            :src="data?.user?.avatar_url ?? ''"
-            :alt="`${data?.user?.first_name} ${data?.user?.last_name}`"
+            :src="user?.avatar_url ?? ''"
+            :alt="`${user?.first_name} ${user?.last_name}`"
             class="w-10 h-10 rounded-full object-cover"
           >
           <div>
             <p class="text-body-sm font-semibold">
-              {{ data?.user?.first_name }} {{ data?.user?.last_name }}
+              {{ user?.first_name }} {{ user?.last_name }}
             </p>
             <p class="text-xs text-neutral-500">
-              {{ data?.user?.email }}
+              {{ user?.email }}
             </p>
           </div>
         </div>
@@ -143,11 +143,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NuxtButton, NuxtSeparator } from '#components'
-import type { IUser } from '~~/lib/domain/entity/user'
-
-const { data } = await useAsyncData<{ user: IUser }>('userData',
-  () => $fetch('/api/auth/get-session'))
+const { user } = useUserSession()
 
 // dark mode
 const colorMode = useColorMode()

@@ -103,7 +103,8 @@ import { NuxtButton } from '#components'
 import dateTimeFormat from '~~/shared/utils/dateTimeFormat'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 const boxItems = [
   {

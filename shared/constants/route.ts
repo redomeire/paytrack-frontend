@@ -5,7 +5,8 @@ const authRoutes = [
   '/auth/login',
   '/auth/register',
   '/auth/forgot-password',
-  '/auth/reset-password'
+  '/auth/reset-password',
+  '/auth/google/callback'
 ]
 
 const isAuthRoute = (pathname: string): boolean => {

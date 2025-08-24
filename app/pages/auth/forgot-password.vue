@@ -23,6 +23,13 @@
 <script setup lang="ts">
 import { NuxtImg } from '#components'
 
+definePageMeta({
+  layout: 'auth',
+  title: 'Forgot Password - Paytrack',
+  description: 'Reset your password by entering your email address.',
+  middleware: ['auth']
+})
+
 useSeoMeta({
   title: 'Forgot Password - Paytrack',
   description: 'Reset your password by entering your email address.'

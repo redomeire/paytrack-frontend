@@ -21,6 +21,12 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'auth',
+  title: 'Reset Password - Paytrack',
+  description: 'Reset your password by entering your email address.',
+  middleware: ['auth']
+})
 useSeoMeta({
   title: 'Reset Password - Paytrack',
   description: 'Reset your password by entering your email address.'

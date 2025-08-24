@@ -106,7 +106,7 @@
             >
               <NuxtSelect
                 v-model="state.billing_type"
-                :items="Object.values(BillingType)"
+                :items="['fixed', 'recurring']"
                 :ui="{ leading: 'pr-3' }"
                 class="w-full"
                 size="xl"
@@ -121,10 +121,11 @@
             >
               <NuxtSelect
                 v-model="state.frequency"
-                :items="Object.values(BillingFrequency)"
+                :items="['monthly', 'annual', 'custom']"
                 :ui="{ leading: 'pr-3' }"
                 class="w-full"
                 size="xl"
+                :disabled="state.billing_type === 'fixed'"
               />
             </NuxtFormField>
             <NuxtFormField
@@ -136,7 +137,7 @@
                 orientation="vertical"
                 size="xl"
                 class="w-full"
-                :disabled="state.frequency !== BillingFrequency.CUSTOM"
+                :disabled="state.frequency !== 'custom'"
               />
             </NuxtFormField>
           </div>
@@ -198,13 +199,14 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { InferedBillsSchema } from '~~/shared/types/bills/billsSchema'
-import { BillingFrequency, BillingType, billsSchema } from '~~/shared/types/bills/billsSchema'
+import { billsSchema } from '~~/shared/types/bills/billsSchema'
 import { NuxtFormField, NuxtTextarea } from '#components'
 import countries from '~/assets/country/countries_with_all_data.json'
 import type { IGetAllBillCategoriesResponse } from '~~/lib/common/types/http/bill/getAllBillCategories'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: ['auth']
 })
 
 const { $useCases } = useNuxtApp()
@@ -216,9 +218,9 @@ const state = reactive({
   description: '',
   amount: 0,
   currency: 'IDR',
-  billing_type: BillingType.FIXED,
-  frequency: BillingFrequency.CUSTOM,
-  custom_frequency_days: 1,
+  billing_type: 'fixed' as const,
+  frequency: undefined,
+  custom_frequency_days: undefined,
   notes: '',
   attachment_url: '',
   due_date: ''

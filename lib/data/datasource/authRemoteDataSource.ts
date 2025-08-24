@@ -16,8 +16,15 @@ import type {
   IResetPasswordRequest,
   IResetPasswordResponse
 } from '~~/lib/common/types/http/auth/resetPassword'
+import type {
+  IChangePasswordRequest,
+  IChangePasswordResponse
+} from '~~/lib/common/types/http/auth/changePassword'
 import type { ILogoutResponse } from '~~/lib/common/types/http/auth/logout'
-import type { IAuthorizeSocialLoginRequest, IAuthorizeSocialLoginResponse } from '~~/lib/common/types/http/auth/authorizeSocialLogin'
+import type {
+  IAuthorizeSocialLoginRequest,
+  IAuthorizeSocialLoginResponse
+} from '~~/lib/common/types/http/auth/authorizeSocialLogin'
 
 abstract class AuthRemoteDataSource {
   abstract login(request: ILoginRequest): Promise<ILoginResponse>
@@ -32,6 +39,9 @@ abstract class AuthRemoteDataSource {
   abstract resetPassword(
     request: IResetPasswordRequest
   ): Promise<IResetPasswordResponse>
+  abstract changePassword(
+    request: IChangePasswordRequest
+  ): Promise<IChangePasswordResponse>
   abstract authorizeSocialLogin(
     request: IAuthorizeSocialLoginRequest
   ): Promise<IAuthorizeSocialLoginResponse>
@@ -70,6 +80,8 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         })
       })
     }
+    const session = useUserSession()
+    await session.fetch()
     return response
   }
 
@@ -125,6 +137,17 @@ export class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         })
       })
     }
+    const session = useUserSession()
+    await session.fetch()
+    return response
+  }
+
+  changePassword(request: IChangePasswordRequest): Promise<IChangePasswordResponse> {
+    const response = this.fetcher('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify(request.payload),
+      ...request.options
+    })
     return response
   }
 }
