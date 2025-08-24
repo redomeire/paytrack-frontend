@@ -173,19 +173,19 @@
           </NuxtBadge>
 
           <!-- Main Title -->
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-snug">
+          <h1 class="text-4xl md:text-5xl font-bold not-dark:text-gray-900 mb-4 leading-snug">
             Find <span class="text-blue-600">the Right Plan</span> to Manage<br>
             Your Webflow Billing
           </h1>
 
           <!-- Subtitle -->
-          <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p class="text-lg not-dark:text-gray-600 mb-8 max-w-2xl mx-auto">
             Whether you're a solo freelancer or managing a large team, FlowPay's pricing is built to scale with your business.
           </p>
 
           <!-- Billing Toggle -->
           <div class="flex items-center justify-center gap-4 mb-12">
-            <span class="text-gray-700 font-medium">Bill Yearly</span>
+            <span class="not-dark:text-gray-700 font-medium">Bill Yearly</span>
             <NuxtSwitch
               v-model="isMonthly"
               size="lg"
@@ -209,7 +209,7 @@
                 <h3 class="text-xl font-bold text-gray-900 mb-2">
                   Starter Plan
                 </h3>
-                <p class="text-gray-600 text-sm">
+                <p class="not-dark:text-gray-600 text-sm">
                   Get started with essential billing tools for managing your Webflow subscriptions.
                 </p>
               </div>
@@ -217,8 +217,8 @@
 
             <div class="text-center mb-6">
               <div class="flex items-baseline justify-center">
-                <span class="text-5xl font-bold text-gray-900">$0</span>
-                <span class="text-gray-600 ml-2">Per Month</span>
+                <span class="text-5xl font-bold not-dark:text-gray-900">$0</span>
+                <span class="not-dark:text-gray-600 ml-2">Per Month</span>
               </div>
             </div>
 
@@ -238,14 +238,14 @@
                   name="heroicons:check-circle"
                   class="w-5 h-5 text-green-500"
                 />
-                <span class="text-gray-700">Manage up to <strong>3 Webflow projects</strong>.</span>
+                <span class="not-dark:text-gray-700">Manage up to <strong>3 Webflow projects</strong>.</span>
               </div>
               <div class="flex items-center gap-3">
                 <NuxtIcon
                   name="heroicons:check-circle"
                   class="w-5 h-5 text-green-500"
                 />
-                <span class="text-gray-700"><strong>Basic client invoicing</strong> for Webflow</span>
+                <span class="not-dark:text-gray-700"><strong>Basic client invoicing</strong> for Webflow</span>
               </div>
             </div>
           </NuxtCard>
@@ -327,7 +327,7 @@
                 <h3 class="text-xl font-bold text-gray-900 mb-2">
                   Agency Plan
                 </h3>
-                <p class="text-gray-600 text-sm">
+                <p class="not-dark:text-gray-600 text-sm">
                   Unlock advanced billing and payment tools for growing businesses and agencies.
                 </p>
               </div>
@@ -335,8 +335,8 @@
 
             <div class="text-center mb-6">
               <div class="flex items-baseline justify-center">
-                <span class="text-5xl font-bold text-gray-900">$49</span>
-                <span class="text-gray-600 ml-2">Per Month</span>
+                <span class="text-5xl font-bold not-dark:text-gray-900">$49</span>
+                <span class="not-dark:text-gray-600 ml-2">Per Month</span>
               </div>
             </div>
 
@@ -356,14 +356,14 @@
                   name="heroicons:check-circle"
                   class="w-5 h-5 text-green-500"
                 />
-                <span class="text-gray-700">Manage <strong>unlimited Webflow projects</strong>.</span>
+                <span class="not-dark:text-gray-700">Manage <strong>unlimited Webflow projects</strong>.</span>
               </div>
               <div class="flex items-center gap-3">
                 <NuxtIcon
                   name="heroicons:check-circle"
                   class="w-5 h-5 text-green-500"
                 />
-                <span class="text-gray-700"><strong>Advanced automation</strong> for invoices, payments, and reports.</span>
+                <span class="not-dark:text-gray-700"><strong>Advanced automation</strong> for invoices, payments, and reports.</span>
               </div>
             </div>
           </NuxtCard>
@@ -408,7 +408,7 @@
               />
             </div>
 
-            <blockquote class="text-gray-700 mb-6 leading-relaxed text-sm">
+            <blockquote class="not-dark:text-gray-700 mb-6 leading-relaxed text-sm">
               "{{ testimonial.content }}"
             </blockquote>
 
@@ -420,10 +420,10 @@
                   size="md"
                 />
                 <div>
-                  <h4 class="font-semibold text-gray-900">
+                  <h4 class="font-semibold not-dark:text-gray-900">
                     {{ testimonial.name }}
                   </h4>
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm not-dark:text-gray-600">
                     {{ testimonial.title }}
                   </p>
                 </div>
