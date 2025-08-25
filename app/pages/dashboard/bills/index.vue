@@ -110,6 +110,7 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { IBill } from '~~/lib/domain/entity/bill'
+import dayCountsFormat from '~~/shared/utils/dayCountsFormat'
 
 definePageMeta({
   layout: 'dashboard',
@@ -167,7 +168,7 @@ const columns: TableColumn<IBill>[] = [
   {
     accessorKey: 'description',
     header: 'Description',
-    cell: ({ row }) => row.getValue('description')
+    cell: ({ row }) => row.getValue('description') ?? '-'
   },
   {
     accessorKey: 'amount',
@@ -191,12 +192,17 @@ const columns: TableColumn<IBill>[] = [
   {
     accessorKey: 'frequency',
     header: 'Frequency',
-    cell: ({ row }) => row.getValue('frequency')
+    cell: ({ row }) => row.getValue('frequency') ?? '-'
+  },
+  {
+    accessorKey: 'custom_frequency_days',
+    header: 'Frequency (Days)',
+    cell: ({ row }) => `${dayCountsFormat(row.getValue('custom_frequency_days'))}`
   },
   {
     accessorKey: 'attachment_url',
     header: 'Attachment',
-    cell: ({ row }) => row.getValue('attachment_url')
+    cell: ({ row }) => row.getValue('attachment_url') ?? '-'
   },
   {
     id: 'action'

@@ -115,9 +115,9 @@
           </div>
           <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
             <NuxtFormField
+              v-if="state.billing_type === 'recurring'"
               label="Billing Frequency"
-              name="billing_frequency"
-              required
+              name="frequency"
             >
               <NuxtSelect
                 v-model="state.frequency"
@@ -125,10 +125,10 @@
                 :ui="{ leading: 'pr-3' }"
                 class="w-full"
                 size="xl"
-                :disabled="state.billing_type === 'fixed'"
               />
             </NuxtFormField>
             <NuxtFormField
+              v-if="state.frequency === 'custom' && state.billing_type === 'recurring'"
               label="Custom Frequency (Days)"
               name="custom_frequency_days"
             >
@@ -137,7 +137,6 @@
                 orientation="vertical"
                 size="xl"
                 class="w-full"
-                :disabled="state.frequency !== 'custom'"
               />
             </NuxtFormField>
           </div>
@@ -219,12 +218,12 @@ const state = reactive({
   amount: 0,
   currency: 'IDR',
   billing_type: 'fixed' as const,
-  frequency: undefined,
+  frequency: undefined as string | null | undefined,
   custom_frequency_days: undefined,
   notes: '',
   attachment_url: '',
   due_date: ''
-})
+} as Partial<InferedBillsSchema>)
 
 const { data: billCategories } = useAsyncData('bill-categories', () =>
   $useCases.bill.getAllBillCategories.execute({}), {
@@ -245,7 +244,7 @@ watch(billCategories, (newCategories) => {
 const { status, execute } = await useAsyncData(() => $useCases.bill.createBill.execute({
   payload: {
     ...state,
-    bill_category_id: state.bill_category_id.value
+    bill_category_id: state.bill_category_id?.value
   }
 }), {
   immediate: false

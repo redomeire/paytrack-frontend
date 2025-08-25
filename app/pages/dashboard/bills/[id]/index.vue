@@ -10,19 +10,28 @@
       </NuxtContainer>
     </div>
     <article
-      v-if="data?.billDetail.data"
+      v-if="data?.data"
       class="p-4"
     >
       <div class="flex justify-between gap-5 flex-wrap">
         <div>
           <h1 class="text-2xl font-bold">
-            Create New Bill
+            {{ data.data.name }}
           </h1>
           <p>
-            Fill in the details of your new bill.
+            {{ data.data.description || 'No description provided.' }}
           </p>
         </div>
-        <div>
+        <div class="flex items-center gap-2">
+          <NuxtButton
+            :to="`/dashboard/bills/${billId}/edit`"
+            color="primary"
+            size="xl"
+            class="flex items-center justify-center"
+          >
+            <NuxtIcon name="i-material-symbols-edit-document-outline" />
+            <span class="ml-2">Edit Detail</span>
+          </NuxtButton>
           <NuxtButton
             :to="`/dashboard/bills/${billId}/payments`"
             color="primary"
@@ -35,186 +44,70 @@
           </NuxtButton>
         </div>
       </div>
-      <div class="mt-10">
-        <NuxtForm
-          :schema="billsSchema"
-          :state="state"
-          @submit="handleUpdateBill"
-        >
-          <div class="form-group grid md:grid-cols-2 gap-5">
-            <NuxtFormField
-              label="Bill Name"
-              name="name"
-              required
-            >
-              <NuxtInput
-                v-model="state.name"
-                color="primary"
-                size="xl"
-                class="w-full"
-                placeholder="Enter bill name"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Bill Category"
-              name="bill_category_id"
-              required
-            >
-              <NuxtSelectMenu
-                v-model="state.bill_category_id"
-                :items="data?.billCategories"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                create-item
-                @create="onCreateCategory"
-              />
-            </NuxtFormField>
-          </div>
-          <NuxtFormField
-            label="Description"
-            name="description"
-            class="mt-5"
-          >
-            <NuxtTextarea
-              v-model="state.description"
-              color="primary"
-              size="xl"
-              class="w-full"
-              placeholder="ex: Monthly electricity bill for January 2024"
-            />
-          </NuxtFormField>
-          <div class="form group grid md:grid-cols-3 gap-3 mt-5">
-            <NuxtFormField
-              label="Amount"
-              name="amount"
-              required
-            >
-              <NuxtInputNumber
-                v-model="state.amount"
-                :format-options="{
-                  style: 'currency',
-                  currency: state.currency ?? 'IDR',
-                  currencyDisplay: 'symbol',
-                  currencySign: 'standard'
-                }"
-                :min="0"
-                :locale="'id-ID'"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
+      <div class="grid md:grid-cols-2 gap-5 mt-5">
+        <NuxtCard>
+          <NuxtImg
+            :alt="data.data.name || 'Bill Image'"
+            :src="data.data.attachment_url ?? 'https://images.unsplash.com/photo-1693045181224-9fc2f954f054?q=80&w=1179&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'"
+            placeholder
+          />
+        </NuxtCard>
+        <Nuxtcontainer>
+          <div>
+            <h3 class="text-heading-6 font-semibold">
+              Bill Details
+            </h3>
+            <ul class="mt-3">
+              <li class="flex justify-between items-center text-body-sm border-b border-accented py-4">
+                <span>Category:</span>
+                <span class="font-semibold">
+                  {{ data.data.bill_category.name }}
+                </span>
+              </li>
+              <li class="flex justify-between items-center text-body-sm border-b border-accented py-4">
+                <span>Amount:</span>
+                <span class="font-semibold">
+                  {{ currencyFormat(data.data.amount, data.data.currency) }}
+                </span>
+              </li>
+              <li class="flex justify-between items-center text-body-sm border-b border-accented py-4">
+                <span>Due Date:</span>
+                <span class="font-semibold">
+                  {{ dateTimeFormat({
+                    date: data.data.due_date,
+                    timezone: 'Asia/Jakarta'
+                  }) }}
+                </span>
+              </li>
+              <li class="flex justify-between items-center text-body-sm border-b border-accented py-4">
+                <span>Type:</span>
+                <span class="font-semibold">
+                  {{ data.data.billing_type }}
+                </span>
+              </li>
+              <li
+                v-if="data.data.billing_type === 'recurring'"
+                class="flex justify-between items-center text-body-sm border-b border-accented py-4"
               >
-                <template #decrement>
-                  <div />
-                </template>
-                <template #increment>
-                  <div />
-                </template>
-              </NuxtInputNumber>
-            </NuxtFormField>
-            <NuxtFormField
-              label="Currency"
-              name="currency"
-              required
-            >
-              <NuxtSelectMenu
-                v-model="state.currency"
-                :items="currencies"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Billing Type"
-              name="billing_type"
-              required
-            >
-              <NuxtSelect
-                v-model="state.billing_type"
-                :items="['recurring', 'fixed']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
+                <span>Frequency:</span>
+                <span class="font-semibold">
+                  {{ data.data.frequency }}
+                </span>
+              </li>
+              <li
+                v-if="data.data.frequency === 'custom'"
+                class="flex justify-between items-center text-body-sm border-b border-accented py-4"
+              >
+                <span>Days count:</span>
+                <span class="font-semibold">
+                  {{ data.data.custom_frequency_days }}
+                </span>
+              </li>
+            </ul>
           </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Billing Frequency"
-              name="billing_frequency"
-            >
-              <NuxtSelect
-                v-model="state.frequency!"
-                :items="['monthly', 'annual', 'custom']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                :disabled="state.billing_type === 'fixed'"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Custom Frequency (Days)"
-              name="custom_frequency_days"
-            >
-              <NuxtInputNumber
-                v-model="state.custom_frequency_days"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
-                :disabled="state.frequency !== 'custom'"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Due Date"
-              name="due_date"
-              required
-            >
-              <NuxtInput
-                v-model="state.due_date"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                type="date"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Attachment URL"
-              name="attachment_url"
-            >
-              <NuxtInput
-                v-model="state.attachment_url"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
-          <NuxtFormField
-            label="Notes"
-            name="notes"
-            class="mt-5"
-          >
-            <NuxtTextarea
-              v-model="state.notes"
-              :ui="{ leading: 'pr-3' }"
-              class="w-full"
-              size="xl"
-            />
-          </NuxtFormField>
-          <NuxtButton
-            type="submit"
-            color="primary"
-            size="xl"
-            class="mt-5 w-full flex items-center justify-center"
-            :loading="updateStatus === 'pending'"
-            :disabled="updateStatus === 'pending'"
-          >
-            Update Bill
-          </NuxtButton>
-        </NuxtForm>
+        </Nuxtcontainer>
+      </div>
+      <div class="mt-10">
         <div class="mt-10">
           <NuxtContainer class="border-error border-2 rounded-xl p-3">
             <h3 class="text-heading-6 font-semibold">
@@ -270,11 +163,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@nuxt/ui'
-import type { InferedBillsSchema } from '~~/shared/types/bills/billsSchema'
-import { billsSchema } from '~~/shared/types/bills/billsSchema'
-import { NuxtFormField, NuxtTextarea } from '#components'
-import countries from '~/assets/country/countries_with_all_data.json'
+useSeoMeta({
+  title: 'Bill Details - PayTrack',
+  description: 'the details of your bill, including name, category, amount, and due date.'
+})
 
 definePageMeta({
   layout: 'dashboard',
@@ -289,71 +181,25 @@ if (!billId) {
   throw new Error('Bill ID is required')
 }
 
-const currencies: string[] = countries.map((country) => country.currencies!)
-
-const { data, error } = await useAsyncData(async () => {
-  const [billDetail, billCategories] = await Promise.all([
-    $useCases.bill.getBillDetail.execute({ payload: { id: billId } }),
-    $useCases.bill.getAllBillCategories.execute({})
-  ])
-  return {
-    billDetail,
-    billCategories
-  }
-}, {
-  transform: (data) => {
-    return {
-      billDetail: data.billDetail,
-      billCategories: data.billCategories.data?.map((billCategory) => ({
-        label: billCategory.name,
-        value: billCategory.id
-      }))
+const { data, error } = await useAsyncData(
+  async () => $useCases.bill.getBillDetail.execute({
+    payload: {
+      id: billId
     }
-  }
-})
+  }))
 
-const state = reactive({
-  ...data.value?.billDetail.data,
-  due_date: data.value?.billDetail?.data?.due_date ? new Date(data.value?.billDetail?.data?.due_date).toISOString().split('T')[0] : '',
-  description: data.value?.billDetail.data?.description ?? '',
-  notes: data.value?.billDetail.data?.notes ?? '',
-  attachment_url: data.value?.billDetail.data?.attachment_url ?? '',
-  bill_category_id: data.value?.billCategories?.find((category) => category.value === data.value?.billDetail.data?.bill_category_id) ?? null
-} as Partial<InferedBillsSchema>)
-
-const { status: updateStatus, execute: executeUpdate } = await useAsyncData(() => $useCases.bill.updateBill.execute({
-  payload: {
-    bill: {
-      ...state,
-      bill_category_id: state.bill_category_id?.value
+const { status: deleteStatus, execute: executeDelete } = await useAsyncData(
+  () => $useCases.bill.deleteBill.execute({
+    payload: {
+      id: billId
     }
-  }
-}), {
-  immediate: false
-})
-
-const { status: deleteStatus, execute: executeDelete } = await useAsyncData(() => $useCases.bill.deleteBill.execute({
-  payload: {
-    id: billId
-  }
-}), {
-  immediate: false
-})
-const handleUpdateBill = async (event: FormSubmitEvent<InferedBillsSchema>) => {
-  event.preventDefault()
-
-  await executeUpdate()
-  if (updateStatus.value === 'success') {
-    navigateTo('/dashboard/bills')
-  }
-}
+  }), {
+    immediate: false
+  })
 const handleDeleteBill = async () => {
   await executeDelete()
   if (deleteStatus.value === 'success') {
     navigateTo('/dashboard/bills')
   }
-}
-const onCreateCategory = (name: string) => {
-  navigateTo(`/dashboard/bills/category/create?name=${encodeURIComponent(name)}`)
 }
 </script>
