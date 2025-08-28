@@ -1,19 +1,17 @@
-import type { BillingFrequency, BillingType } from '../../../shared/types/bills/billsSchema'
+export type BillStatus = 'paid' | 'unpaid' | 'overdue'
 
 export interface IBill {
   id: string
-  user_id: string
   bill_category_id: string
   name: string
   description?: string
   amount: number
   currency: string
-  billing_type: BillingType
-  frequency?: BillingFrequency | null
-  custom_frequency_days?: number | null
   due_date: string
+  period?: string | null
   notes?: string
   attachment_url?: string
+  status: BillStatus
   created_at: string
   updated_at: string
 }

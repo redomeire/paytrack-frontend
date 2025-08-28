@@ -3,20 +3,26 @@
     <div class="flex justify-between gap-5 flex-wrap">
       <div>
         <h1 class="text-2xl font-bold">
-          Create New Bill
+          Create New Recurring Bill
         </h1>
-        <p>
-          Fill in the details of your new bill.
+        <p class="text-gray-500 dark:text-gray-400">
+          Fill in the details to create a new recurring bill series.
         </p>
       </div>
     </div>
-    <div class="mt-10">
+
+    <div class="mt-10 max-w-3xl">
       <NuxtForm
-        :schema="billsSchema"
+        :schema="billSeries"
         :state="state"
-        @submit="handleCreateBill"
+        class="space-y-6"
+        @submit="handleCreateRecurringBill"
       >
-        <div class="form-group grid md:grid-cols-2 gap-5">
+        <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-lg space-y-6">
+          <h2 class="text-lg font-semibold border-b dark:border-gray-700 pb-4">
+            Bill Details
+          </h2>
+
           <NuxtFormField
             label="Bill Name"
             name="name"
@@ -24,12 +30,12 @@
           >
             <NuxtInput
               v-model="state.name"
-              color="primary"
               size="xl"
+              placeholder="e.g., Netflix Subscription"
               class="w-full"
-              placeholder="Enter bill name"
             />
           </NuxtFormField>
+
           <NuxtFormField
             label="Bill Category"
             name="bill_category_id"
@@ -38,27 +44,17 @@
             <NuxtSelectMenu
               v-model="state.bill_category_id"
               :items="billCategories"
-              :ui="{ leading: 'pr-3' }"
-              class="w-full"
+              value-attribute="value"
+              option-attribute="label"
               size="xl"
+              class="w-full"
+              placeholder="Select a category"
               create-item
               @create="onCreateCategory"
             />
           </NuxtFormField>
-        </div>
-        <NuxtFormField
-          label="Description"
-          name="desription"
-          class="mt-5"
-        >
-          <NuxtTextarea
-            v-model="state.description"
-            color="primary"
-            size="xl"
-            class="w-full"
-            placeholder="ex: Monthly electricity bill for January 2024"
-          />
-          <div class="form group grid md:grid-cols-3 gap-3 mt-5">
+
+          <div class="grid md:grid-cols-2 gap-3">
             <NuxtFormField
               label="Amount"
               name="amount"
@@ -99,109 +95,127 @@
                 size="xl"
               />
             </NuxtFormField>
-            <NuxtFormField
-              label="Billing Type"
-              name="billing_type"
-              required
-            >
-              <NuxtSelect
-                v-model="state.billing_type"
-                :items="['fixed', 'recurring']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
           </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              v-if="state.billing_type === 'recurring'"
-              label="Billing Frequency"
-              name="frequency"
-            >
-              <NuxtSelect
-                v-model="state.frequency"
-                :items="['monthly', 'annual', 'custom']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              v-if="state.frequency === 'custom' && state.billing_type === 'recurring'"
-              label="Custom Frequency (Days)"
-              name="custom_frequency_days"
-            >
-              <NuxtInputNumber
-                v-model="state.custom_frequency_days"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Due Date"
-              name="due_date"
-              required
-            >
-              <NuxtInput
-                v-model="state.due_date"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                type="date"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Attachment URL"
-              name="attachment_url"
-            >
-              <NuxtInput
-                v-model="state.attachment_url"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
+
           <NuxtFormField
-            label="Notes"
-            name="notes"
-            class="mt-5"
+            label="Description"
+            name="description"
           >
             <NuxtTextarea
-              v-model="state.notes"
-              :ui="{ leading: 'pr-3' }"
-              class="w-full"
+              v-model="state.description"
               size="xl"
+              class="w-full"
+              placeholder="A brief description of the bill series"
             />
           </NuxtFormField>
-        </NuxtFormField>
-        <NuxtButton
-          type="submit"
-          color="primary"
-          size="xl"
-          class="mt-5 w-full flex items-center justify-center"
-          icon="mdi-plus"
-          :loading="status === 'pending'"
-          :disabled="status === 'pending'"
-        >
-          Create Bill
-        </NuxtButton>
+        </div>
+
+        <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-lg space-y-6">
+          <h2 class="text-lg font-semibold border-b dark:border-gray-700 pb-4">
+            Billing Cycle
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <NuxtFormField
+              label="Frequency"
+              name="frequency"
+              required
+            >
+              <NuxtSelectMenu
+                v-model="state.frequency"
+                :items="['monthly', 'annual', 'custom']"
+                size="xl"
+              />
+            </NuxtFormField>
+
+            <NuxtFormField
+              label="Interval"
+              name="frequency_interval"
+              required
+            >
+              <NuxtInput
+                v-model.number="state.frequency_interval"
+                type="number"
+                size="xl"
+                :min="1"
+              />
+            </NuxtFormField>
+
+            <NuxtFormField
+              label="Due Day"
+              name="due_day"
+              required
+            >
+              <NuxtInput
+                v-model.number="state.due_day"
+                type="number"
+                size="xl"
+                placeholder="e.g., 15"
+                :min="1"
+                :max="31"
+              />
+              <template #help>
+                The day of the month bill is due (1-31).
+              </template>
+            </NuxtFormField>
+
+            <NuxtFormField
+              label="Start Date"
+              name="start_date"
+              required
+            >
+              <NuxtInput
+                v-model="state.start_date"
+                type="date"
+                size="xl"
+              />
+              <template #help>
+                The date the first invoice should generate.
+              </template>
+            </NuxtFormField>
+          </div>
+
+          <NuxtFormField
+            name="is_active"
+            class="flex items-center justify-between"
+          >
+            <template #label>
+              <div>
+                <p class="font-medium">
+                  Activate Series
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  If disabled, no new invoices will be generated.
+                </p>
+              </div>
+            </template>
+            <NuxtSwitch
+              v-model="state.is_active"
+            />
+          </NuxtFormField>
+        </div>
+
+        <div class="flex justify-end">
+          <NuxtButton
+            type="submit"
+            size="xl"
+            icon="i-heroicons-paper-airplane"
+            :loading="status === 'pending'"
+          >
+            Create Bill Series
+          </NuxtButton>
+        </div>
       </NuxtForm>
     </div>
   </article>
 </template>
 
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@nuxt/ui'
-import type { InferedBillsSchema } from '~~/shared/types/bills/billsSchema'
-import { billsSchema } from '~~/shared/types/bills/billsSchema'
-import { NuxtFormField, NuxtTextarea } from '#components'
-import countries from '~/assets/country/countries_with_all_data.json'
+import type { FormSubmitEvent } from '#ui/types'
 import type { IGetAllBillCategoriesResponse } from '~~/lib/common/types/http/bill/getAllBillCategories'
+import type { InferedBillSeries } from '~~/shared/types/recurring-bill/billSeriesSchema'
+import { billSeries } from '~~/shared/types/recurring-bill/billSeriesSchema'
+import countries from '~/assets/country/countries_with_all_data.json'
 
 definePageMeta({
   layout: 'dashboard',
@@ -211,19 +225,20 @@ definePageMeta({
 const { $useCases } = useNuxtApp()
 
 const currencies: string[] = countries.map((country) => country.currencies!)
+
 const state = reactive({
   name: '',
   bill_category_id: { label: '', value: '' },
   description: '',
-  amount: 0,
   currency: 'IDR',
-  billing_type: 'fixed' as const,
-  frequency: undefined as string | null | undefined,
+  amount: 0,
+  frequency: 'monthly' as const,
+  frequency_interval: 1,
   custom_frequency_days: undefined,
-  notes: '',
-  attachment_url: '',
-  due_date: ''
-} as Partial<InferedBillsSchema>)
+  due_day: 15,
+  start_date: new Date().toISOString().split('T')[0],
+  is_active: true
+})
 
 const { data: billCategories } = useAsyncData('bill-categories', () =>
   $useCases.bill.getAllBillCategories.execute({}), {
@@ -241,23 +256,29 @@ watch(billCategories, (newCategories) => {
   }
 })
 
-const { status, execute } = await useAsyncData(() => $useCases.bill.createBill.execute({
-  payload: {
-    ...state,
-    bill_category_id: state.bill_category_id?.value
-  }
-}), {
+const {
+  data,
+  status,
+  execute
+} = await useAsyncData(() =>
+  $useCases.bill.createBillSeries.execute({
+    payload: {
+      ...state,
+      bill_category_id: state.bill_category_id?.value
+    }
+  }), {
   immediate: false
 })
 
-const handleCreateBill = async (event: FormSubmitEvent<InferedBillsSchema>) => {
+const handleCreateRecurringBill = async (event: FormSubmitEvent<InferedBillSeries>) => {
   event.preventDefault()
   await execute()
 
-  if (status.value !== 'error') {
+  if (data.value?.success) {
     navigateTo('/dashboard/bills')
   }
 }
+
 const onCreateCategory = (name: string) => {
   navigateTo(`/dashboard/bills/category/create?name=${encodeURIComponent(name)}`)
 }

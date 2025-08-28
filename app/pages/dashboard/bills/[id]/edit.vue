@@ -84,7 +84,7 @@
               placeholder="ex: Monthly electricity bill for January 2024"
             />
           </NuxtFormField>
-          <div class="form group grid md:grid-cols-3 gap-3 mt-5">
+          <div class="form group grid md:grid-cols-2 gap-3 mt-5">
             <NuxtFormField
               label="Amount"
               name="amount"
@@ -123,46 +123,6 @@
                 :ui="{ leading: 'pr-3' }"
                 class="w-full"
                 size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Billing Type"
-              name="billing_type"
-              required
-            >
-              <NuxtSelect
-                v-model="state.billing_type"
-                :items="['recurring', 'fixed']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              v-if="state.billing_type === 'recurring'"
-              label="Billing Frequency"
-              name="frequency"
-            >
-              <NuxtSelect
-                v-model="state.frequency!"
-                :items="['monthly', 'annual', 'custom']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              v-if="state.frequency === 'custom' && state.billing_type === 'recurring'"
-              label="Custom Frequency (Days)"
-              name="custom_frequency_days"
-            >
-              <NuxtInputNumber
-                v-model="state.custom_frequency_days"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
               />
             </NuxtFormField>
           </div>

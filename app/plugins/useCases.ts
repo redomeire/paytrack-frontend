@@ -7,13 +7,18 @@ import { Logout } from '../../lib/domain/usecase/auth/logout'
 import { AuthorizeSocialLogin } from '../../lib/domain/usecase/auth/authorizeSocialLogin'
 import { ChangePassword } from '../../lib/domain/usecase/auth/changePassword'
 import type BillRepository from '~~/lib/domain/repository/billRepository'
-import { GetAllBills } from '../../lib/domain/usecase/bill/getAllBills'
+import { GetUpcomingBills } from '../../lib/domain/usecase/bill/getUpcomingBills'
 import { GetBillDetail } from '../../lib/domain/usecase/bill/getBillDetail'
 import { UpdateBill } from '../../lib/domain/usecase/bill/updateBill'
 import { DeleteBill } from '../../lib/domain/usecase/bill/deleteBill'
 import { CreateBill } from '../../lib/domain/usecase/bill/createBill'
 import { CreateBillCategory } from '../../lib/domain/usecase/bill/createBillCategory'
 import { GetAllBillCategories } from '../../lib/domain/usecase/bill/getAllBillCategories'
+import { GetRecurringBills } from '../../lib/domain/usecase/bill/getRecurringBills'
+import { GetBillSeriesDetail } from '../../lib/domain/usecase/bill/getBillSeriesDetail'
+import { CreateBillSeries } from '../../lib/domain/usecase/bill/createBillSeries'
+import { UpdateBillSeries } from '../../lib/domain/usecase/bill/updateBillSeries'
+import { DeleteBillSeries } from '../../lib/domain/usecase/bill/deleteBillSeries'
 import type PaymentRepository from '~~/lib/domain/repository/paymentRepository'
 import { GetAllPayments } from '../../lib/domain/usecase/payment/getAllPayment'
 import { CreatePayment } from '../../lib/domain/usecase/payment/createPayment'
@@ -44,7 +49,12 @@ export default defineNuxtPlugin({
         changePassword: new ChangePassword(authRepository)
       },
       bill: {
-        getAllBills: new GetAllBills(billRepository),
+        getRecurringBills: new GetRecurringBills(billRepository),
+        getBillSeriesDetail: new GetBillSeriesDetail(billRepository),
+        createBillSeries: new CreateBillSeries(billRepository),
+        updateBillSeries: new UpdateBillSeries(billRepository),
+        deleteBillSeries: new DeleteBillSeries(billRepository),
+        getUpcomingBills: new GetUpcomingBills(billRepository),
         getBillDetail: new GetBillDetail(billRepository),
         createBill: new CreateBill(billRepository),
         updateBill: new UpdateBill(billRepository),

@@ -80,27 +80,15 @@
                 </span>
               </li>
               <li class="flex justify-between items-center text-body-sm border-b border-accented py-4">
-                <span>Type:</span>
+                <span>Period:</span>
                 <span class="font-semibold">
-                  {{ data.data.billing_type }}
+                  {{ data.data.period ?? 'No period provided.' }}
                 </span>
               </li>
-              <li
-                v-if="data.data.billing_type === 'recurring'"
-                class="flex justify-between items-center text-body-sm border-b border-accented py-4"
-              >
-                <span>Frequency:</span>
+              <li class="flex justify-between items-center text-body-sm border-b border-accented py-4">
+                <span>Notes:</span>
                 <span class="font-semibold">
-                  {{ data.data.frequency }}
-                </span>
-              </li>
-              <li
-                v-if="data.data.frequency === 'custom'"
-                class="flex justify-between items-center text-body-sm border-b border-accented py-4"
-              >
-                <span>Days count:</span>
-                <span class="font-semibold">
-                  {{ data.data.custom_frequency_days }}
+                  {{ data.data.notes || 'No notes provided.' }}
                 </span>
               </li>
             </ul>
