@@ -47,6 +47,10 @@ import type {
   IDeleteBillSeriesRequest,
   IDeleteBillSeriesResponse
 } from '../../common/types/http/bill/deleteBillSeries'
+import type {
+  ICheckoutBillRequest,
+  ICheckoutBillResponse
+} from '../../common/types/http/bill/checkoutBill'
 
 abstract class BillRemoteDataSource {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -61,6 +65,7 @@ abstract class BillRemoteDataSource {
   abstract createBillSeries(request: ICreateBillSeriesRequest): Promise<ICreateBillSeriesResponse>
   abstract updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse>
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
+  abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
 }
 
 export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
@@ -157,7 +162,7 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
     return response
   }
 
-  override updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse> {
+  updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse> {
     const response = this.fetcher(`/bills/series/${request.payload.billSeries.id}`, {
       method: 'PUT',
       body: JSON.stringify(request.payload.billSeries),
@@ -166,9 +171,18 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
     return response
   }
 
-  override deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse> {
+  deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse> {
     const response = this.fetcher(`/bills/series/${request.payload.id}`, {
       method: 'DELETE',
+      ...request.options
+    })
+    return response
+  }
+
+  checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse> {
+    const response = this.fetcher(`/payments/checkout`, {
+      method: 'POST',
+      body: JSON.stringify(request.payload),
       ...request.options
     })
     return response

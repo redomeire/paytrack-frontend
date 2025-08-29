@@ -19,12 +19,15 @@ import { GetBillSeriesDetail } from '../../lib/domain/usecase/bill/getBillSeries
 import { CreateBillSeries } from '../../lib/domain/usecase/bill/createBillSeries'
 import { UpdateBillSeries } from '../../lib/domain/usecase/bill/updateBillSeries'
 import { DeleteBillSeries } from '../../lib/domain/usecase/bill/deleteBillSeries'
+import { CheckoutBill } from '../../lib/domain/usecase/bill/checkoutBill'
 import type PaymentRepository from '~~/lib/domain/repository/paymentRepository'
 import { GetAllPayments } from '../../lib/domain/usecase/payment/getAllPayment'
 import { CreatePayment } from '../../lib/domain/usecase/payment/createPayment'
 import { GetPaymentDetail } from '../../lib/domain/usecase/payment/getPaymentDetail'
 import { UpdatePayment } from '../../lib/domain/usecase/payment/updatePayment'
 import { DeletePayment } from '../../lib/domain/usecase/payment/deletePayment'
+import type MediaRepository from '~~/lib/domain/repository/mediaRepository'
+import { UploadMedia } from '../../lib/domain/usecase/media/uploadMedia'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -36,6 +39,7 @@ export default defineNuxtPlugin({
     const authRepository = $repositories.auth as AuthRepository
     const billRepository = $repositories.bill as BillRepository
     const paymentRepository = $repositories.payment as PaymentRepository
+    const mediaRepository = $repositories.media as MediaRepository
 
     // register use cases
     const useCases = {
@@ -60,7 +64,8 @@ export default defineNuxtPlugin({
         updateBill: new UpdateBill(billRepository),
         deleteBill: new DeleteBill(billRepository),
         createBillCategory: new CreateBillCategory(billRepository),
-        getAllBillCategories: new GetAllBillCategories(billRepository)
+        getAllBillCategories: new GetAllBillCategories(billRepository),
+        checkoutBill: new CheckoutBill(billRepository)
       },
       payment: {
         getAllPayments: new GetAllPayments(paymentRepository),
@@ -68,6 +73,9 @@ export default defineNuxtPlugin({
         getPaymentDetail: new GetPaymentDetail(paymentRepository),
         updatePayment: new UpdatePayment(paymentRepository),
         deletePayment: new DeletePayment(paymentRepository)
+      },
+      media: {
+        uploadMedia: new UploadMedia(mediaRepository)
       }
     }
 

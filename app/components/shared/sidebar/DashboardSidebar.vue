@@ -114,6 +114,12 @@ const navItems = [
     isCollapsible: false
   },
   {
+    title: 'Riwayat',
+    icon: 'i-material-symbols-history',
+    route: '/dashboard/bills/history',
+    isCollapsible: false
+  },
+  {
     title: 'Pengaturan',
     icon: 'i-material-symbols-settings-outline',
     route: '/settings',

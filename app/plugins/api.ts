@@ -7,7 +7,6 @@ export default defineNuxtPlugin({
     const fetchOptions: FetchOptions = {
       baseURL: config.public.apiBase,
       async onRequest({ options }) {
-        options.headers.set('Content-Type', 'application/json')
         options.headers.set('Accept', 'application/json')
 
         // get session if available

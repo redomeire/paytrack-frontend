@@ -447,6 +447,13 @@ function getBillDropdownActions(bill: IBill): DropdownMenuItem[][] {
         }
       },
       {
+        label: 'Pay',
+        icon: 'i-lucide-credit-card',
+        onSelect() {
+          navigateTo(`/dashboard/bills/${bill.id}/payments/create`)
+        }
+      },
+      {
         label: 'Delete',
         icon: 'i-lucide-trash',
         color: 'error',

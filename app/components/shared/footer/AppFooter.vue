@@ -11,9 +11,8 @@
       <div class="flex justify-center gap-3">
         <NuxtButton
           variant="solid"
-          color="neutral"
           size="lg"
-          class="transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          class="transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 bg-white text-black hover:bg-white hover:text-black"
         >
           <NuxtLink to="/auth/signup">
             <span class="text-body-sm">

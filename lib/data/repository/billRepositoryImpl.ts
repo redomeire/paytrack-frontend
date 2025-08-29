@@ -12,6 +12,7 @@ import type { IDeleteBillSeriesRequest, IDeleteBillSeriesResponse } from '~~/lib
 import type { IGetRecurringBillDetailRequest, IGetRecurringBillDetailResponse } from '~~/lib/common/types/http/bill/getRecurringBillDetail'
 import type { IUpdateBillSeriesRequest, IUpdateBillSeriesResponse } from '~~/lib/common/types/http/bill/updateBillSeries'
 import type { IGetRecurringBillsRequest, IGetRecurringBillsResponse } from '~~/lib/common/types/http/bill/getRecurringBill'
+import type { ICheckoutBillRequest, ICheckoutBillResponse } from '~~/lib/common/types/http/bill/checkoutBill'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -66,5 +67,9 @@ export class BillRepositoryImpl extends BillRepository {
 
   deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse> {
     return this.billRemoteDataSource.deleteBillSeries(request)
+  }
+
+  checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse> {
+    return this.billRemoteDataSource.checkoutBill(request)
   }
 }

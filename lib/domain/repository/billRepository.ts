@@ -46,6 +46,10 @@ import type {
   ICreateBillSeriesRequest,
   ICreateBillSeriesResponse
 } from '~~/lib/common/types/http/bill/createBillSeries'
+import type {
+  ICheckoutBillRequest,
+  ICheckoutBillResponse
+} from '~~/lib/common/types/http/bill/checkoutBill'
 
 abstract class BillRepository {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -60,6 +64,7 @@ abstract class BillRepository {
   abstract getRecurringBillDetail(request: IGetRecurringBillDetailRequest): Promise<IGetRecurringBillDetailResponse>
   abstract updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse>
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
+  abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
 }
 
 export default BillRepository

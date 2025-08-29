@@ -100,7 +100,7 @@
             Invoice History
           </h2>
           <NuxtTable
-            :rows="billSeries?.data?.bills"
+            :data="billSeries?.data?.bills"
             :columns="columns"
           >
             <template #amount-data>
@@ -207,7 +207,7 @@ const columns: TableColumn<IBill>[] = [
       return h(
         NuxtBadge,
         {
-          color
+          color: color[row.original.status]
         },
         paidDate ? 'Paid' : 'Unpaid'
       )

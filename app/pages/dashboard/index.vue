@@ -35,52 +35,65 @@
         id="popular-billd"
         class="rounded-2xl shadow-lg hover:shadow-xl transition-shadow md:col-span-2 h-fit p-7"
       >
-        <div class="flex justify-between mb-5">
-          <h4 class="text-heading-6 font-[500]">
-            Your Popular Bills
-          </h4>
-          <NuxtButton
-            variant="ghost"
-            color="info"
+        <h6 class="text-heading-6 font-[500] my-3">
+          Upcoming Bills
+        </h6>
+        <div v-if="billsStatus === 'success'">
+          <ul
+            v-if="bills?.data?.data.length && bills?.data?.data.length > 0"
+            class="space-y-3 mt-5"
           >
-            <p class="text-body-sm text-secondary-500">
-              Show more
-            </p>
-          </NuxtButton>
+            <li
+              v-for="bill in bills?.data?.data"
+              :key="bill.id"
+              class="rounded-lg p-3 bg-accented/40 hover:outline hover:outline-primary"
+            >
+              <NuxtLink
+                :to="`/dashboard/bills/${bill.id}`"
+                class="flex justify-between items-center"
+              >
+                <div class="flex items-center gap-3">
+                  <div>
+                    <p class="text-ellipsis line-clamp-1">{{ bill.name }}</p>
+                    <p class="text-xs text-muted-foreground">
+                      Due {{ dateTimeFormat({ date: bill.due_date }) }}
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div>
+                    <p class="text-sm text-muted-foreground">
+                      Amount
+                    </p>
+                    <p class="font-semibold">
+                      {{ currencyFormat(bill.amount, bill.currency ?? 'IDR') }}
+                    </p>
+                  </div>
+                </div>
+              </NuxtLink>
+            </li>
+          </ul>
+          <ul v-else>
+            <li class="text-center text-sm text-muted-foreground py-10">
+              No upcoming bills found.
+            </li>
+          </ul>
         </div>
-        <ul class="space-y-3">
-          <li
-            v-for="popularBill in popularBills"
-            :key="popularBill.title"
-            class="flex items-center justify-between"
-          >
-            <div class="flex items-center">
-              <NuxtAvatar
-                size="3xl"
-                class="mr-3"
-                alt="User Avatar"
-                :icon="popularBill.icon"
-                :ui="{
-                  root: 'bg-neutral-100',
-                  icon: 'w-6 h-6'
-                }"
-              />
-              <div>
-                <h4 class="text-body-sm font-[500]">
-                  {{ popularBill.title }}
-                </h4>
-                <p class="text-xs text-neutral-400">
-                  {{ popularBill.value }}
-                </p>
-              </div>
-            </div>
-            <div>
-              <p class="text-xs text-neutral-400 mr-2">
-                {{ popularBill.time }}
-              </p>
-            </div>
-          </li>
-        </ul>
+        <div v-else-if="billsStatus === 'pending'">
+          <div class="text-center py-10">
+            <NuxtProgress
+              size="xs"
+              animation="swing"
+            />
+          </div>
+        </div>
+        <div v-else-if="billsStatus === 'error'">
+          <NuxtAlert
+            color="error"
+            title="Failed to load upcoming bills."
+            message="Please try again later."
+          />
+        </div>
       </div>
       <div
         id="recent-activities"
@@ -106,6 +119,7 @@ definePageMeta({
   layout: 'dashboard',
   middleware: ['auth']
 })
+const { $useCases } = useNuxtApp()
 const boxItems = [
   {
     title: 'Total belum dibayar',
@@ -132,26 +146,16 @@ const boxItems = [
     color: 'bg-purple-100 text-purple-800'
   }
 ]
-const popularBills = [
-  {
-    title: 'Youtube Premium',
-    value: 'Rp 59.000 / month',
-    icon: 'i-logos-youtube-icon',
-    time: '2 hours ago'
-  },
-  {
-    title: 'Spotify Premium',
-    value: 'Rp 49.000 / month',
-    icon: 'i-logos-spotify-icon',
-    time: '1 day ago'
-  },
-  {
-    title: 'Netflix',
-    value: 'Rp 99.000 / month',
-    icon: 'i-logos-netflix-icon',
-    time: '3 days ago'
-  }
-]
+
+const limit = ref(5)
+const { data: bills, status: billsStatus } = useAsyncData('bills',
+  () => $useCases.bill.getUpcomingBills.execute({
+    options: {
+      query: {
+        limit: limit.value
+      }
+    }
+  }))
 const tableDatas = ref([
   {
     number: 'bill-4599',
