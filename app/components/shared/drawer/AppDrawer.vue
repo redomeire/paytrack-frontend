@@ -1,12 +1,13 @@
 <template>
   <NuxtDrawer
-    v-if="!isDesktop"
+    v-model:open="drawerOpen"
     direction="left"
   >
     <NuxtButton
       icon="i-icon-park-outline-hamburger-button"
       variant="subtle"
       class="lg:hidden w-10 grid place-items-center"
+      @click="drawerOpen = true"
     />
 
     <template #content>
@@ -32,6 +33,7 @@
               :key="item.route"
             >
               <NuxtLink
+                v-if="!item.isCollapsible"
                 :to="item.route"
                 class="flex items-center gap-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
@@ -40,10 +42,51 @@
                   class="w-full px-4 py-3 rounded-2xl hover:text-primary transition-colors"
                   :variant="item.route === $route.path ? 'solid' : 'ghost'"
                   :color="item.route === $route.path ? 'primary' : 'neutral'"
+                  @click="drawerOpen = false"
                 >
                   {{ item.title }}
                 </NuxtButton>
               </NuxtLink>
+              <NuxtCollapsible v-else>
+                <NuxtButton
+                  :icon="item.icon"
+                  class="w-full px-4 py-3 rounded-2xl hover:text-primary transition-colors"
+                  :variant="item.route.includes($route.path) ? 'solid' : 'ghost'"
+                  :color="item.route.includes($route.path) ? 'primary' : 'neutral'"
+                >
+                  {{ item.title }}
+                  <template #trailing>
+                    <NuxtIcon
+                      name="i-lucide-chevron-down"
+                      class="absolute right-10"
+                    />
+                  </template>
+                </NuxtButton>
+                <template #content>
+                  <ul>
+                    <li
+                      v-for="child in item.child"
+                      :key="child.route"
+                      class="pl-2"
+                    >
+                      <NuxtLink
+                        :to="child.route"
+                        class="flex items-center gap-2 rounded-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <NuxtButton
+                          :icon="child.icon"
+                          class="w-full px-4 py-3 rounded-2xl hover:text-primary transition-colors"
+                          :variant="child.route === $route.path ? 'solid' : 'ghost'"
+                          :color="child.route === $route.path ? 'primary' : 'neutral'"
+                          @click="drawerOpen = false"
+                        >
+                          {{ child.title }}
+                        </NuxtButton>
+                      </NuxtLink>
+                    </li>
+                  </ul>
+                </template>
+              </NuxtCollapsible>
             </li>
           </ul>
         </nav>
@@ -63,48 +106,59 @@
 </template>
 
 <script lang="ts" setup>
-import { useMediaQuery } from '@vueuse/core'
-
 const { $useCases } = useNuxtApp()
 const { clear } = useUserSession()
 const router = useRouter()
-const isDesktop = useMediaQuery('(min-width: 1024px)')
+const drawerOpen = ref(false)
 
 const navItems = [
   {
     title: 'Home',
     icon: 'i-material-symbols-dashboard',
-    route: '/dashboard'
+    route: '/dashboard',
+    isCollapsible: false
   },
   {
     title: 'Tagihan',
     icon: 'i-material-symbols-receipt-long-outline',
-    route: '/invoices'
+    route: '/dashboard/bills',
+    isCollapsible: false
   },
   {
-    title: 'Klien',
-    icon: 'i-material-symbols-settings-outline',
-    route: '/payments'
+    title: 'Riwayat',
+    icon: 'i-material-symbols-history',
+    route: '/dashboard/bills/history',
+    isCollapsible: false
   },
   {
     title: 'Pengaturan',
     icon: 'i-material-symbols-settings-outline',
-    route: '/settings'
+    route: '/settings',
+    isCollapsible: true,
+    child: [
+      {
+        title: 'Change Password',
+        icon: 'i-material-symbols-lock-outline',
+        route: '/dashboard/change-password',
+        isCollapsible: false
+      }
+    ]
   },
   {
     title: 'Bantuan',
     icon: 'i-material-symbols-info-outline',
-    route: '/settings'
+    route: '/settings',
+    isCollapsible: false
   }
 ]
 
 const handleLogout = async () => {
   Promise.all([
-    $useCases.auth.logout.execute(),
-    clear()
+    $useCases.auth.logout.execute()
   ]).catch((error) => {
     console.error('Error during logout:', error)
   }).finally(() => {
+    clear()
     setTimeout(() => {
       router.replace('/auth/login')
     }, 1000)

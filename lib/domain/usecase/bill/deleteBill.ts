@@ -1,4 +1,4 @@
-import type { IDeleteBillRequest, IDeleteBillResponse } from '../../../common/types/http/bill/deleteBIll'
+import type { IDeleteBillRequest, IDeleteBillResponse } from '../../../common/types/http/bill/deleteBill'
 import type BillRepository from '../../repository/billRepository'
 
 export class DeleteBill {
