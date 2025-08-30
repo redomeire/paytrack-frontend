@@ -299,6 +299,48 @@
           </NuxtTabs>
         </NuxtCard>
       </div>
+      <NuxtModal
+        v-model:open="isPayModalOpen"
+        title="Confirm Pay"
+        description="This action cannot be undone."
+      >
+        <template #body>
+          <div class="p-5">
+            <p class="text-body-md">
+              Are you sure you want to pay the bill
+              <span class="font-semibold">{{ selectedBill?.name }}</span>
+              with amount
+              <span class="font-semibold">
+                {{ currencyFormat(selectedBill?.amount ?? 0, selectedBill?.currency ?? 'IDR') }}
+              </span>
+              ?
+            </p>
+          </div>
+        </template>
+        <template #footer>
+          <div class="flex gap-2">
+            <NuxtButton
+              class="w-fit float-end"
+              variant="outline"
+              color="neutral"
+              :disabled="checkoutStatus === 'pending'"
+              @click="isPayModalOpen = false"
+            >
+              Cancel
+            </NuxtButton>
+            <NuxtButton
+              class="w-fit float-end"
+              color="error"
+              variant="solid"
+              :loading="checkoutStatus === 'pending'"
+              :disabled="checkoutStatus === 'pending'"
+              @click="executeCheckout()"
+            >
+              Yes, Pay
+            </NuxtButton>
+          </div>
+        </template>
+      </NuxtModal>
     </article>
   </div>
 </template>
@@ -321,10 +363,10 @@ const toast = useToast()
 
 const search = ref('')
 
-// queries for upcoming
 const pageUpcoming = ref(1)
-// queries for recurring
 const pageRecurring = ref(1)
+
+const selectedBill = ref<IBill | null>(null)
 
 // tabs item
 const tabItems = [
@@ -370,7 +412,12 @@ const { data: categories } = await useAsyncData('categories',
 const categorySelectValue = ref({ label: '', value: '' })
 
 // table data
-const { data: bills, status: billsStatus, execute: executeBills, error } = useAsyncData('bills',
+const {
+  data: bills,
+  status: billsStatus,
+  execute: executeBills,
+  error
+} = useAsyncData('bills',
   () => $useCases.bill.getUpcomingBills.execute({
     options: {
       query: {
@@ -401,6 +448,18 @@ const {
     immediate: false,
     watch: [pageRecurring]
   })
+
+const {
+  execute: executeCheckout,
+  status: checkoutStatus
+} = await useAsyncData(
+  () => $useCases.bill.checkoutBill.execute({
+    payload: {
+      billId: selectedBill.value?.id ?? ''
+    }
+  }), {
+    immediate: false
+  })
 watch([activeTab, categorySelectValue], (newValue) => {
   if (newValue[0] === 'upcoming') {
     executeBills()
@@ -417,6 +476,7 @@ onMounted(() => {
     executeBillSeries()
   }
 })
+const isPayModalOpen = ref(false)
 // functions
 function getBillDropdownActions(bill: IBill): DropdownMenuItem[][] {
   return [
@@ -450,7 +510,8 @@ function getBillDropdownActions(bill: IBill): DropdownMenuItem[][] {
         label: 'Pay',
         icon: 'i-lucide-credit-card',
         onSelect() {
-          navigateTo(`/dashboard/bills/${bill.id}/payments/create`)
+          isPayModalOpen.value = true
+          selectedBill.value = bill
         }
       },
       {

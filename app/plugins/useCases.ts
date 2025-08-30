@@ -31,6 +31,7 @@ import { UploadMedia } from '../../lib/domain/usecase/media/uploadMedia'
 import type AnalyticsRepository from '~~/lib/domain/repository/analyticsRepository'
 import { GetMonthlySpendingTrend } from '../../lib/domain/usecase/analytics/getMonthlySpendingTrend'
 import { GetSpendingCountByCategory } from '../../lib/domain/usecase/analytics/getSpendingCountByCategory'
+import { GetSummary } from '../../lib/domain/usecase/analytics/getSummary'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -83,7 +84,8 @@ export default defineNuxtPlugin({
       },
       analytics: {
         getMonthlySpendingTrend: new GetMonthlySpendingTrend(analyticsRepository),
-        getSpendingCountByCategory: new GetSpendingCountByCategory(analyticsRepository)
+        getSpendingCountByCategory: new GetSpendingCountByCategory(analyticsRepository),
+        getSummary: new GetSummary(analyticsRepository)
       }
     }
 

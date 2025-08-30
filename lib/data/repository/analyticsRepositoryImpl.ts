@@ -1,3 +1,4 @@
+import type { IGetSummaryRequest, IGetSummaryResponse } from '~~/lib/common/types/http/analytics/getSummary'
 import type {
   IGetMonthlySpendingTrendRequest,
   IGetMonthlySpendingTrendResponse
@@ -14,6 +15,10 @@ export class AnalyticsRepositoryImpl extends AnalyticsRepository {
   constructor(analyticsRemoteDataSource: AnalyticsRemoteDataSourceImpl) {
     super()
     this.analyticsRemoteDataSource = analyticsRemoteDataSource
+  }
+
+  getSummary(request: IGetSummaryRequest): Promise<IGetSummaryResponse> {
+    return this.analyticsRemoteDataSource.getSummary(request)
   }
 
   getSpendingCountByCategory(request: IGetSpendingCountByCategoryRequest): Promise<IGetSpendingCountByCategoryResponse> {

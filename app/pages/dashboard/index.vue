@@ -1,6 +1,9 @@
 <template>
   <div class="dashboard">
-    <ul class="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3">
+    <ul
+      v-if="summaryStatus === 'success'"
+      class="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3"
+    >
       <li
         v-for="boxItem in boxItems"
         :key="boxItem.title"
@@ -30,6 +33,31 @@
         </div>
       </li>
     </ul>
+    <div
+      v-else-if="summaryStatus === 'pending'"
+      class="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3"
+    >
+      <li
+        v-for="n in 4"
+        :key="n"
+        class="rounded-2xl p-4 shadow hover:shadow-lg transition"
+      >
+        <div class="flex flex-col items-center justify-center gap-3">
+          <NuxtSkeleton class="h-10 w-10 rounded-full mb-2" />
+          <div class="text-center w-full space-y-2">
+            <NuxtSkeleton class="h-4 w-3/4 mx-auto" />
+            <NuxtSkeleton class="h-6 w-full mx-auto" />
+          </div>
+        </div>
+      </li>
+    </div>
+    <div v-else-if="summaryStatus === 'error'">
+      <NuxtAlert
+        color="error"
+        variant="soft"
+        title="Failed to load summary data."
+      />
+    </div>
     <div class="grid md:grid-cols-5 items-stretch gap-5 mt-5">
       <div
         id="popular-billd"
@@ -232,6 +260,14 @@ const { $useCases } = useNuxtApp()
 const limit = ref(5)
 
 const {
+  data: summary,
+  status: summaryStatus
+} = await useAsyncData(
+  'summary',
+  () => $useCases.analytics.getSummary.execute({})
+)
+
+const {
   data: monthlySpendingTrend,
   status: monthlyTrendStatus,
   execute: executeMonthlyTrend
@@ -367,12 +403,32 @@ const barChartOption = computed(() => ({
   }]
 }))
 
-const boxItems = [
-  { title: 'Total belum dibayar', value: 'Rp 2.525.000', icon: 'i-heroicons-currency-dollar', color: 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300' },
-  { title: 'Tagihan mendatang', value: '3', icon: 'i-heroicons-calendar-days', color: 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300' },
-  { title: 'Total tagihan', value: '6', icon: 'i-heroicons-document-text', color: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300' },
-  { title: 'Terlambat bayar', value: '1', icon: 'i-heroicons-exclamation-triangle', color: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300' }
-]
+const boxItems = ref([
+  {
+    title: 'Total belum dibayar',
+    value: currencyFormat(summary?.value?.data?.total_unpaid ?? 0, 'IDR'),
+    icon: 'i-heroicons-currency-dollar',
+    color: 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300'
+  },
+  {
+    title: 'Tagihan mendatang',
+    value: summary?.value?.data?.upcoming_count ?? 0,
+    icon: 'i-heroicons-calendar-days',
+    color: 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
+  },
+  {
+    title: 'Total tagihan',
+    value: summary?.value?.data?.total_bills_this_month ?? 0,
+    icon: 'i-heroicons-document-text',
+    color: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300'
+  },
+  {
+    title: 'Terlambat bayar',
+    value: summary?.value?.data?.overdue_count ?? 0,
+    icon: 'i-heroicons-exclamation-triangle',
+    color: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300'
+  }
+])
 
 const containerClasses = (color: string) => {
   return cn('flex flex-col items-center justify-center gap-3', 'rounded-2xl p-4 shadow hover:shadow-lg transition', color)

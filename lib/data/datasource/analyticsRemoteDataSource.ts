@@ -1,5 +1,9 @@
 import type { $Fetch } from 'ofetch'
 import type {
+  IGetSummaryRequest,
+  IGetSummaryResponse
+} from '../../common/types/http/analytics/getSummary'
+import type {
   IGetSpendingCountByCategoryRequest,
   IGetSpendingCountByCategoryResponse
 } from '../../common/types/http/analytics/getSpendingCountByCategory'
@@ -9,6 +13,7 @@ import type {
 } from '../../common/types/http/analytics/getMonthlySpendingTrend'
 
 abstract class AnalyticsRemoteDataSource {
+  abstract getSummary(request: IGetSummaryRequest): Promise<IGetSummaryResponse>
   abstract getSpendingCountByCategory(request: IGetSpendingCountByCategoryRequest): Promise<IGetSpendingCountByCategoryResponse>
   abstract getMonthlySpendingTrend(request: IGetMonthlySpendingTrendRequest): Promise<IGetMonthlySpendingTrendResponse>
 }
@@ -26,6 +31,13 @@ export class AnalyticsRemoteDataSourceImpl extends AnalyticsRemoteDataSource {
       AnalyticsRemoteDataSourceImpl.instance = new AnalyticsRemoteDataSourceImpl(fetcher)
     }
     return AnalyticsRemoteDataSourceImpl.instance
+  }
+
+  getSummary(request: IGetSummaryRequest): Promise<IGetSummaryResponse> {
+    const response = this.fetcher('/analytics/summary', {
+      ...request.options
+    })
+    return response
   }
 
   getSpendingCountByCategory(request: IGetSpendingCountByCategoryRequest): Promise<IGetSpendingCountByCategoryResponse> {
