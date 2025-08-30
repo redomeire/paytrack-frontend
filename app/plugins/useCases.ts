@@ -28,6 +28,9 @@ import { UpdatePayment } from '../../lib/domain/usecase/payment/updatePayment'
 import { DeletePayment } from '../../lib/domain/usecase/payment/deletePayment'
 import type MediaRepository from '~~/lib/domain/repository/mediaRepository'
 import { UploadMedia } from '../../lib/domain/usecase/media/uploadMedia'
+import type AnalyticsRepository from '~~/lib/domain/repository/analyticsRepository'
+import { GetMonthlySpendingTrend } from '../../lib/domain/usecase/analytics/getMonthlySpendingTrend'
+import { GetSpendingCountByCategory } from '../../lib/domain/usecase/analytics/getSpendingCountByCategory'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -40,6 +43,7 @@ export default defineNuxtPlugin({
     const billRepository = $repositories.bill as BillRepository
     const paymentRepository = $repositories.payment as PaymentRepository
     const mediaRepository = $repositories.media as MediaRepository
+    const analyticsRepository = $repositories.analytics as AnalyticsRepository
 
     // register use cases
     const useCases = {
@@ -76,6 +80,10 @@ export default defineNuxtPlugin({
       },
       media: {
         uploadMedia: new UploadMedia(mediaRepository)
+      },
+      analytics: {
+        getMonthlySpendingTrend: new GetMonthlySpendingTrend(analyticsRepository),
+        getSpendingCountByCategory: new GetSpendingCountByCategory(analyticsRepository)
       }
     }
 

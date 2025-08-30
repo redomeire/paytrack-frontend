@@ -4,11 +4,13 @@ import { AuthRepositoryImpl } from '~~/lib/data/repository/authRepositoryImpl'
 import { BillRepositoryImpl } from '~~/lib/data/repository/billRepositoryImpl'
 import { PaymentRepositoryImpl } from '~~/lib/data/repository/paymentRepositoryImpl'
 import { MediaRepositoryImpl } from '~~/lib/data/repository/mediaRepositoryImpl'
+import { AnalyticsRepositoryImpl } from '~~/lib/data/repository/analyticsRepositoryImpl'
 
 import { AuthRemoteDataSourceImpl } from '~~/lib/data/datasource/authRemoteDataSource'
 import { BillRemoteDataSourceImpl } from '~~/lib/data/datasource/billRemoteDataSource'
 import { PaymentRemoteDataSourceImpl } from '~~/lib/data/datasource/paymentRemoteDataSource'
 import { MediaRemoteDataSourceImpl } from '~~/lib/data/datasource/mediaRemoteDataSource'
+import { AnalyticsRemoteDataSourceImpl } from '~~/lib/data/datasource/analyticsRemoteDataSource'
 
 export default defineNuxtPlugin({
   name: 'repositories',
@@ -22,13 +24,15 @@ export default defineNuxtPlugin({
     const billRemoteDataSource = new BillRemoteDataSourceImpl(api)
     const paymentRemoteDataSource = new PaymentRemoteDataSourceImpl(api)
     const mediaRemoteDataSource = new MediaRemoteDataSourceImpl(api)
+    const analyticsRemoteDataSource = new AnalyticsRemoteDataSourceImpl(api)
 
     // register repositories
     const repositories = {
       auth: new AuthRepositoryImpl(authRemoteDataSource),
       bill: new BillRepositoryImpl(billRemoteDataSource),
       payment: new PaymentRepositoryImpl(paymentRemoteDataSource),
-      media: new MediaRepositoryImpl(mediaRemoteDataSource)
+      media: new MediaRepositoryImpl(mediaRemoteDataSource),
+      analytics: new AnalyticsRepositoryImpl(analyticsRemoteDataSource)
     }
 
     return {
