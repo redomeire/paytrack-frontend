@@ -72,8 +72,8 @@ const navbarDatas = [
 @reference '~/assets/css/main.css';
 
 .main__header {
-  @apply p-3 px-10 mx-28 mt-10 rounded-full bg-white;
-  @apply border border-neutral-200 hover:shadow-xl shadow-primary-100 transition;
+  @apply p-3 px-10 mx-28 mt-10 rounded-full bg-accented/50;
+  @apply border border-transparent hover:border-primary hover:shadow-xl dark:shadow-neutral-600 shadow-primary-100 transition;
   @apply flex items-center justify-between;
 }
 </style>

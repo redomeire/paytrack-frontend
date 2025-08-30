@@ -114,6 +114,12 @@ const navItems = [
     isCollapsible: false
   },
   {
+    title: 'Riwayat',
+    icon: 'i-material-symbols-history',
+    route: '/dashboard/bills/history',
+    isCollapsible: false
+  },
+  {
     title: 'Pengaturan',
     icon: 'i-material-symbols-settings-outline',
     route: '/settings',
@@ -137,11 +143,11 @@ const navItems = [
 
 const handleLogout = async () => {
   Promise.all([
-    $useCases.auth.logout.execute(),
-    clear()
+    $useCases.auth.logout.execute()
   ]).catch((error) => {
     console.error('Error during logout:', error)
   }).finally(() => {
+    clear()
     setTimeout(() => {
       router.replace('/auth/login')
     }, 1000)

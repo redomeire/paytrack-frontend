@@ -12,7 +12,7 @@
         <NuxtButton
           variant="solid"
           size="lg"
-          class="bg-white text-primary hover:bg-gray-300 transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          class="transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 bg-white text-black hover:bg-white hover:text-black"
         >
           <NuxtLink to="/auth/signup">
             <span class="text-body-sm">

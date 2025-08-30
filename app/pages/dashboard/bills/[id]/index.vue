@@ -4,265 +4,191 @@
       <NuxtContainer class="p-4">
         <NuxtAlert
           color="error"
-          :title="error.message"
-          message="Failed to load bill details. Please try again later."
+          variant="soft"
+          icon="i-heroicons-exclamation-triangle"
+          title="Error Loading Bill"
+          :description="error.message || 'Failed to load bill details. Please try again later.'"
         />
       </NuxtContainer>
     </div>
+
     <article
-      v-if="data?.billDetail.data"
-      class="p-4"
+      v-if="data?.data"
+      class="p-4 md:p-6"
     >
-      <div class="flex justify-between gap-5 flex-wrap">
+      <div class="flex justify-between items-start gap-5 flex-wrap mb-8">
         <div>
-          <h1 class="text-2xl font-bold">
-            Create New Bill
-          </h1>
-          <p>
-            Fill in the details of your new bill.
+          <div class="flex items-center gap-3">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+              {{ data.data.name }}
+            </h1>
+            <NuxtBadge
+              color="warning"
+              variant="soft"
+              size="lg"
+            >
+              Due in {{ dayCountsFormat(data.data.due_date) }}
+            </NuxtBadge>
+          </div>
+          <p class="mt-1 text-gray-500 dark:text-gray-400">
+            {{ data.data.description || 'No description provided.' }}
           </p>
         </div>
-        <div>
+        <div class="flex items-center gap-2 flex-shrink-0">
           <NuxtButton
-            :to="`/dashboard/bills/${billId}/payments`"
-            color="primary"
-            size="xl"
-            class="flex items-center justify-center"
+            :to="`/dashboard/bills/${billId}/edit`"
+            icon="i-heroicons-pencil-square"
+            size="md"
             variant="outline"
           >
-            <NuxtIcon name="i-material-symbols-visibility" />
-            <span class="ml-2">View payment history</span>
+            Edit
           </NuxtButton>
         </div>
       </div>
-      <div class="mt-10">
-        <NuxtForm
-          :schema="billsSchema"
-          :state="state"
-          @submit="handleUpdateBill"
-        >
-          <div class="form-group grid md:grid-cols-2 gap-5">
-            <NuxtFormField
-              label="Bill Name"
-              name="name"
-              required
-            >
-              <NuxtInput
-                v-model="state.name"
-                color="primary"
-                size="xl"
-                class="w-full"
-                placeholder="Enter bill name"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Bill Category"
-              name="bill_category_id"
-              required
-            >
-              <NuxtSelectMenu
-                v-model="state.bill_category_id"
-                :items="data?.billCategories"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                create-item
-                @create="onCreateCategory"
-              />
-            </NuxtFormField>
-          </div>
-          <NuxtFormField
-            label="Description"
-            name="description"
-            class="mt-5"
-          >
-            <NuxtTextarea
-              v-model="state.description"
-              color="primary"
-              size="xl"
-              class="w-full"
-              placeholder="ex: Monthly electricity bill for January 2024"
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8">
+          <NuxtCard>
+            <template #header>
+              <h3 class="font-semibold text-gray-800 dark:text-gray-200">
+                Attachment
+              </h3>
+            </template>
+            <NuxtImg
+              v-if="data.data.attachment_url"
+              :alt="data.data.name || 'Bill Image'"
+              :src="data.data.attachment_url || 'https://images.unsplash.com/photo-1586452838318-7e3763286b35?auto=format&fit=crop&q=80'"
+              placeholder
+              class="rounded-md object-cover w-full h-auto"
             />
-          </NuxtFormField>
-          <div class="form group grid md:grid-cols-3 gap-3 mt-5">
-            <NuxtFormField
-              label="Amount"
-              name="amount"
-              required
-            >
-              <NuxtInputNumber
-                v-model="state.amount"
-                :format-options="{
-                  style: 'currency',
-                  currency: state.currency ?? 'IDR',
-                  currencyDisplay: 'symbol',
-                  currencySign: 'standard'
-                }"
-                :min="0"
-                :locale="'id-ID'"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
-              >
-                <template #decrement>
-                  <div />
-                </template>
-                <template #increment>
-                  <div />
-                </template>
-              </NuxtInputNumber>
-            </NuxtFormField>
-            <NuxtFormField
-              label="Currency"
-              name="currency"
-              required
-            >
-              <NuxtSelectMenu
-                v-model="state.currency"
-                :items="currencies"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Billing Type"
-              name="billing_type"
-              required
-            >
-              <NuxtSelect
-                v-model="state.billing_type"
-                :items="['recurring', 'fixed']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Billing Frequency"
-              name="billing_frequency"
-            >
-              <NuxtSelect
-                v-model="state.frequency!"
-                :items="['monthly', 'annual', 'custom']"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                :disabled="state.billing_type === 'fixed'"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Custom Frequency (Days)"
-              name="custom_frequency_days"
-            >
-              <NuxtInputNumber
-                v-model="state.custom_frequency_days"
-                orientation="vertical"
-                size="xl"
-                class="w-full"
-                :disabled="state.frequency !== 'custom'"
-              />
-            </NuxtFormField>
-          </div>
-          <div class="form-group grid md:grid-cols-2 gap-5 mt-5">
-            <NuxtFormField
-              label="Due Date"
-              name="due_date"
-              required
-            >
-              <NuxtInput
-                v-model="state.due_date"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-                type="date"
-              />
-            </NuxtFormField>
-            <NuxtFormField
-              label="Attachment URL"
-              name="attachment_url"
-            >
-              <NuxtInput
-                v-model="state.attachment_url"
-                :ui="{ leading: 'pr-3' }"
-                class="w-full"
-                size="xl"
-              />
-            </NuxtFormField>
-          </div>
-          <NuxtFormField
-            label="Notes"
-            name="notes"
-            class="mt-5"
-          >
-            <NuxtTextarea
-              v-model="state.notes"
-              :ui="{ leading: 'pr-3' }"
-              class="w-full"
-              size="xl"
+            <NuxtFileUpload
+              v-else
+              v-model="files"
+              accept="image/*"
+              icon="i-lucide-image"
+              label="Drop your image here"
+              description="SVG, PNG, JPG or GIF (max. 2MB)"
+              class="w-full min-h-48"
             />
-          </NuxtFormField>
-          <NuxtButton
-            type="submit"
-            color="primary"
-            size="xl"
-            class="mt-5 w-full flex items-center justify-center"
-            :loading="updateStatus === 'pending'"
-            :disabled="updateStatus === 'pending'"
-          >
-            Update Bill
-          </NuxtButton>
-        </NuxtForm>
-        <div class="mt-10">
-          <NuxtContainer class="border-error border-2 rounded-xl p-3">
-            <h3 class="text-heading-6 font-semibold">
-              Danger Zone
-            </h3>
-            <div class="flex items-center justify-between mt-5">
+            <NuxtButton
+              v-if="files"
+              class="mt-4"
+              label="Upload Attachment"
+              :loading="uploadStatus === 'pending'"
+              :disabled="uploadStatus === 'pending'"
+              @click="handleUploadFile"
+            />
+          </NuxtCard>
+
+          <NuxtCard :ui="{ root: 'bg-red-50 dark:bg-red-900/50' }">
+            <template #header>
+              <h3 class="text-lg font-semibold text-red-800 dark:text-red-300">
+                Danger Zone
+              </h3>
+            </template>
+            <div class="flex items-center justify-between">
               <div>
-                <h6
-                  class="text-body-lg font-semibold"
-                >
-                  Delete Bill
-                </h6>
-                <p class="text-sm text-gray-500">
-                  Deleting a bill is permanent and cannot be undone. Please proceed with caution.
+                <h4 class="font-semibold">
+                  Delete This Bill
+                </h4>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  This action is permanent and cannot be undone.
                 </p>
               </div>
-              <div>
-                <NuxtModal>
-                  <NuxtButton
-                    variant="solid"
-                    color="error"
-                  >
-                    Delete Bill
-                  </NuxtButton>
-                  <template #content>
-                    <div class="p-5">
-                      <p class="text-lg font-semibold">
-                        Confirm deletion
-                      </p>
-                      <p class="text-sm">
-                        Are you sure you want to delete this bill? This action cannot be undone.
-                      </p>
+              <NuxtModal>
+                <NuxtButton
+                  variant="solid"
+                  color="error"
+                  label="Delete Bill"
+                />
+                <template #content>
+                  <div class="p-5">
+                    <p class="text-lg font-semibold">
+                      Confirm Deletion
+                    </p>
+                    <p class="text-sm mt-1">
+                      Are you sure you want to delete this bill? This action cannot be undone.
+                    </p>
+                    <div class="flex justify-end mt-4">
                       <NuxtButton
-                        class="w-fit float-end"
                         color="error"
                         variant="solid"
+                        label="Delete Permanently"
                         :loading="deleteStatus === 'pending'"
-                        :disabled="deleteStatus === 'pending'"
                         @click="handleDeleteBill"
-                      >
-                        Delete permanently
-                      </NuxtButton>
+                      />
                     </div>
-                  </template>
-                </NuxtModal>
-              </div>
+                  </div>
+                </template>
+              </NuxtModal>
             </div>
-          </NuxtContainer>
+          </NuxtCard>
+        </div>
+
+        <div class="lg:col-span-1">
+          <div class="sticky top-24">
+            <NuxtCard class="w-full">
+              <template #header>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-200">
+                  Payment Details
+                </h3>
+              </template>
+
+              <div class="text-center mb-6">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  Amount Due
+                </p>
+                <p class="text-4xl font-bold text-gray-900 dark:text-white mt-1">
+                  {{ currencyFormat(data.data.amount, data.data.currency) }}
+                </p>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2">
+                    <NuxtIcon
+                      name="i-heroicons-tag"
+                      class="text-gray-400"
+                    />
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Category</span>
+                  </div>
+                  <span class="font-semibold text-right">{{ data.data.bill_category.name }}</span>
+                </div>
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2">
+                    <NuxtIcon
+                      name="i-heroicons-calendar-days"
+                      class="text-gray-400"
+                    />
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Due Date</span>
+                  </div>
+                  <span class="font-semibold text-right">{{ dateTimeFormat({ date: data.data.due_date, timezone: 'Asia/Jakarta' }) }}</span>
+                </div>
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2">
+                    <NuxtIcon
+                      name="i-heroicons-clock"
+                      class="text-gray-400"
+                    />
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Period</span>
+                  </div>
+                  <span class="font-semibold text-right">{{ data.data.period ?? 'N/A' }}</span>
+                </div>
+              </div>
+
+              <template #footer>
+                <NuxtButton
+                  size="xl"
+                  block
+                  label="Pay Now"
+                  icon="i-heroicons-credit-card"
+                  :loading="checkoutStatus === 'pending'"
+                  :disabled="checkoutStatus === 'pending'"
+                  @click="handleCheckout"
+                />
+              </template>
+            </NuxtCard>
+          </div>
         </div>
       </div>
     </article>
@@ -270,11 +196,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@nuxt/ui'
-import type { InferedBillsSchema } from '~~/shared/types/bills/billsSchema'
-import { billsSchema } from '~~/shared/types/bills/billsSchema'
-import { NuxtFormField, NuxtTextarea } from '#components'
-import countries from '~/assets/country/countries_with_all_data.json'
+import { NuxtButton } from '#components'
+
+useSeoMeta({
+  title: 'Bill Details - PayTrack',
+  description: 'the details of your bill, including name, category, amount, and due date.'
+})
 
 definePageMeta({
   layout: 'dashboard',
@@ -289,71 +216,93 @@ if (!billId) {
   throw new Error('Bill ID is required')
 }
 
-const currencies: string[] = countries.map((country) => country.currencies!)
+const { data, error } = await useAsyncData(
+  'bill-' + billId,
+  async () => $useCases.bill.getBillDetail.execute({
+    payload: {
+      id: billId
+    }
+  }))
 
-const { data, error } = await useAsyncData(async () => {
-  const [billDetail, billCategories] = await Promise.all([
-    $useCases.bill.getBillDetail.execute({ payload: { id: billId } }),
-    $useCases.bill.getAllBillCategories.execute({})
-  ])
-  return {
-    billDetail,
-    billCategories
-  }
-}, {
-  transform: (data) => {
-    return {
-      billDetail: data.billDetail,
-      billCategories: data.billCategories.data?.map((billCategory) => ({
-        label: billCategory.name,
-        value: billCategory.id
-      }))
+const files = ref<File>()
+
+const {
+  data: updateBillData,
+  execute: executeUpdateBill
+} = await useAsyncData(
+  () => $useCases.bill.updateBill.execute({
+    payload: {
+      bill: {
+        ...data.value?.data,
+        attachment_url: uploadData.value?.data?.url
+      }
     }
   }
-})
+  ), {
+    immediate: false
+  })
 
-const state = reactive({
-  ...data.value?.billDetail.data,
-  due_date: data.value?.billDetail?.data?.due_date ? new Date(data.value?.billDetail?.data?.due_date).toISOString().split('T')[0] : '',
-  description: data.value?.billDetail.data?.description ?? '',
-  notes: data.value?.billDetail.data?.notes ?? '',
-  attachment_url: data.value?.billDetail.data?.attachment_url ?? '',
-  bill_category_id: data.value?.billCategories?.find((category) => category.value === data.value?.billDetail.data?.bill_category_id) ?? null
-} as Partial<InferedBillsSchema>)
-
-const { status: updateStatus, execute: executeUpdate } = await useAsyncData(() => $useCases.bill.updateBill.execute({
-  payload: {
-    bill: {
-      ...state,
-      bill_category_id: state.bill_category_id?.value
+const {
+  status: deleteStatus,
+  execute: executeDelete
+} = await useAsyncData(
+  () => $useCases.bill.deleteBill.execute({
+    payload: {
+      id: billId
     }
-  }
-}), {
-  immediate: false
-})
+  }), {
+    immediate: false
+  })
 
-const { status: deleteStatus, execute: executeDelete } = await useAsyncData(() => $useCases.bill.deleteBill.execute({
-  payload: {
-    id: billId
-  }
-}), {
-  immediate: false
-})
-const handleUpdateBill = async (event: FormSubmitEvent<InferedBillsSchema>) => {
-  event.preventDefault()
+const {
+  data: checkoutData,
+  status: checkoutStatus,
+  execute: executeCheckout
+} = await useAsyncData(
+  () => $useCases.bill.checkoutBill.execute({
+    payload: {
+      billId
+    }
+  }), {
+    immediate: false
+  })
+const {
+  data: uploadData,
+  status: uploadStatus,
+  execute: executeUpload
+} = await useAsyncData(
+  () => $useCases.media.uploadMedia.execute({
+    payload: {
+      file: files.value!
+    }
+  }), {
+    immediate: false
+  })
 
-  await executeUpdate()
-  if (updateStatus.value === 'success') {
-    navigateTo('/dashboard/bills')
-  }
-}
 const handleDeleteBill = async () => {
   await executeDelete()
   if (deleteStatus.value === 'success') {
     navigateTo('/dashboard/bills')
   }
 }
-const onCreateCategory = (name: string) => {
-  navigateTo(`/dashboard/bills/category/create?name=${encodeURIComponent(name)}`)
+const handleCheckout = async () => {
+  await executeCheckout()
+  if (checkoutData.value?.success) {
+    navigateTo(checkoutData.value.data?.invoice_url, {
+      external: true
+    })
+  }
+}
+const handleUploadFile = async () => {
+  if (files.value) {
+    await executeUpload()
+    if (uploadData.value?.success) {
+      await executeUpdateBill()
+      if (updateBillData.value?.success) {
+        files.value = undefined
+        await refreshNuxtData(`bill-${billId}`)
+      }
+    }
+  }
 }
 </script>

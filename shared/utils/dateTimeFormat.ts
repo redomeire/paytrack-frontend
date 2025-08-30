@@ -1,6 +1,6 @@
 interface IDateTimeFormat {
   date: string
-  timezone: string
+  timezone?: string
 }
 
 function dateTimeFormat({ date: inputDate, timezone = 'Asia/Jakarta' }: IDateTimeFormat) {

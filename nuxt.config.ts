@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@pinia/nuxt',
     '@vee-validate/nuxt',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    'nuxt-echarts'
   ],
   plugins: [
     '~/plugins/api.ts',

@@ -2,9 +2,9 @@ import type { IBill } from '../../../../domain/entity/bill'
 import type { IHttpResponse } from '../base'
 import type { FetchOptions } from 'ofetch'
 
-type IGetAllBillsResponse = IHttpResponse<IBill[], true>
-interface IGetAllBillsRequest {
+type IGetUpcomingBillsResponse = IHttpResponse<IBill[], true>
+interface IGetUpcomingBillsRequest {
   options?: FetchOptions
 }
 
-export type { IGetAllBillsResponse, IGetAllBillsRequest }
+export type { IGetUpcomingBillsResponse, IGetUpcomingBillsRequest }
