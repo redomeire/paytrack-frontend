@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_URL || 'https://api.example.com',
+      apiBase: '/api',
       appName: 'My Nuxt App',
       appVersion: '1.0.0'
     },
@@ -36,7 +36,16 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/api': {
+          target: process.env.NUXT_PUBLIC_API_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '/api/v1')
+        }
+      }
+    }
   },
   eslint: {
     checker: true,
