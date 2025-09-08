@@ -14,6 +14,7 @@
       <NuxtChip
         class="lg:hidden"
         size="lg"
+        :show="notificationReadStatuses.unread > 0"
       >
         <NuxtPopover
           :content="{
@@ -34,25 +35,59 @@
                   Notifikasi
                 </h4>
                 <NuxtButton
+                  v-if="notificationReadStatuses.unread > 0"
                   variant="subtle"
                   class="text-xs"
+                  :loading="readAllStatus === 'pending'"
+                  :disabled="readAllStatus === 'pending'"
+                  @click="handleReadAllNotifications"
                 >
                   Mark as read
                 </NuxtButton>
               </div>
               <NuxtSeparator />
-              <ul>
-                <li
-                  v-for="notification of notifications"
-                  :key="notification.time"
-                  :class="`${!notification.is_read ? 'hover:bg-elevated' : 'bg-elevated hover:bg-accented'} transition p-3`"
+              <ul
+                v-if="status === 'pending'"
+                class="grid gap-2 p-3"
+              >
+                <NuxtSkeleton class="h-4 w-full" />
+                <NuxtSkeleton class="h-4 w-[100px] mt-2" />
+              </ul>
+              <div v-else-if="status === 'success'">
+                <ul
+                  v-if="notifications?.data && notifications.data.length > 0"
+                  class="max-h-[500px] overflow-y-auto"
                 >
-                  <p class="text-body-sm">
-                    {{ notification.text }}
+                  <li
+                    v-for="notification of notifications.data"
+                    :key="notification.id"
+                    :class="`${!notification.is_read ? 'hover:bg-elevated' : 'bg-elevated hover:bg-accented'} transition p-3`"
+                    @click="() => handleClickNotification(notification.read_id, notification.is_read)"
+                  >
+                    <p class="text-body-sm">
+                      {{ notification.message }}
+                    </p>
+                    <span class="text-xs text-neutral-500">
+                      {{ dateTimeFormat({ date: notification.created_at }) }}
+                    </span>
+                  </li>
+                </ul>
+                <div
+                  v-else
+                  class="flex flex-col items-center justify-center p-5"
+                >
+                  <p class="text-body-sm text-center">
+                    No new notifications
                   </p>
-                  <span class="text-xs text-neutral-500">
-                    {{ notification.time }}
-                  </span>
+                </div>
+              </div>
+              <ul v-else-if="status === 'error'">
+                <li class="p-3">
+                  <NuxtAlert
+                    color="error"
+                    variant="soft"
+                    title="Failed to load notifications."
+                  />
                 </li>
               </ul>
             </div>
@@ -77,6 +112,7 @@
         />
         <NuxtChip
           size="lg"
+          :show="notificationReadStatuses.unread > 0"
         >
           <NuxtPopover
             :content="{
@@ -97,25 +133,59 @@
                     Notifikasi
                   </h4>
                   <NuxtButton
+                    v-if="notificationReadStatuses.unread > 0"
                     variant="subtle"
                     class="text-xs"
+                    :loading="readAllStatus === 'pending'"
+                    :disabled="readAllStatus === 'pending'"
+                    @click="handleReadAllNotifications"
                   >
                     Mark as read
                   </NuxtButton>
                 </div>
                 <NuxtSeparator />
-                <ul>
-                  <li
-                    v-for="notification of notifications"
-                    :key="notification.time"
-                    :class="`${!notification.is_read ? 'hover:bg-elevated' : 'bg-elevated hover:bg-accented'} transition p-3`"
+                <ul
+                  v-if="status === 'pending'"
+                  class="grid gap-2 p-3"
+                >
+                  <NuxtSkeleton class="h-4 w-full" />
+                  <NuxtSkeleton class="h-4 w-[100px] mt-2" />
+                </ul>
+                <div v-else-if="status === 'success'">
+                  <ul
+                    v-if="notifications?.data && notifications.data.length > 0"
+                    class="max-h-[500px] overflow-y-auto"
                   >
-                    <p class="text-body-sm">
-                      {{ notification.text }}
+                    <li
+                      v-for="notification of notifications?.data"
+                      :key="notification.id"
+                      :class="`${!notification.is_read ? 'hover:bg-elevated' : 'bg-elevated hover:bg-accented'} transition p-3`"
+                      @click="() => handleClickNotification(notification.read_id, notification.is_read)"
+                    >
+                      <p class="text-body-sm">
+                        {{ notification.message }}
+                      </p>
+                      <span class="text-xs text-neutral-500">
+                        {{ dateTimeFormat({ date: notification.created_at }) }}
+                      </span>
+                    </li>
+                  </ul>
+                  <div
+                    v-else
+                    class="flex flex-col items-center justify-center p-5"
+                  >
+                    <p class="text-body-sm text-center">
+                      No new notifications
                     </p>
-                    <span class="text-xs text-neutral-500">
-                      {{ notification.time }}
-                    </span>
+                  </div>
+                </div>
+                <ul v-else-if="status === 'error'">
+                  <li class="p-3">
+                    <NuxtAlert
+                      color="error"
+                      variant="soft"
+                      title="Failed to load notifications."
+                    />
                   </li>
                 </ul>
               </div>
@@ -143,7 +213,12 @@
 </template>
 
 <script lang="ts" setup>
+const { $useCases } = useNuxtApp()
 const { user } = useUserSession()
+
+onMounted(() => {
+  execute()
+})
 
 // dark mode
 const colorMode = useColorMode()
@@ -154,26 +229,48 @@ const isDark = computed({
   }
 })
 
-const notifications = [
+const {
+  data: notifications,
+  status,
+  execute
+} = await useAsyncData('notifications',
+  () =>
+    $useCases.notification.getNotifications.execute({}),
   {
-    text: 'Tagihan listrik jatuh tempo besok',
-    time: '2 jam yang lalu',
-    is_read: false
-  },
-  {
-    text: 'Pembayaran tagihan air berhasil',
-    time: '1 hari yang lalu',
-    is_read: true
-  },
-  {
-    text: 'Pembayaran tagihan internet berhasil',
-    time: '3 hari yang lalu',
-    is_read: true
-  },
-  {
-    text: 'Tagihan listrik jatuh tempo besok',
-    time: '2 jam yang lalu',
-    is_read: false
+    immediate: false
   }
-]
+)
+
+const notificationReadStatuses = computed(() => {
+  if (!notifications.value?.data) return { unread: 0, total: 0 }
+  const unread = notifications.value.data.filter((n) => !n.is_read).length
+  const total = notifications.value.data.length
+  return { unread, total }
+})
+
+const {
+  status: readAllStatus,
+  execute: executeReadAll
+} = await useAsyncData(
+  () =>
+    $useCases.notification.readAllNotifications.execute({}),
+  {
+    immediate: false
+  }
+)
+
+const handleClickNotification = async (id: string, is_read: boolean) => {
+  if (!id || is_read) return
+  await $useCases.notification.readNotification.execute({
+    payload: { id }
+  })
+  if (status.value === 'success')
+    await refreshNuxtData('notifications')
+}
+
+const handleReadAllNotifications = async () => {
+  await executeReadAll()
+  if (readAllStatus.value === 'success')
+    await refreshNuxtData('notifications')
+}
 </script>

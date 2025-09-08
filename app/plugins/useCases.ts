@@ -32,6 +32,10 @@ import type AnalyticsRepository from '~~/lib/domain/repository/analyticsReposito
 import { GetMonthlySpendingTrend } from '../../lib/domain/usecase/analytics/getMonthlySpendingTrend'
 import { GetSpendingCountByCategory } from '../../lib/domain/usecase/analytics/getSpendingCountByCategory'
 import { GetSummary } from '../../lib/domain/usecase/analytics/getSummary'
+import type NotificationRepository from '~~/lib/domain/repository/notificationRepository'
+import { GetNotifications } from '../../lib/domain/usecase/notification/getNotifications'
+import { ReadNotification } from '../../lib/domain/usecase/notification/readNotification'
+import { ReadAllNotifications } from '../../lib/domain/usecase/notification/readAllNotifications'
 
 export default defineNuxtPlugin({
   name: 'useCases',
@@ -45,6 +49,7 @@ export default defineNuxtPlugin({
     const paymentRepository = $repositories.payment as PaymentRepository
     const mediaRepository = $repositories.media as MediaRepository
     const analyticsRepository = $repositories.analytics as AnalyticsRepository
+    const notificationRepository = $repositories.notification as NotificationRepository
 
     // register use cases
     const useCases = {
@@ -86,6 +91,11 @@ export default defineNuxtPlugin({
         getMonthlySpendingTrend: new GetMonthlySpendingTrend(analyticsRepository),
         getSpendingCountByCategory: new GetSpendingCountByCategory(analyticsRepository),
         getSummary: new GetSummary(analyticsRepository)
+      },
+      notification: {
+        getNotifications: new GetNotifications(notificationRepository),
+        readNotification: new ReadNotification(notificationRepository),
+        readAllNotifications: new ReadAllNotifications(notificationRepository)
       }
     }
 
