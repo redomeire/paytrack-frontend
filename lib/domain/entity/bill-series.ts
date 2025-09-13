@@ -16,6 +16,7 @@ export interface IBillSeries {
   account_number?: string
   account_name?: string
   bank_code?: string
+  billing_information_id?: string | null
   is_active?: boolean
   created_at: string
   updated_at: string

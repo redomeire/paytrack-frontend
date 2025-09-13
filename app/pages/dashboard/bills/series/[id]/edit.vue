@@ -122,6 +122,71 @@
 
           <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-lg space-y-6">
             <h2 class="text-lg font-semibold border-b dark:border-gray-700 pb-4">
+              Billing Information
+            </h2>
+            <p>
+              Fill in the billing information for this bill.
+            </p>
+            <NuxtFormField
+              v-if="recipientAccounts?.data"
+              label="Billing Information Details"
+              name="billing_information_id"
+              class="mt-5"
+            >
+              <NuxtSelectMenu
+                v-model="billingInformationOption"
+                :items="recipientAccounts?.data"
+                :ui="{ leading: 'pr-3' }"
+                class="w-full"
+                size="xl"
+                placeholder="Select Billing Information"
+              />
+            </NuxtFormField>
+            <div class="form-group grid md:grid-cols-3 gap-5 mt-5">
+              <NuxtFormField
+                label="Account Number"
+                name="account_number"
+                required
+              >
+                <NuxtInput
+                  v-model="state.account_number"
+                  :ui="{ leading: 'pr-3' }"
+                  class="w-full"
+                  size="xl"
+                  placeholder="ex: 1234567890"
+                />
+              </NuxtFormField>
+              <NuxtFormField
+                label="Account Name"
+                name="account_name"
+                required
+              >
+                <NuxtInput
+                  v-model="state.account_name"
+                  :ui="{ leading: 'pr-3' }"
+                  class="w-full"
+                  size="xl"
+                  placeholder="ex: John Doe"
+                />
+              </NuxtFormField>
+              <NuxtFormField
+                label="Channel Code"
+                name="bank_code"
+                required
+              >
+                <NuxtSelectMenu
+                  v-model="paymentChannelOption"
+                  :items="paymentChannel.channel"
+                  placeholder="Pilih Akun"
+                  size="xl"
+                  class="w-full"
+                />
+              </NuxtFormField>
+            </div>
+          </div>
+
+          <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-lg space-y-6">
+            <h2 class="text-lg font-semibold border-b dark:border-gray-700 pb-4">
               Billing Cycle
             </h2>
 
@@ -238,6 +303,8 @@ const route = useRoute()
 const billSeriesId = route.params.id as string
 
 const currencies: string[] = countries.map((country) => country.currencies!)
+const { value: paymentChannel } = usePaymentChannelCode()
+const paymentChannelOption = ref({ label: '', value: '' })
 
 const { data, error } = await useAsyncData(async () => {
   const [billDetail, billCategories] = await Promise.all([
@@ -264,14 +331,25 @@ const state = reactive({
   start_date: data.value?.billDetail?.data?.start_date ? new Date(data.value?.billDetail?.data?.start_date).toISOString().split('T')[0] : '',
   frequency: data.value?.billDetail.data?.frequency || 'monthly',
   frequency_interval: data.value?.billDetail.data?.frequency_interval || 1,
+  billing_information_id: data.value?.billDetail.data?.billing_information_id || undefined,
+  description: data.value?.billDetail.data?.description ?? undefined,
   bill_category_id: data.value?.billCategories?.find(
     (category) => category.value === data.value?.billDetail.data?.bill_category_id
   ) ?? undefined
-})
+} as Partial<InferedBillSeries>)
 watch(() => data.value?.billCategories, (newCategories) => {
   if (newCategories && newCategories.length > 0 && state) {
     state.bill_category_id = newCategories[0]!
   }
+})
+watch(() => state.bank_code, (newVal) => {
+  const selectedChannel = paymentChannel.channel.find((channel) => channel.value === newVal)
+  if (selectedChannel) {
+    paymentChannelOption.value = { label: selectedChannel.label, value: selectedChannel.value }
+  }
+}, { immediate: true })
+watch(paymentChannelOption, (newVal) => {
+  state.bank_code = newVal.value
 })
 
 const {
@@ -288,6 +366,31 @@ const {
     }
   }), {
   immediate: false
+})
+
+const { data: recipientAccounts } = await useAsyncData(
+  () => $useCases.bill.getAllRecipientAccounts.execute({}),
+  {
+    transform: (data) => ({
+      data: data?.data?.data.map((channel) => {
+        const details = JSON.parse(channel.details)
+        return {
+          label: `${channel.name} - ${details.account_number}`,
+          value: channel.id,
+          account_id: details.account_id,
+          account_name: details.account_name
+        }
+      })
+    })
+  }
+)
+const billingInformationOption = ref({ label: '', value: '', account_name: '', account_id: '' })
+watch(billingInformationOption, (newVal) => {
+  state.account_name = newVal.label.split(' - ')[0] || ''
+  state.account_number = newVal.label.split(' - ')[1] || ''
+  paymentChannelOption.value = { label: newVal.account_name, value: newVal.account_id }
+  state.bank_code = newVal.account_id
+  state.billing_information_id = newVal.value
 })
 
 const handleUpdateRecurringBill = async (event: FormSubmitEvent<InferedBillSeries>) => {
