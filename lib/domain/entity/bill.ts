@@ -12,6 +12,9 @@ export interface IBill {
   notes?: string
   attachment_url?: string
   status: BillStatus
+  account_number?: string
+  account_name?: string
+  bank_code?: string
   created_at: string
   updated_at: string
 }

@@ -16,7 +16,11 @@ const billsSchema = v.object({
   notes: v.optional(v.string()),
   attachment_url: v.optional(v.string()),
   due_date: v.pipe(v.string(), v.minLength(1, 'Due date is required')),
-  period: v.nullable(v.string())
+  period: v.nullable(v.string()),
+  account_number: v.pipe(v.string(), v.minLength(1, 'Account number is required')),
+  account_name: v.pipe(v.string(), v.minLength(1, 'Account name is required')),
+  bank_code: v.pipe(v.string(), v.minLength(1, 'Bank code is required')),
+  billing_information_id: v.optional(v.string())
 })
 
 type InferedBillsSchema = v.InferOutput<typeof billsSchema>
