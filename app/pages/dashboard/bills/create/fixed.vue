@@ -126,6 +126,68 @@
               />
             </NuxtFormField>
           </div>
+          <h1 class="text-xl font-bold mt-5">
+            Billing Information
+          </h1>
+          <p>
+            Fill in the billing information for this bill.
+          </p>
+          <NuxtFormField
+            v-if="recipientAccounts?.data"
+            label="Billing Information Details"
+            name="billing_information_id"
+            class="mt-5"
+          >
+            <NuxtSelectMenu
+              v-model="billingInformationOption"
+              :items="recipientAccounts?.data"
+              :ui="{ leading: 'pr-3' }"
+              class="w-full"
+              size="xl"
+              placeholder="Select Billing Information"
+            />
+          </NuxtFormField>
+          <div class="form-group grid md:grid-cols-3 gap-5 mt-5">
+            <NuxtFormField
+              label="Account Number"
+              name="account_number"
+              required
+            >
+              <NuxtInput
+                v-model="state.account_number"
+                :ui="{ leading: 'pr-3' }"
+                class="w-full"
+                size="xl"
+                placeholder="ex: 1234567890"
+              />
+            </NuxtFormField>
+            <NuxtFormField
+              label="Account Name"
+              name="account_name"
+              required
+            >
+              <NuxtInput
+                v-model="state.account_name"
+                :ui="{ leading: 'pr-3' }"
+                class="w-full"
+                size="xl"
+                placeholder="ex: John Doe"
+              />
+            </NuxtFormField>
+            <NuxtFormField
+              label="Channel Code"
+              name="bank_code"
+              required
+            >
+              <NuxtSelectMenu
+                v-model="paymentChannelOption"
+                :items="paymentChannel.channel"
+                placeholder="Pilih Akun"
+                size="xl"
+                class="w-full"
+              />
+            </NuxtFormField>
+          </div>
           <NuxtFormField
             label="Notes"
             name="notes"
@@ -171,6 +233,9 @@ definePageMeta({
 const { $useCases } = useNuxtApp()
 
 const currencies: string[] = countries.map((country) => country.currencies!)
+const { value: paymentChannel } = usePaymentChannelCode()
+const paymentChannelOption = ref({ label: '', value: '' })
+
 const state = reactive({
   name: '',
   bill_category_id: { label: '', value: '' },
@@ -180,8 +245,15 @@ const state = reactive({
   notes: '',
   attachment_url: '',
   due_date: '',
-  period: null
+  period: null,
+  account_number: '',
+  account_name: '',
+  bank_code: '',
+  billing_information_id: undefined
 } as Partial<InferedBillsSchema>)
+watch(paymentChannelOption, (newVal) => {
+  state.bank_code = newVal.value
+})
 
 const { data: billCategories } = useAsyncData('bill-categories', () =>
   $useCases.bill.getAllBillCategories.execute({}), {
@@ -199,13 +271,38 @@ watch(billCategories, (newCategories) => {
   }
 })
 
-const { status, execute } = await useAsyncData(() => $useCases.bill.createBill.execute({
-  payload: {
-    ...state,
-    bill_category_id: state.bill_category_id?.value
+const { status, execute } = await useAsyncData(
+  () => $useCases.bill.createBill.execute({
+    payload: {
+      ...state,
+      bill_category_id: state.bill_category_id?.value
+    }
+  }), {
+    immediate: false
+  })
+const { data: recipientAccounts } = await useAsyncData(
+  () => $useCases.bill.getAllRecipientAccounts.execute({}),
+  {
+    transform: (data) => ({
+      data: data?.data?.data.map((channel) => {
+        const details = JSON.parse(channel.details)
+        return {
+          label: `${channel.name} - ${details.account_number}`,
+          value: channel.id,
+          account_id: details.account_id,
+          account_name: details.account_name
+        }
+      })
+    })
   }
-}), {
-  immediate: false
+)
+const billingInformationOption = ref({ label: '', value: '', account_name: '', account_id: '' })
+watch(billingInformationOption, (newVal) => {
+  state.account_name = newVal.label.split(' - ')[0] || ''
+  state.account_number = newVal.label.split(' - ')[1] || ''
+  paymentChannelOption.value = { label: newVal.account_name, value: newVal.account_id }
+  state.bank_code = newVal.account_id
+  state.billing_information_id = newVal.value
 })
 
 const handleCreateBill = async (event: FormSubmitEvent<InferedBillsSchema>) => {

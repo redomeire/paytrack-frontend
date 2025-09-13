@@ -25,17 +25,6 @@ export default defineNuxtPlugin({
           color: 'error'
         })
       },
-      onResponse({ response }) {
-        if (import.meta.server) return
-        if (response.ok) {
-          const toast = useToast()
-          toast.add({
-            title: 'Success',
-            description: response._data.message || 'Request completed successfully',
-            color: 'success'
-          })
-        }
-      },
       onResponseError({ response }) {
         if (import.meta.server) return
         const toast = useToast()

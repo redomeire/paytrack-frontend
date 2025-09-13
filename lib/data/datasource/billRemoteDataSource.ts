@@ -51,6 +51,18 @@ import type {
   ICheckoutBillRequest,
   ICheckoutBillResponse
 } from '../../common/types/http/bill/checkoutBill'
+import type {
+  IGetRecipientAccountRequest,
+  IGetRecipientAccountResponse
+} from '../../common/types/http/bill/getRecipientAccounts'
+import type {
+  ICreateRecipientAccountRequest,
+  ICreateRecipientAccountResponse
+} from '../../common/types/http/bill/createRecipientAccount'
+import type {
+  ISetBillingInformationAsDefaultRequest,
+  ISetBillingInformationAsDefaultResponse
+} from '../../common/types/http/bill/setBillingInformationAsDefault'
 
 abstract class BillRemoteDataSource {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -66,6 +78,9 @@ abstract class BillRemoteDataSource {
   abstract updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse>
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
+  abstract getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse>
+  abstract createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse>
+  abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
 }
 
 export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
@@ -183,6 +198,30 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
     const response = this.fetcher(`/payments/checkout`, {
       method: 'POST',
       body: JSON.stringify(request.payload),
+      ...request.options
+    })
+    return response
+  }
+
+  getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse> {
+    const response = this.fetcher('/bills/recipient-accounts', {
+      ...request.options
+    })
+    return response
+  }
+
+  createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse> {
+    const response = this.fetcher('/bills/recipient-accounts', {
+      method: 'POST',
+      body: JSON.stringify(request.payload),
+      ...request.options
+    })
+    return response
+  }
+
+  override setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
+    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.id}/set-as-default`, {
+      method: 'PUT',
       ...request.options
     })
     return response

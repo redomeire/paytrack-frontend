@@ -50,6 +50,15 @@ import type {
   ICheckoutBillRequest,
   ICheckoutBillResponse
 } from '~~/lib/common/types/http/bill/checkoutBill'
+import type {
+  IGetRecipientAccountRequest,
+  IGetRecipientAccountResponse
+} from '~~/lib/common/types/http/bill/getRecipientAccounts'
+import type {
+  ICreateRecipientAccountRequest,
+  ICreateRecipientAccountResponse
+} from '~~/lib/common/types/http/bill/createRecipientAccount'
+import type { ISetBillingInformationAsDefaultRequest, ISetBillingInformationAsDefaultResponse } from '~~/lib/common/types/http/bill/setBillingInformationAsDefault'
 
 abstract class BillRepository {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -65,6 +74,9 @@ abstract class BillRepository {
   abstract updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse>
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
+  abstract getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse>
+  abstract createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse>
+  abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
 }
 
 export default BillRepository
