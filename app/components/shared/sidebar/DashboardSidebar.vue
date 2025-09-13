@@ -120,6 +120,12 @@ const navItems = [
     isCollapsible: false
   },
   {
+    title: 'Rekening Penerima',
+    icon: 'i-material-symbols-account-balance-wallet-outline',
+    route: '/dashboard/recipient-account',
+    isCollapsible: false
+  },
+  {
     title: 'Pengaturan',
     icon: 'i-material-symbols-settings-outline',
     route: '/settings',

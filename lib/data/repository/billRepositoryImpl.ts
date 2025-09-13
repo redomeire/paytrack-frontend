@@ -13,6 +13,8 @@ import type { IGetRecurringBillDetailRequest, IGetRecurringBillDetailResponse } 
 import type { IUpdateBillSeriesRequest, IUpdateBillSeriesResponse } from '~~/lib/common/types/http/bill/updateBillSeries'
 import type { IGetRecurringBillsRequest, IGetRecurringBillsResponse } from '~~/lib/common/types/http/bill/getRecurringBill'
 import type { ICheckoutBillRequest, ICheckoutBillResponse } from '~~/lib/common/types/http/bill/checkoutBill'
+import type { ICreateRecipientAccountRequest, ICreateRecipientAccountResponse } from '~~/lib/common/types/http/bill/createRecipientAccount'
+import type { IGetRecipientAccountRequest, IGetRecipientAccountResponse } from '~~/lib/common/types/http/bill/getRecipientAccounts'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -71,5 +73,13 @@ export class BillRepositoryImpl extends BillRepository {
 
   checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse> {
     return this.billRemoteDataSource.checkoutBill(request)
+  }
+
+  getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse> {
+    return this.billRemoteDataSource.getAllRecipientAccounts(request)
+  }
+
+  createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse> {
+    return this.billRemoteDataSource.createRecipientAccount(request)
   }
 }

@@ -1,0 +1,672 @@
+[
+    {
+        "channelCode": "ACEH",
+        "channelType": "Bank",
+        "name": "Bank BPD Aceh"
+    },
+    {
+        "channelCode": "ACEH_UUS",
+        "channelType": "Bank",
+        "name": "Bank BPD Aceh UUS"
+    },
+    {
+        "channelCode": "AGRONIAGA",
+        "channelType": "Bank",
+        "name": "Bank Raya Indonesia (formerly called Bank BRI Agroniaga)"
+    },
+    {
+        "channelCode": "ALADIN",
+        "channelType": "Bank",
+        "name": "Bank Aladin Syariah (formerly Bank Maybank Syariah Indonesia)"
+    },
+    {
+        "channelCode": "ALLO",
+        "channelType": "Bank",
+        "name": "Allo Bank Indonesia (formerly Bank Harda Internasional)"
+    },
+    {
+        "channelCode": "AMAR",
+        "channelType": "Bank",
+        "name": "Bank Amar Indonesia (formerly called Anglomas International Bank)"
+    },
+    {
+        "channelCode": "ANZ",
+        "channelType": "Bank",
+        "name": "Bank ANZ Indonesia"
+    },
+    {
+        "channelCode": "ARTHA",
+        "channelType": "Bank",
+        "name": "Bank Artha Graha International"
+    },
+    {
+        "channelCode": "BALI",
+        "channelType": "Bank",
+        "name": "BPD Bali"
+    },
+    {
+        "channelCode": "BAML",
+        "channelType": "Bank",
+        "name": "Bank of America Merill-Lynch"
+    },
+    {
+        "channelCode": "BANTEN",
+        "channelType": "Bank",
+        "name": "BPD Banten (formerly called Bank Pundi Indonesia)"
+    },
+    {
+        "channelCode": "BCA",
+        "channelType": "Bank",
+        "name": "Bank Central Asia (BCA)"
+    },
+    {
+        "channelCode": "BCA_DIGITAL",
+        "channelType": "Bank",
+        "name": "Bank Central Asia Digital (BluBCA)"
+    },
+    {
+        "channelCode": "BCA_SYR",
+        "channelType": "Bank",
+        "name": "Bank Central Asia (BCA) Syariah"
+    },
+    {
+        "channelCode": "BENGKULU",
+        "channelType": "Bank",
+        "name": "BPD Bengkulu"
+    },
+    {
+        "channelCode": "BISNIS_INTERNASIONAL",
+        "channelType": "Bank",
+        "name": "Bank Bisnis Internasional"
+    },
+    {
+        "channelCode": "BJB",
+        "channelType": "Bank",
+        "name": "Bank BJB"
+    },
+    {
+        "channelCode": "BJB_SYR",
+        "channelType": "Bank",
+        "name": "Bank BJB Syariah"
+    },
+    {
+        "channelCode": "BNC",
+        "channelType": "Bank",
+        "name": "Bank Neo Commerce (formerly Bank Yudha Bhakti)"
+    },
+    {
+        "channelCode": "BNI",
+        "channelType": "Bank",
+        "name": "Bank Negara Indonesia (BNI)"
+    },
+    {
+        "channelCode": "BNP_PARIBAS",
+        "channelType": "Bank",
+        "name": "Bank BNP Paribas"
+    },
+    {
+        "channelCode": "BOC",
+        "channelType": "Bank",
+        "name": "Bank of China (BOC)"
+    },
+    {
+        "channelCode": "BRI",
+        "channelType": "Bank",
+        "name": "Bank Rakyat Indonesia (BRI)"
+    },
+    {
+        "channelCode": "BSI",
+        "channelType": "Bank",
+        "name": "Bank Syariah Indonesia (BSI)"
+    },
+    {
+        "channelCode": "BTN",
+        "channelType": "Bank",
+        "name": "Bank Tabungan Negara (BTN)"
+    },
+    {
+        "channelCode": "BTN_UUS",
+        "channelType": "Bank",
+        "name": "Bank Tabungan Negara (BTN) UUS"
+    },
+    {
+        "channelCode": "BTPN_SYARIAH",
+        "channelType": "Bank",
+        "name": "BTPN Syariah (formerly called BTPN UUS and Bank Sahabat Purba Danarta)"
+    },
+    {
+        "channelCode": "BUKOPIN",
+        "channelType": "Bank",
+        "name": "Bank Bukopin"
+    },
+    {
+        "channelCode": "BUKOPIN_SYR",
+        "channelType": "Bank",
+        "name": "Bank Syariah Bukopin"
+    },
+    {
+        "channelCode": "BUMI_ARTA",
+        "channelType": "Bank",
+        "name": "Bank Bumi Arta"
+    },
+    {
+        "channelCode": "CAPITAL",
+        "channelType": "Bank",
+        "name": "Bank Capital Indonesia"
+    },
+    {
+        "channelCode": "CCB",
+        "channelType": "Bank",
+        "name": "China Construction Bank Indonesia (formerly called Bank Antar Daerah and Bank Windu Kentjana International)"
+    },
+    {
+        "channelCode": "CHINATRUST",
+        "channelType": "Bank",
+        "name": "Bank Chinatrust Indonesia"
+    },
+    {
+        "channelCode": "CIMB",
+        "channelType": "Bank",
+        "name": "Bank CIMB Niaga"
+    },
+    {
+        "channelCode": "CIMB_UUS",
+        "channelType": "Bank",
+        "name": "Bank CIMB Niaga UUS"
+    },
+    {
+        "channelCode": "CITIBANK",
+        "channelType": "Bank",
+        "name": "Citibank"
+    },
+    {
+        "channelCode": "COMMONWEALTH",
+        "channelType": "Bank",
+        "name": "Bank Commonwealth"
+    },
+    {
+        "channelCode": "DAERAH_ISTIMEWA",
+        "channelType": "Bank",
+        "name": "BPD Daerah Istimewa Yogyakarta (DIY)"
+    },
+    {
+        "channelCode": "DAERAH_ISTIMEWA_UUS",
+        "channelType": "Bank",
+        "name": "BPD Daerah Istimewa Yogyakarta (DIY) UUS"
+    },
+    {
+        "channelCode": "DANAMON",
+        "channelType": "Bank",
+        "name": "Bank Danamon"
+    },
+    {
+        "channelCode": "DANAMON_UUS",
+        "channelType": "Bank",
+        "name": "Bank Danamon UUS"
+    },
+    {
+        "channelCode": "DBS",
+        "channelType": "Bank",
+        "name": "Bank DBS Indonesia"
+    },
+    {
+        "channelCode": "DEUTSCHE",
+        "channelType": "Bank",
+        "name": "Deutsche Bank"
+    },
+    {
+        "channelCode": "DINAR_INDONESIA",
+        "channelType": "Bank",
+        "name": "Bank Dinar Indonesia"
+    },
+    {
+        "channelCode": "DKI",
+        "channelType": "Bank",
+        "name": "Bank DKI"
+    },
+    {
+        "channelCode": "DKI_UUS",
+        "channelType": "Bank",
+        "name": "Bank DKI UUS"
+    },
+    {
+        "channelCode": "FAMA",
+        "channelType": "Bank",
+        "name": "Bank Fama International"
+    },
+    {
+        "channelCode": "GANESHA",
+        "channelType": "Bank",
+        "name": "Bank Ganesha"
+    },
+    {
+        "channelCode": "HANA",
+        "channelType": "Bank",
+        "name": "Bank Hana"
+    },
+    {
+        "channelCode": "HSBC",
+        "channelType": "Bank",
+        "name": "HSBC Indonesia (formerly called Bank Ekonomi Raharja)"
+    },
+    {
+        "channelCode": "HSBC_UUS",
+        "channelType": "Bank",
+        "name": "Hongkong and Shanghai Bank Corporation (HSBC) UUS"
+    },
+    {
+        "channelCode": "IBK",
+        "channelType": "Bank",
+        "name": "Bank IBK Indonesia (formerly Bank Agris)"
+    },
+    {
+        "channelCode": "ICBC",
+        "channelType": "Bank",
+        "name": "Bank ICBC Indonesia"
+    },
+    {
+        "channelCode": "INA_PERDANA",
+        "channelType": "Bank",
+        "name": "Bank Ina Perdania"
+    },
+    {
+        "channelCode": "INDEX_SELINDO",
+        "channelType": "Bank",
+        "name": "Bank Index Selindo"
+    },
+    {
+        "channelCode": "INDIA",
+        "channelType": "Bank",
+        "name": "Bank of India Indonesia"
+    },
+    {
+        "channelCode": "JAGO",
+        "channelType": "Bank",
+        "name": "Bank Jago (formerly Bank Artos Indonesia)"
+    },
+    {
+        "channelCode": "JAMBI",
+        "channelType": "Bank",
+        "name": "BPD Jambi"
+    },
+    {
+        "channelCode": "JAMBI_UUS",
+        "channelType": "Bank",
+        "name": "BPD Jambi UUS"
+    },
+    {
+        "channelCode": "JASA_JAKARTA",
+        "channelType": "Bank",
+        "name": "Bank Jasa Jakarta"
+    },
+    {
+        "channelCode": "JAWA_TENGAH",
+        "channelType": "Bank",
+        "name": "BPD Jawa Tengah"
+    },
+    {
+        "channelCode": "JAWA_TENGAH_UUS",
+        "channelType": "Bank",
+        "name": "BPD Jawa Tengah UUS"
+    },
+    {
+        "channelCode": "JAWA_TIMUR",
+        "channelType": "Bank",
+        "name": "BPD Jawa Timur"
+    },
+    {
+        "channelCode": "JAWA_TIMUR_UUS",
+        "channelType": "Bank",
+        "name": "BPD Jawa Timur UUS"
+    },
+    {
+        "channelCode": "JPMORGAN",
+        "channelType": "Bank",
+        "name": "JP Morgan Chase Bank"
+    },
+    {
+        "channelCode": "JTRUST",
+        "channelType": "Bank",
+        "name": "Bank JTrust Indonesia (formerly called Bank Mutiara)"
+    },
+    {
+        "channelCode": "KALIMANTAN_BARAT",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Barat"
+    },
+    {
+        "channelCode": "KALIMANTAN_BARAT_UUS",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Barat UUS"
+    },
+    {
+        "channelCode": "KALIMANTAN_SELATAN",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Selatan"
+    },
+    {
+        "channelCode": "KALIMANTAN_SELATAN_UUS",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Selatan UUS"
+    },
+    {
+        "channelCode": "KALIMANTAN_TENGAH",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Tengah"
+    },
+    {
+        "channelCode": "KALIMANTAN_TIMUR",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Timur"
+    },
+    {
+        "channelCode": "KALIMANTAN_TIMUR_UUS",
+        "channelType": "Bank",
+        "name": "BPD Kalimantan Timur UUS"
+    },
+    {
+        "channelCode": "LAMPUNG",
+        "channelType": "Bank",
+        "name": "BPD Lampung"
+    },
+    {
+        "channelCode": "MALUKU",
+        "channelType": "Bank",
+        "name": "BPD Maluku"
+    },
+    {
+        "channelCode": "MANDIRI",
+        "channelType": "Bank",
+        "name": "Bank Mandiri"
+    },
+    {
+        "channelCode": "MANDIRI_TASPEN",
+        "channelType": "Bank",
+        "name": "Mandiri Taspen Pos (formerly called Bank Sinar Harapan Bali)"
+    },
+    {
+        "channelCode": "MASPION",
+        "channelType": "Bank",
+        "name": "Bank Maspion Indonesia"
+    },
+    {
+        "channelCode": "MAYAPADA",
+        "channelType": "Bank",
+        "name": "Bank Mayapada International"
+    },
+    {
+        "channelCode": "MAYBANK",
+        "channelType": "Bank",
+        "name": "Bank Maybank"
+    },
+    {
+        "channelCode": "MAYBANK_SYR",
+        "channelType": "Bank",
+        "name": "Bank Maybank Syariah Indonesia"
+    },
+    {
+        "channelCode": "MAYORA",
+        "channelType": "Bank",
+        "name": "Bank Mayora"
+    },
+    {
+        "channelCode": "MEGA",
+        "channelType": "Bank",
+        "name": "Bank Mega"
+    },
+    {
+        "channelCode": "MEGA_SYR",
+        "channelType": "Bank",
+        "name": "Bank Syariah Mega"
+    },
+    {
+        "channelCode": "MESTIKA_DHARMA",
+        "channelType": "Bank",
+        "name": "Bank Mestika Dharma"
+    },
+    {
+        "channelCode": "MIZUHO",
+        "channelType": "Bank",
+        "name": "Bank Mizuho Indonesia"
+    },
+    {
+        "channelCode": "MNC_INTERNASIONAL",
+        "channelType": "Bank",
+        "name": "Bank MNC Internasional"
+    },
+    {
+        "channelCode": "MUAMALAT",
+        "channelType": "Bank",
+        "name": "Bank Muamalat Indonesia"
+    },
+    {
+        "channelCode": "MULTI_ARTA_SENTOSA",
+        "channelType": "Bank",
+        "name": "Bank Multi Arta Sentosa"
+    },
+    {
+        "channelCode": "NATIONALNOBU",
+        "channelType": "Bank",
+        "name": "Bank Nationalnobu"
+    },
+    {
+        "channelCode": "NUSA_TENGGARA_BARAT",
+        "channelType": "Bank",
+        "name": "BPD Nusa Tenggara Barat"
+    },
+    {
+        "channelCode": "NUSA_TENGGARA_TIMUR",
+        "channelType": "Bank",
+        "name": "BPD Nusa Tenggara Timur"
+    },
+    {
+        "channelCode": "OCBC",
+        "channelType": "Bank",
+        "name": "Bank OCBC NISP"
+    },
+    {
+        "channelCode": "OCBC_UUS",
+        "channelType": "Bank",
+        "name": "Bank OCBC NISP UUS"
+    },
+    {
+        "channelCode": "OKE",
+        "channelType": "Bank",
+        "name": "Bank Oke Indonesia (formerly called Bank Andara)"
+    },
+    {
+        "channelCode": "PANIN",
+        "channelType": "Bank",
+        "name": "Bank Panin"
+    },
+    {
+        "channelCode": "PANIN_SYR",
+        "channelType": "Bank",
+        "name": "Bank Panin Syariah"
+    },
+    {
+        "channelCode": "PAPUA",
+        "channelType": "Bank",
+        "name": "BPD Papua"
+    },
+    {
+        "channelCode": "PERMATA",
+        "channelType": "Bank",
+        "name": "Bank Permata"
+    },
+    {
+        "channelCode": "PERMATA_UUS",
+        "channelType": "Bank",
+        "name": "Bank Permata UUS"
+    },
+    {
+        "channelCode": "PRIMA_MASTER",
+        "channelType": "Bank",
+        "name": "Prima Master Bank"
+    },
+    {
+        "channelCode": "QNB_INDONESIA",
+        "channelType": "Bank",
+        "name": "Bank QNB Indonesia (formerly called Bank QNB Kesawan)"
+    },
+    {
+        "channelCode": "RABOBANK",
+        "channelType": "Bank",
+        "name": "Bank Rabobank International Indonesia"
+    },
+    {
+        "channelCode": "RESONA",
+        "channelType": "Bank",
+        "name": "Bank Resona Perdania"
+    },
+    {
+        "channelCode": "RIAU_DAN_KEPRI",
+        "channelType": "Bank",
+        "name": "BPD Riau Dan Kepri"
+    },
+    {
+        "channelCode": "SAHABAT_SAMPOERNA",
+        "channelType": "Bank",
+        "name": "Bank Sahabat Sampoerna"
+    },
+    {
+        "channelCode": "SBI_INDONESIA",
+        "channelType": "Bank",
+        "name": "Bank SBI Indonesia"
+    },
+    {
+        "channelCode": "SEABANK",
+        "channelType": "Bank",
+        "name": "Bank Seabank Indonesia (formerly Bank Kesejahteraan Ekonomi)"
+    },
+    {
+        "channelCode": "SHINHAN",
+        "channelType": "Bank",
+        "name": "Bank Shinhan Indonesia (formerly called Bank Metro Express)"
+    },
+    {
+        "channelCode": "SINARMAS",
+        "channelType": "Bank",
+        "name": "Bank Sinarmas"
+    },
+    {
+        "channelCode": "SINARMAS_UUS",
+        "channelType": "Bank",
+        "name": "Bank Sinarmas UUS"
+    },
+    {
+        "channelCode": "STANDARD_CHARTERED",
+        "channelType": "Bank",
+        "name": "Standard Charted Bank"
+    },
+    {
+        "channelCode": "SULAWESI",
+        "channelType": "Bank",
+        "name": "BPD Sulawesi Tengah"
+    },
+    {
+        "channelCode": "SULAWESI_TENGGARA",
+        "channelType": "Bank",
+        "name": "BPD Sulawesi Tenggara"
+    },
+    {
+        "channelCode": "SULSELBAR",
+        "channelType": "Bank",
+        "name": "BPD Sulselbar"
+    },
+    {
+        "channelCode": "SULSELBAR_UUS",
+        "channelType": "Bank",
+        "name": "BPD Sulselbar UUS"
+    },
+    {
+        "channelCode": "SULUT",
+        "channelType": "Bank",
+        "name": "BPD Sulut"
+    },
+    {
+        "channelCode": "SUMATERA_BARAT",
+        "channelType": "Bank",
+        "name": "BPD Sumatera Barat"
+    },
+    {
+        "channelCode": "SUMATERA_BARAT_UUS",
+        "channelType": "Bank",
+        "name": "BPD Sumatera Barat UUS"
+    },
+    {
+        "channelCode": "SUMSEL_DAN_BABEL",
+        "channelType": "Bank",
+        "name": "BPD Sumsel Dan Babel"
+    },
+    {
+        "channelCode": "SUMSEL_DAN_BABEL_UUS",
+        "channelType": "Bank",
+        "name": "BPD Sumsel Dan Babel UUS"
+    },
+    {
+        "channelCode": "SUMUT",
+        "channelType": "Bank",
+        "name": "BPD Sumut"
+    },
+    {
+        "channelCode": "SUMUT_UUS",
+        "channelType": "Bank",
+        "name": "BPD Sumut UUS"
+    },
+    {
+        "channelCode": "TABUNGAN_PENSIUNAN_NASIONAL",
+        "channelType": "Bank",
+        "name": "Bank Tabungan Pensiunan Nasional (BTPN)"
+    },
+    {
+        "channelCode": "TOKYO",
+        "channelType": "Bank",
+        "name": "Bank of Tokyo Mitsubishi UFJ (MUFJ)"
+    },
+    {
+        "channelCode": "UOB",
+        "channelType": "Bank",
+        "name": "Bank UOB Indonesia"
+    },
+    {
+        "channelCode": "VICTORIA_INTERNASIONAL",
+        "channelType": "Bank",
+        "name": "Bank Victoria Internasional"
+    },
+    {
+        "channelCode": "VICTORIA_SYR",
+        "channelType": "Bank",
+        "name": "Bank Victoria Syariah"
+    },
+    {
+        "channelCode": "WOORI",
+        "channelType": "Bank",
+        "name": "Bank Woori Indonesia"
+    },
+    {
+        "channelCode": "DANA",
+        "channelType": "E-Wallet",
+        "name": "DANA"
+    },
+    {
+        "channelCode": "GOPAY",
+        "channelType": "E-Wallet",
+        "name": "GoPay"
+    },
+    {
+        "channelCode": "LINKAJA",
+        "channelType": "E-Wallet",
+        "name": "LinkAja"
+    },
+    {
+        "channelCode": "OVO",
+        "channelType": "E-Wallet",
+        "name": "OVO"
+    },
+    {
+        "channelCode": "SHOPEEPAY",
+        "channelType": "E-Wallet",
+        "name": "ShopeePay"
+    }
+]

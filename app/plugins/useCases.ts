@@ -20,6 +20,8 @@ import { CreateBillSeries } from '../../lib/domain/usecase/bill/createBillSeries
 import { UpdateBillSeries } from '../../lib/domain/usecase/bill/updateBillSeries'
 import { DeleteBillSeries } from '../../lib/domain/usecase/bill/deleteBillSeries'
 import { CheckoutBill } from '../../lib/domain/usecase/bill/checkoutBill'
+import { GetAllRecipientAccounts } from '../../lib/domain/usecase/bill/getAllRecipientAccounts'
+import { CreateRecipientAccount } from '../../lib/domain/usecase/bill/createRecipientAccount'
 import type PaymentRepository from '~~/lib/domain/repository/paymentRepository'
 import { GetAllPayments } from '../../lib/domain/usecase/payment/getAllPayment'
 import { CreatePayment } from '../../lib/domain/usecase/payment/createPayment'
@@ -75,7 +77,9 @@ export default defineNuxtPlugin({
         deleteBill: new DeleteBill(billRepository),
         createBillCategory: new CreateBillCategory(billRepository),
         getAllBillCategories: new GetAllBillCategories(billRepository),
-        checkoutBill: new CheckoutBill(billRepository)
+        checkoutBill: new CheckoutBill(billRepository),
+        getAllRecipientAccounts: new GetAllRecipientAccounts(billRepository),
+        createRecipientAccount: new CreateRecipientAccount(billRepository)
       },
       payment: {
         getAllPayments: new GetAllPayments(paymentRepository),
