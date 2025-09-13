@@ -59,6 +59,10 @@ import type {
   ICreateRecipientAccountRequest,
   ICreateRecipientAccountResponse
 } from '../../common/types/http/bill/createRecipientAccount'
+import type {
+  ISetBillingInformationAsDefaultRequest,
+  ISetBillingInformationAsDefaultResponse
+} from '../../common/types/http/bill/setBillingInformationAsDefault'
 
 abstract class BillRemoteDataSource {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -76,6 +80,7 @@ abstract class BillRemoteDataSource {
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
   abstract getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse>
   abstract createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse>
+  abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
 }
 
 export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
@@ -209,6 +214,14 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
     const response = this.fetcher('/bills/recipient-accounts', {
       method: 'POST',
       body: JSON.stringify(request.payload),
+      ...request.options
+    })
+    return response
+  }
+
+  override setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
+    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.id}/set-as-default`, {
+      method: 'PUT',
       ...request.options
     })
     return response

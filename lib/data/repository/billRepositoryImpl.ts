@@ -15,6 +15,7 @@ import type { IGetRecurringBillsRequest, IGetRecurringBillsResponse } from '~~/l
 import type { ICheckoutBillRequest, ICheckoutBillResponse } from '~~/lib/common/types/http/bill/checkoutBill'
 import type { ICreateRecipientAccountRequest, ICreateRecipientAccountResponse } from '~~/lib/common/types/http/bill/createRecipientAccount'
 import type { IGetRecipientAccountRequest, IGetRecipientAccountResponse } from '~~/lib/common/types/http/bill/getRecipientAccounts'
+import type { ISetBillingInformationAsDefaultRequest, ISetBillingInformationAsDefaultResponse } from '~~/lib/common/types/http/bill/setBillingInformationAsDefault'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -81,5 +82,9 @@ export class BillRepositoryImpl extends BillRepository {
 
   createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse> {
     return this.billRemoteDataSource.createRecipientAccount(request)
+  }
+
+  setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
+    return this.billRemoteDataSource.setBillingInformationAsDefault(request)
   }
 }

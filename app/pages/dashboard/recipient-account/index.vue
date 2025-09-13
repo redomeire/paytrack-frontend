@@ -87,7 +87,7 @@
                 </NuxtBadge>
                 <div class="flex items-center gap-2">
                   <NuxtIcon
-                    name="i-mdi-bank"
+                    :name="recipientAccount.type === 'EWALLET' ? 'i-heroicons-wallet' : 'i-mdi-bank'"
                     class="text-2xl text-gray-600"
                   />
                   <h2 class="text-lg font-semibold">
@@ -102,19 +102,18 @@
                   ({{ JSON.parse(recipientAccount.details).account_id }})
                 </p>
               </div>
-              <template #footer>
-                <NuxtLink
-                  :to="`/dashboard/recipient-account/${recipientAccount.id}`"
-                  class="w-full"
+              <template
+                v-if="!recipientAccount.default"
+                #footer
+              >
+                <NuxtButton
+                  variant="outline"
+                  class="w-full grid place-items-center"
+                  size="md"
+                  @click="() => handleSetAsDefault(recipientAccount.id)"
                 >
-                  <NuxtButton
-                    variant="outline"
-                    class="w-full grid place-items-center"
-                    size="md"
-                  >
-                    Manage
-                  </NuxtButton>
-                </NuxtLink>
+                  Set as Default
+                </NuxtButton>
               </template>
             </NuxtCard>
           </li>
@@ -191,6 +190,7 @@ const recipientTypes = ref([
 const recipientType = ref()
 
 const { data: recipientAccounts, status, execute } = await useAsyncData(
+  'recipientAccounts',
   () => $useCases.bill.getAllRecipientAccounts.execute({
     options: {
       query: {
@@ -201,4 +201,16 @@ const { data: recipientAccounts, status, execute } = await useAsyncData(
   }), {
     watch: [recipientType]
   })
+
+const handleSetAsDefault = async (id: string) => {
+  const response = await $useCases
+    .bill
+    .setBillingInformationAsDefault
+    .execute({
+      payload: { id }
+    })
+  if (response.success) {
+    await refreshNuxtData('recipientAccounts')
+  }
+}
 </script>
