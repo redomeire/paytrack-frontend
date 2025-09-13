@@ -29,11 +29,4 @@ const { data } = await useFetch<{ user: IUser }>('/api/auth/get-session', {
     'Accept': 'application/json'
   }
 })
-
-watch(data, (newData) => {
-  if (newData) {
-    // Optionally, you can redirect or show a modal here
-    console.warn(newData)
-  }
-})
 </script>

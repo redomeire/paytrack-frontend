@@ -10,7 +10,7 @@ const billSeries = v.pipe(v.object({
     value: v.pipe(v.string(), v.minLength(1, 'Bill category ID is required')),
     label: v.string()
   }),
-  description: v.nullable(v.string()),
+  description: v.optional(v.string()),
   currency: v.pipe(v.string(), v.minLength(1, 'Currency is required')),
   amount: v.pipe(v.number(), v.minValue(1, 'Amount must be more than zero')),
   frequency: v.optional(v.picklist(['monthly', 'annual', 'custom'])),
@@ -19,7 +19,11 @@ const billSeries = v.pipe(v.object({
   attachment_url: v.optional(v.string()),
   due_day: v.pipe(v.number(), v.minValue(1, 'Due date is required'), v.maxValue(31, 'Due date cannot be more than 31')),
   start_date: v.pipe(v.string(), v.minLength(1, 'Start date is required')),
-  is_active: v.boolean()
+  is_active: v.boolean(),
+  account_number: v.pipe(v.string(), v.minLength(1, 'Account number is required')),
+  account_name: v.pipe(v.string(), v.minLength(1, 'Account name is required')),
+  bank_code: v.pipe(v.string(), v.minLength(1, 'Bank code is required')),
+  billing_information_id: v.optional(v.string())
 }), v.forward(
   v.partialCheck(
     [['frequency'], ['custom_frequency_days']],

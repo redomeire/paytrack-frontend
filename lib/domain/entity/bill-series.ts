@@ -13,6 +13,10 @@ export interface IBillSeries {
   start_date: string // When the series starts
   currency: string
   amount: number
+  account_number?: string
+  account_name?: string
+  bank_code?: string
+  billing_information_id?: string | null
   is_active?: boolean
   created_at: string
   updated_at: string

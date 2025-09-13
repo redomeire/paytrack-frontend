@@ -30,7 +30,7 @@
             >
               <NuxtButton
                 :icon="item.icon"
-                class="w-full px-4 py-3 rounded-2xl hover:text-primary transition-colors"
+                :class="'w-full px-4 py-3 rounded-lg transition-colors' + (item.route === $route.path ? ' text-inverted' : ' hover:text-primary')"
                 :variant="item.route === $route.path ? 'solid' : 'ghost'"
                 :color="item.route === $route.path ? 'primary' : 'neutral'"
               >
@@ -40,7 +40,7 @@
             <NuxtCollapsible v-else>
               <NuxtButton
                 :icon="item.icon"
-                class="w-full px-4 py-3 rounded-2xl hover:text-primary transition-colors"
+                :class="'w-full px-4 py-3 rounded-lg transition-colors' + (item.route.includes($route.path) ? ' text-primary' : ' hover:text')"
                 :variant="item.route.includes($route.path) ? 'solid' : 'ghost'"
                 :color="item.route.includes($route.path) ? 'primary' : 'neutral'"
               >
@@ -65,7 +65,7 @@
                     >
                       <NuxtButton
                         :icon="child.icon"
-                        class="w-full px-4 py-3 rounded-2xl hover:text-primary transition-colors"
+                        :class="'w-full px-4 py-3 rounded-lg transition-colors' + (item.route.includes($route.path) ? ' text-primary' : ' hover:text')"
                         :variant="child.route === $route.path ? 'solid' : 'ghost'"
                         :color="child.route === $route.path ? 'primary' : 'neutral'"
                       >
@@ -117,6 +117,12 @@ const navItems = [
     title: 'Riwayat',
     icon: 'i-material-symbols-history',
     route: '/dashboard/bills/history',
+    isCollapsible: false
+  },
+  {
+    title: 'Rekening Penerima',
+    icon: 'i-material-symbols-account-balance-wallet-outline',
+    route: '/dashboard/recipient-account',
     isCollapsible: false
   },
   {

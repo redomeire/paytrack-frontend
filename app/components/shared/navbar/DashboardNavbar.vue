@@ -56,7 +56,7 @@
               <div v-else-if="status === 'success'">
                 <ul
                   v-if="notifications?.data && notifications.data.length > 0"
-                  class="max-h-[500px] overflow-y-auto"
+                  class="max-h-[300px] overflow-y-auto"
                 >
                   <li
                     v-for="notification of notifications.data"
@@ -154,7 +154,7 @@
                 <div v-else-if="status === 'success'">
                   <ul
                     v-if="notifications?.data && notifications.data.length > 0"
-                    class="max-h-[500px] overflow-y-auto"
+                    class="max-h-[300px] overflow-y-auto"
                   >
                     <li
                       v-for="notification of notifications?.data"
