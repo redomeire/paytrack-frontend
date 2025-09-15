@@ -2,15 +2,12 @@ import type { IBillingInformation } from '../../../../domain/entity/billing-info
 import type { IHttpResponse } from '../base'
 import type { FetchOptions } from 'ofetch'
 
-type ISetBillingInformationAsDefaultResponse = IHttpResponse<IBillingInformation>
-interface ISetBillingInformationAsDefaultRequest {
+type IDeleteBillingInformationResponse = IHttpResponse<IBillingInformation>
+interface IDeleteBillingInformationRequest {
   payload: {
     id: string
   }
   options?: FetchOptions
 }
 
-export type {
-  ISetBillingInformationAsDefaultResponse,
-  ISetBillingInformationAsDefaultRequest
-}
+export type { IDeleteBillingInformationResponse, IDeleteBillingInformationRequest }

@@ -12,7 +12,7 @@
     </div>
     <div class="mt-6">
       <NuxtForm
-        :schema="recipientAccountsSchema"
+        :schema="billingInformationSchema"
         :state="state"
         class="space-y-6"
         @submit="handleCreateRecipientAccount"
@@ -102,7 +102,7 @@
             :loading="status === 'pending'"
             :disabled="status === 'pending'"
           >
-            Simpan Channel
+            Update Channel
           </NuxtButton>
         </div>
       </NuxtForm>
@@ -112,8 +112,8 @@
 
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { InferedRecipientAccountsSchema } from '~~/shared/types/recipient-account/recipientAccountSchema'
-import { recipientAccountsSchema } from '~~/shared/types/recipient-account/recipientAccountSchema'
+import type { InferedBillingInformationSchema } from '~~/shared/types/billing-information/billingInformationSchema'
+import { billingInformationSchema } from '~~/shared/types/billing-information/billingInformationSchema'
 
 definePageMeta({
   layout: 'dashboard',
@@ -125,16 +125,6 @@ const router = useRouter()
 const { $useCases } = useNuxtApp()
 
 const bankOptions = usePaymentChannelCode()
-const bankOption = ref({ label: '', value: '' })
-
-const state = reactive({
-  name: route.query.name as string || '',
-  type: 'BANK_ACCOUNT' as const,
-  account_number: '',
-  verify_account_name: false,
-  bank_id: bankOption.value.value,
-  default: false
-})
 
 const accountTypeOptions = [
   {
@@ -149,28 +139,48 @@ const accountTypeOptions = [
   }
 ]
 
-const { status, execute } = await useAsyncData(
-  () => $useCases.bill.createRecipientAccount
+const { data: billingInformationDetail } = await useAsyncData(
+  () => $useCases.bill.getBillingInformationDetail
     .execute({
       payload: {
-        ...state,
-        details: JSON.stringify({
-          account_id: bankOption.value.value,
-          account_name: bankOption.value.label,
-          account_number: state.account_number
-        })
+        id: route.params.id as string
+      }
+    }))
+
+const state = reactive({
+  ...billingInformationDetail.value?.data,
+  account_number: billingInformationDetail.value?.data?.details.account_number || '',
+  verify_account_name: true
+})
+const bankOption = ref({
+  label: billingInformationDetail.value?.data?.details.account_name || '',
+  value: billingInformationDetail.value?.data?.details.account_id || ''
+})
+
+const { status, execute } = await useAsyncData(
+  () => $useCases.bill.updateBillingInformation
+    .execute({
+      payload: {
+        recipientAccount: {
+          ...state,
+          details: {
+            account_id: bankOption.value.value,
+            account_name: bankOption.value.label,
+            account_number: state.account_number
+          }
+        }
       }
     }), {
     immediate: false
   })
 
 const handleCreateRecipientAccount
-  = async (event: FormSubmitEvent<InferedRecipientAccountsSchema>) => {
+  = async (event: FormSubmitEvent<InferedBillingInformationSchema>) => {
     event.preventDefault()
     await execute()
 
     if (status.value === 'success') {
-      router.back()
+      router.replace('/dashboard/billing-information')
     }
   }
 </script>

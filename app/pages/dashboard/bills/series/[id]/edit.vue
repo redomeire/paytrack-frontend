@@ -369,16 +369,15 @@ const {
 })
 
 const { data: recipientAccounts } = await useAsyncData(
-  () => $useCases.bill.getAllRecipientAccounts.execute({}),
+  () => $useCases.bill.getAllBillingInformations.execute({}),
   {
     transform: (data) => ({
       data: data?.data?.data.map((channel) => {
-        const details = JSON.parse(channel.details)
         return {
-          label: `${channel.name} - ${details.account_number}`,
+          label: `${channel.name} - ${channel.details.account_number}`,
           value: channel.id,
-          account_id: details.account_id,
-          account_name: details.account_name
+          account_id: channel.details.account_id,
+          account_name: channel.details.account_name
         }
       })
     })
