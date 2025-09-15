@@ -70,6 +70,7 @@ import type {
   IUpdateBillingInformationRequest,
   IUpdateBillingInformationResponse
 } from '~~/lib/common/types/http/bill/updateBillingInformation'
+import type { IGetBillingInformationDetailRequest, IGetBillingInformationDetailResponse } from '~~/lib/common/types/http/bill/getBillingInformationDetail'
 
 abstract class BillRepository {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -86,6 +87,7 @@ abstract class BillRepository {
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
   abstract getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse>
+  abstract getBillingInformationDetail(request: IGetBillingInformationDetailRequest): Promise<IGetBillingInformationDetailResponse>
   abstract createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse>
   abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
   abstract updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse>

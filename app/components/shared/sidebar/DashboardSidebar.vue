@@ -122,7 +122,7 @@ const navItems = [
   {
     title: 'Rekening Penerima',
     icon: 'i-material-symbols-account-balance-wallet-outline',
-    route: '/dashboard/recipient-account',
+    route: '/dashboard/billing-information',
     isCollapsible: false
   },
   {

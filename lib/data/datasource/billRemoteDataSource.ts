@@ -56,6 +56,10 @@ import type {
   IGetBillingInformationResponse
 } from '../../common/types/http/bill/getBillingInformations'
 import type {
+  IGetBillingInformationDetailRequest,
+  IGetBillingInformationDetailResponse
+} from '../../common/types/http/bill/getBillingInformationDetail'
+import type {
   ICreateBillingInformationRequest,
   ICreateBillingInformationResponse
 } from '../../common/types/http/bill/createBillingInformation'
@@ -87,6 +91,7 @@ abstract class BillRemoteDataSource {
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
   abstract getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse>
+  abstract getBillingInformationDetail(request: IGetBillingInformationDetailRequest): Promise<IGetBillingInformationDetailResponse>
   abstract createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse>
   abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
   abstract updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse>
@@ -214,14 +219,21 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
   }
 
   getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse> {
-    const response = this.fetcher('/bills/recipient-accounts', {
+    const response = this.fetcher('/bills/billing-informations', {
+      ...request.options
+    })
+    return response
+  }
+
+  getBillingInformationDetail(request: IGetBillingInformationDetailRequest): Promise<IGetBillingInformationDetailResponse> {
+    const response = this.fetcher(`/bills/billing-informations/${request.payload.id}`, {
       ...request.options
     })
     return response
   }
 
   createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse> {
-    const response = this.fetcher('/bills/recipient-accounts', {
+    const response = this.fetcher('/bills/billing-informations', {
       method: 'POST',
       body: JSON.stringify(request.payload),
       ...request.options
@@ -230,7 +242,7 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
   }
 
   setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
-    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.id}/set-as-default`, {
+    const response = this.fetcher(`/bills/billing-informations/${request.payload.id}/set-as-default`, {
       method: 'PUT',
       ...request.options
     })
@@ -238,7 +250,7 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
   }
 
   updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse> {
-    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.recipientAccount.id}`, {
+    const response = this.fetcher(`/bills/billing-informations/${request.payload.recipientAccount.id}`, {
       method: 'PUT',
       body: JSON.stringify(request.payload.recipientAccount),
       ...request.options
@@ -247,7 +259,7 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
   }
 
   deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse> {
-    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.id}`, {
+    const response = this.fetcher(`/bills/billing-informations/${request.payload.id}`, {
       method: 'DELETE',
       ...request.options
     })

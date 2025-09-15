@@ -25,7 +25,7 @@
             Manage your recipient accounts here.
           </p>
         </div>
-        <NuxtLink to="/dashboard/recipient-account/create">
+        <NuxtLink to="/dashboard/billing-information/create">
           <NuxtButton
             variant="soft"
             icon="i-material-symbols-add-rounded"
@@ -36,7 +36,7 @@
       </div>
       <div class="w-1/3 mt-3">
         <NuxtInput
-          v-model="state.search_recipient"
+          v-model="query.search_recipient"
           class="w-full"
           size="xl"
           icon="i-material-symbols-search"
@@ -74,47 +74,99 @@
           class="grid md:grid-cols-3 gap-5"
         >
           <li
-            v-for="recipientAccount of billingInformations?.data?.data"
-            :key="recipientAccount.name"
+            v-for="billingInformation of billingInformations?.data?.data"
+            :key="billingInformation.id"
           >
-            <NuxtCard :ui="{ root: 'p-0 md:min-h-44 hover:shadow-xl transition-shadow duration-200' }">
+            <NuxtCard :ui="{ root: 'p-0 md:min-h-44 hover:shadow-xl transition-shadow duration-200 relative' }">
+              <NuxtDropdownMenu
+                :items="getContextMenuItems(billingInformation)"
+                :content="{ side: 'right', sideOffset: 10 }"
+                :ui="{
+                  content: 'w-48'
+                }"
+              >
+                <NuxtButton
+                  variant="outline"
+                  color="primary"
+                  size="sm"
+                  class="absolute top-3 right-3 z-10"
+                  icon="i-material-symbols-more-horiz"
+                />
+              </NuxtDropdownMenu>
+              <NuxtModal
+                v-model:open="isDeleteModalOpen"
+                title="Confirm Pay"
+                description="This action cannot be undone."
+              >
+                <template #body>
+                  <div class="p-5">
+                    <p class="text-body-md">
+                      Are you sure you want to delete billing information?
+                    </p>
+                    <div class="mt-3">
+                      <p class="text-sm text-gray-500">
+                        Name: {{ billingInformation.name }}
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        Type: {{ billingInformation.type === 'EWALLET' ? 'E-Wallet' : 'Bank Account' }}
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        Account Number: {{ billingInformation.details.account_number }}
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        Account ID: {{ billingInformation.details.account_id }}
+                      </p>
+                    </div>
+                  </div>
+                </template>
+                <template #footer>
+                  <div class="flex gap-2">
+                    <NuxtButton
+                      class="w-fit float-end"
+                      variant="outline"
+                      color="neutral"
+                      :disabled="deleteStatus === 'pending'"
+                      @click="isDeleteModalOpen = false; selectedBillingInformationId = null"
+                    >
+                      Cancel
+                    </NuxtButton>
+                    <NuxtButton
+                      class="w-fit float-end"
+                      color="error"
+                      variant="solid"
+                      :loading="deleteStatus === 'pending'"
+                      :disabled="deleteStatus === 'pending'"
+                      @click="handleDelete"
+                    >
+                      Yes, Delete
+                    </NuxtButton>
+                  </div>
+                </template>
+              </NuxtModal>
               <div>
                 <NuxtBadge
-                  v-if="recipientAccount.default"
+                  v-if="billingInformation.default"
                   class="mb-3"
                 >
                   Default
                 </NuxtBadge>
                 <div class="flex items-center gap-2">
                   <NuxtIcon
-                    :name="recipientAccount.type === 'EWALLET' ? 'i-heroicons-wallet' : 'i-mdi-bank'"
+                    :name="billingInformation.type === 'EWALLET' ? 'i-heroicons-wallet' : 'i-mdi-bank'"
                     class="text-2xl text-gray-600"
                   />
                   <h2 class="text-lg font-semibold">
-                    {{ recipientAccount.name }}
+                    {{ billingInformation.name }}
                   </h2>
                 </div>
                 <p class="text-xs text-gray-400 mt-5">
-                  Type: {{ recipientAccount.type === 'EWALLET' ? 'E-Wallet' : 'Bank Account' }}
+                  Type: {{ billingInformation.type === 'EWALLET' ? 'E-Wallet' : 'Bank Account' }}
                 </p>
                 <p class="text-lg font-semibold">
-                  {{ JSON.parse(recipientAccount.details).account_number }}
-                  ({{ JSON.parse(recipientAccount.details).account_id }})
+                  {{ billingInformation.details.account_number }}
+                  ({{ billingInformation.details.account_id }})
                 </p>
               </div>
-              <template
-                v-if="!recipientAccount.default"
-                #footer
-              >
-                <NuxtButton
-                  variant="outline"
-                  class="w-full grid place-items-center"
-                  size="md"
-                  @click="() => handleSetAsDefault(recipientAccount.id)"
-                >
-                  Set as Default
-                </NuxtButton>
-              </template>
             </NuxtCard>
           </li>
         </ul>
@@ -131,7 +183,7 @@
             Menampilkan {{ billingInformations?.data?.from }} - {{ billingInformations?.data?.to }} dari {{ billingInformations?.data?.total }} Channel
           </p>
           <NuxtPagination
-            v-model:page="state.page"
+            v-model:page="query.page"
             :items-per-page="10"
             :total="billingInformations?.data?.total"
             class="float-end"
@@ -163,17 +215,20 @@
 </template>
 
 <script lang="ts" setup>
-import { NuxtSkeleton } from '#components'
+import type { DropdownMenuItem } from '@nuxt/ui'
+import type { IBillingInformation } from '~~/lib/domain/entity/billing-information'
 
 definePageMeta({
   layout: 'dashboard',
   middleware: ['auth']
 })
 const { $useCases } = useNuxtApp()
-const state = reactive({
+const query = reactive({
   search_recipient: '',
   page: 1
 })
+const isDeleteModalOpen = ref(false)
+const selectedBillingInformationId = ref<string | null>(null)
 
 const recipientTypes = ref([
   {
@@ -189,17 +244,62 @@ const recipientTypes = ref([
 ])
 const recipientType = ref()
 
-const { data: billingInformations, status, execute } = await useAsyncData(
+const getContextMenuItems = (billingInformation: IBillingInformation): DropdownMenuItem[][] => (
+  [
+    [
+      {
+        label: 'Show Details',
+        icon: 'i-material-symbols-info',
+        to: `/dashboard/billing-information/${billingInformation.id}`
+      },
+      {
+        label: 'Set as Default',
+        color: billingInformation.default ? 'neutral' : 'primary',
+        icon: 'i-material-symbols-check-circle-outline',
+        disabled: billingInformation.default,
+        onSelect: async () => {
+          await handleSetAsDefault(billingInformation.id)
+        }
+      },
+      {
+        label: 'Delete',
+        color: 'error',
+        icon: 'i-material-symbols-delete-outline',
+        onSelect: () => {
+          selectedBillingInformationId.value = billingInformation.id
+          isDeleteModalOpen.value = true
+        }
+      }
+    ]
+  ])
+
+const {
+  data: billingInformations,
+  status,
+  execute
+} = await useAsyncData(
   'billingInformations',
   () => $useCases.bill.getAllBillingInformations.execute({
     options: {
       query: {
-        search: state.search_recipient,
+        search: query.search_recipient,
         type: recipientType.value?.value
       }
     }
   }), {
     watch: [recipientType]
+  })
+
+const {
+  status: deleteStatus,
+  execute: executeDelete
+} = await useAsyncData(
+  () => $useCases.bill.deleteBillingInformation.execute({
+    payload: {
+      id: selectedBillingInformationId.value ?? ''
+    }
+  }), {
+    immediate: false
   })
 
 const handleSetAsDefault = async (id: string) => {
@@ -210,6 +310,15 @@ const handleSetAsDefault = async (id: string) => {
       payload: { id }
     })
   if (response.success) {
+    await refreshNuxtData('billingInformations')
+  }
+}
+
+const handleDelete = async () => {
+  await executeDelete()
+  if (deleteStatus.value === 'success') {
+    isDeleteModalOpen.value = false
+    selectedBillingInformationId.value = null
     await refreshNuxtData('billingInformations')
   }
 }

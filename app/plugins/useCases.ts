@@ -21,6 +21,7 @@ import { UpdateBillSeries } from '../../lib/domain/usecase/bill/updateBillSeries
 import { DeleteBillSeries } from '../../lib/domain/usecase/bill/deleteBillSeries'
 import { CheckoutBill } from '../../lib/domain/usecase/bill/checkoutBill'
 import { GetAllBillingInformations } from '../../lib/domain/usecase/bill/getAllBillingInformations'
+import { GetBillingInformationDetail } from '../../lib/domain/usecase/bill/getBillingInformationDetail'
 import { CreateBillingInformation } from '../../lib/domain/usecase/bill/createBillingInformation'
 import { SetBillingInformationAsDefault } from '../../lib/domain/usecase/bill/setBillingInformationAsDefault'
 import { UpdateBillingInformation } from '../../lib/domain/usecase/bill/updateBillingInformation'
@@ -82,6 +83,7 @@ export default defineNuxtPlugin({
         getAllBillCategories: new GetAllBillCategories(billRepository),
         checkoutBill: new CheckoutBill(billRepository),
         getAllBillingInformations: new GetAllBillingInformations(billRepository),
+        getBillingInformationDetail: new GetBillingInformationDetail(billRepository),
         createBillingInformation: new CreateBillingInformation(billRepository),
         setBillingInformationAsDefault: new SetBillingInformationAsDefault(billRepository),
         updateBillingInformation: new UpdateBillingInformation(billRepository),

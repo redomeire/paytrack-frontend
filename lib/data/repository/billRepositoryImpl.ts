@@ -18,6 +18,7 @@ import type { IDeleteBillingInformationRequest, IDeleteBillingInformationRespons
 import type { IUpdateBillingInformationRequest, IUpdateBillingInformationResponse } from '~~/lib/common/types/http/bill/updateBillingInformation'
 import type { ICreateBillingInformationRequest, ICreateBillingInformationResponse } from '~~/lib/common/types/http/bill/createBillingInformation'
 import type { IGetBillingInformationRequest, IGetBillingInformationResponse } from '~~/lib/common/types/http/bill/getBillingInformations'
+import type { IGetBillingInformationDetailRequest, IGetBillingInformationDetailResponse } from '~~/lib/common/types/http/bill/getBillingInformationDetail'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -78,11 +79,15 @@ export class BillRepositoryImpl extends BillRepository {
     return this.billRemoteDataSource.checkoutBill(request)
   }
 
-  override getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse> {
+  getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse> {
     return this.billRemoteDataSource.getAllBillingInformations(request)
   }
 
-  override createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse> {
+  getBillingInformationDetail(request: IGetBillingInformationDetailRequest): Promise<IGetBillingInformationDetailResponse> {
+    return this.billRemoteDataSource.getBillingInformationDetail(request)
+  }
+
+  createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse> {
     return this.billRemoteDataSource.createBillingInformation(request)
   }
 
@@ -90,11 +95,11 @@ export class BillRepositoryImpl extends BillRepository {
     return this.billRemoteDataSource.setBillingInformationAsDefault(request)
   }
 
-  override updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse> {
+  updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse> {
     return this.billRemoteDataSource.updateBillingInformation(request)
   }
 
-  override deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse> {
+  deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse> {
     return this.billRemoteDataSource.deleteBillingInformation(request)
   }
 }
