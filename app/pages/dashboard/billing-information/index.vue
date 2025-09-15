@@ -70,11 +70,11 @@
         class="mt-5"
       >
         <ul
-          v-if="recipientAccounts?.data?.data && recipientAccounts?.data?.data.length > 0"
+          v-if="billingInformations?.data?.data && billingInformations?.data?.data.length > 0"
           class="grid md:grid-cols-3 gap-5"
         >
           <li
-            v-for="recipientAccount of recipientAccounts?.data?.data"
+            v-for="recipientAccount of billingInformations?.data?.data"
             :key="recipientAccount.name"
           >
             <NuxtCard :ui="{ root: 'p-0 md:min-h-44 hover:shadow-xl transition-shadow duration-200' }">
@@ -128,12 +128,12 @@
         </div>
         <div class="flex items-center flex-wrap gap-5 justify-between mt-5">
           <p class="text-sm">
-            Menampilkan {{ recipientAccounts?.data?.from }} - {{ recipientAccounts?.data?.to }} dari {{ recipientAccounts?.data?.total }} Channel
+            Menampilkan {{ billingInformations?.data?.from }} - {{ billingInformations?.data?.to }} dari {{ billingInformations?.data?.total }} Channel
           </p>
           <NuxtPagination
             v-model:page="state.page"
             :items-per-page="10"
-            :total="recipientAccounts?.data?.total"
+            :total="billingInformations?.data?.total"
             class="float-end"
             show-edges
           />
@@ -189,9 +189,9 @@ const recipientTypes = ref([
 ])
 const recipientType = ref()
 
-const { data: recipientAccounts, status, execute } = await useAsyncData(
-  'recipientAccounts',
-  () => $useCases.bill.getAllRecipientAccounts.execute({
+const { data: billingInformations, status, execute } = await useAsyncData(
+  'billingInformations',
+  () => $useCases.bill.getAllBillingInformations.execute({
     options: {
       query: {
         search: state.search_recipient,
@@ -210,7 +210,7 @@ const handleSetAsDefault = async (id: string) => {
       payload: { id }
     })
   if (response.success) {
-    await refreshNuxtData('recipientAccounts')
+    await refreshNuxtData('billingInformations')
   }
 }
 </script>

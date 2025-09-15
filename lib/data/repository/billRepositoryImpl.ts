@@ -13,11 +13,11 @@ import type { IGetRecurringBillDetailRequest, IGetRecurringBillDetailResponse } 
 import type { IUpdateBillSeriesRequest, IUpdateBillSeriesResponse } from '~~/lib/common/types/http/bill/updateBillSeries'
 import type { IGetRecurringBillsRequest, IGetRecurringBillsResponse } from '~~/lib/common/types/http/bill/getRecurringBill'
 import type { ICheckoutBillRequest, ICheckoutBillResponse } from '~~/lib/common/types/http/bill/checkoutBill'
-import type { ICreateRecipientAccountRequest, ICreateRecipientAccountResponse } from '~~/lib/common/types/http/bill/createRecipientAccount'
-import type { IGetRecipientAccountRequest, IGetRecipientAccountResponse } from '~~/lib/common/types/http/bill/getRecipientAccounts'
 import type { ISetBillingInformationAsDefaultRequest, ISetBillingInformationAsDefaultResponse } from '~~/lib/common/types/http/bill/setBillingInformationAsDefault'
 import type { IDeleteBillingInformationRequest, IDeleteBillingInformationResponse } from '~~/lib/common/types/http/bill/deleteBillingInformation'
 import type { IUpdateBillingInformationRequest, IUpdateBillingInformationResponse } from '~~/lib/common/types/http/bill/updateBillingInformation'
+import type { ICreateBillingInformationRequest, ICreateBillingInformationResponse } from '~~/lib/common/types/http/bill/createBillingInformation'
+import type { IGetBillingInformationRequest, IGetBillingInformationResponse } from '~~/lib/common/types/http/bill/getBillingInformations'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -78,12 +78,12 @@ export class BillRepositoryImpl extends BillRepository {
     return this.billRemoteDataSource.checkoutBill(request)
   }
 
-  getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse> {
-    return this.billRemoteDataSource.getAllRecipientAccounts(request)
+  override getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse> {
+    return this.billRemoteDataSource.getAllBillingInformations(request)
   }
 
-  createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse> {
-    return this.billRemoteDataSource.createRecipientAccount(request)
+  override createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse> {
+    return this.billRemoteDataSource.createBillingInformation(request)
   }
 
   setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {

@@ -20,8 +20,8 @@ import { CreateBillSeries } from '../../lib/domain/usecase/bill/createBillSeries
 import { UpdateBillSeries } from '../../lib/domain/usecase/bill/updateBillSeries'
 import { DeleteBillSeries } from '../../lib/domain/usecase/bill/deleteBillSeries'
 import { CheckoutBill } from '../../lib/domain/usecase/bill/checkoutBill'
-import { GetAllRecipientAccounts } from '../../lib/domain/usecase/bill/getAllRecipientAccounts'
-import { CreateRecipientAccount } from '../../lib/domain/usecase/bill/createRecipientAccount'
+import { GetAllBillingInformations } from '../../lib/domain/usecase/bill/getAllBillingInformations'
+import { CreateBillingInformation } from '../../lib/domain/usecase/bill/createBillingInformation'
 import { SetBillingInformationAsDefault } from '../../lib/domain/usecase/bill/setBillingInformationAsDefault'
 import { UpdateBillingInformation } from '../../lib/domain/usecase/bill/updateBillingInformation'
 import { DeleteBillingInformation } from '../../lib/domain/usecase/bill/deleteBillingInformation'
@@ -81,8 +81,8 @@ export default defineNuxtPlugin({
         createBillCategory: new CreateBillCategory(billRepository),
         getAllBillCategories: new GetAllBillCategories(billRepository),
         checkoutBill: new CheckoutBill(billRepository),
-        getAllRecipientAccounts: new GetAllRecipientAccounts(billRepository),
-        createRecipientAccount: new CreateRecipientAccount(billRepository),
+        getAllBillingInformations: new GetAllBillingInformations(billRepository),
+        createBillingInformation: new CreateBillingInformation(billRepository),
         setBillingInformationAsDefault: new SetBillingInformationAsDefault(billRepository),
         updateBillingInformation: new UpdateBillingInformation(billRepository),
         deleteBillingInformation: new DeleteBillingInformation(billRepository)

@@ -1,11 +1,11 @@
-import type { IRecipientAccount } from '../../../../domain/entity/recipient-account'
+import type { IBillingInformation } from '../../../../domain/entity/billing-information'
 import type { IHttpResponse } from '../base'
 import type { FetchOptions } from 'ofetch'
 
-type IUpdateBillingInformationResponse = IHttpResponse<IRecipientAccount>
+type IUpdateBillingInformationResponse = IHttpResponse<IBillingInformation>
 interface IUpdateBillingInformationRequest {
   payload: {
-    recipientAccount: Partial<IRecipientAccount>
+    recipientAccount: Partial<IBillingInformation>
   }
   options?: FetchOptions
 }

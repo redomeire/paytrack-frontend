@@ -51,16 +51,25 @@ import type {
   ICheckoutBillResponse
 } from '~~/lib/common/types/http/bill/checkoutBill'
 import type {
-  IGetRecipientAccountRequest,
-  IGetRecipientAccountResponse
-} from '~~/lib/common/types/http/bill/getRecipientAccounts'
+  IGetBillingInformationRequest,
+  IGetBillingInformationResponse
+} from '~~/lib/common/types/http/bill/getBillingInformations'
 import type {
-  ICreateRecipientAccountRequest,
-  ICreateRecipientAccountResponse
-} from '~~/lib/common/types/http/bill/createRecipientAccount'
-import type { ISetBillingInformationAsDefaultRequest, ISetBillingInformationAsDefaultResponse } from '~~/lib/common/types/http/bill/setBillingInformationAsDefault'
-import type { IDeleteBillingInformationRequest, IDeleteBillingInformationResponse } from '~~/lib/common/types/http/bill/deleteBillingInformation'
-import type { IUpdateBillingInformationRequest, IUpdateBillingInformationResponse } from '~~/lib/common/types/http/bill/updateBillingInformation'
+  ICreateBillingInformationRequest,
+  ICreateBillingInformationResponse
+} from '~~/lib/common/types/http/bill/createBillingInformation'
+import type {
+  ISetBillingInformationAsDefaultRequest,
+  ISetBillingInformationAsDefaultResponse
+} from '~~/lib/common/types/http/bill/setBillingInformationAsDefault'
+import type {
+  IDeleteBillingInformationRequest,
+  IDeleteBillingInformationResponse
+} from '~~/lib/common/types/http/bill/deleteBillingInformation'
+import type {
+  IUpdateBillingInformationRequest,
+  IUpdateBillingInformationResponse
+} from '~~/lib/common/types/http/bill/updateBillingInformation'
 
 abstract class BillRepository {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -76,8 +85,8 @@ abstract class BillRepository {
   abstract updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse>
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
-  abstract getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse>
-  abstract createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse>
+  abstract getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse>
+  abstract createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse>
   abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
   abstract updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse>
   abstract deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse>

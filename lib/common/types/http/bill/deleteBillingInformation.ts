@@ -1,8 +1,8 @@
-import type { IRecipientAccount } from '../../../../domain/entity/recipient-account'
+import type { IBillingInformation } from '../../../../domain/entity/billing-information'
 import type { IHttpResponse } from '../base'
 import type { FetchOptions } from 'ofetch'
 
-type IDeleteBillingInformationResponse = IHttpResponse<IRecipientAccount>
+type IDeleteBillingInformationResponse = IHttpResponse<IBillingInformation>
 interface IDeleteBillingInformationRequest {
   payload: {
     id: string

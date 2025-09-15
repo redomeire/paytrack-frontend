@@ -52,13 +52,13 @@ import type {
   ICheckoutBillResponse
 } from '../../common/types/http/bill/checkoutBill'
 import type {
-  IGetRecipientAccountRequest,
-  IGetRecipientAccountResponse
-} from '../../common/types/http/bill/getRecipientAccounts'
+  IGetBillingInformationRequest,
+  IGetBillingInformationResponse
+} from '../../common/types/http/bill/getBillingInformations'
 import type {
-  ICreateRecipientAccountRequest,
-  ICreateRecipientAccountResponse
-} from '../../common/types/http/bill/createRecipientAccount'
+  ICreateBillingInformationRequest,
+  ICreateBillingInformationResponse
+} from '../../common/types/http/bill/createBillingInformation'
 import type {
   ISetBillingInformationAsDefaultRequest,
   ISetBillingInformationAsDefaultResponse
@@ -86,8 +86,8 @@ abstract class BillRemoteDataSource {
   abstract updateBillSeries(request: IUpdateBillSeriesRequest): Promise<IUpdateBillSeriesResponse>
   abstract deleteBillSeries(request: IDeleteBillSeriesRequest): Promise<IDeleteBillSeriesResponse>
   abstract checkoutBill(request: ICheckoutBillRequest): Promise<ICheckoutBillResponse>
-  abstract getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse>
-  abstract createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse>
+  abstract getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse>
+  abstract createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse>
   abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
   abstract updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse>
   abstract deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse>
@@ -213,14 +213,14 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
     return response
   }
 
-  getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse> {
+  getAllBillingInformations(request: IGetBillingInformationRequest): Promise<IGetBillingInformationResponse> {
     const response = this.fetcher('/bills/recipient-accounts', {
       ...request.options
     })
     return response
   }
 
-  createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse> {
+  createBillingInformation(request: ICreateBillingInformationRequest): Promise<ICreateBillingInformationResponse> {
     const response = this.fetcher('/bills/recipient-accounts', {
       method: 'POST',
       body: JSON.stringify(request.payload),

@@ -12,7 +12,7 @@
     </div>
     <div class="mt-6">
       <NuxtForm
-        :schema="recipientAccountsSchema"
+        :schema="billingInformationSchema"
         :state="state"
         class="space-y-6"
         @submit="handleCreateRecipientAccount"
@@ -112,8 +112,8 @@
 
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { InferedRecipientAccountsSchema } from '~~/shared/types/recipient-account/recipientAccountSchema'
-import { recipientAccountsSchema } from '~~/shared/types/recipient-account/recipientAccountSchema'
+import type { InferedBillingInformationSchema } from '~~/shared/types/billing-information/billingInformationSchema'
+import { billingInformationSchema } from '~~/shared/types/billing-information/billingInformationSchema'
 
 definePageMeta({
   layout: 'dashboard',
@@ -150,7 +150,7 @@ const accountTypeOptions = [
 ]
 
 const { status, execute } = await useAsyncData(
-  () => $useCases.bill.createRecipientAccount
+  () => $useCases.bill.createBillingInformation
     .execute({
       payload: {
         ...state,
@@ -165,7 +165,7 @@ const { status, execute } = await useAsyncData(
   })
 
 const handleCreateRecipientAccount
-  = async (event: FormSubmitEvent<InferedRecipientAccountsSchema>) => {
+  = async (event: FormSubmitEvent<InferedBillingInformationSchema>) => {
     event.preventDefault()
     await execute()
 
