@@ -16,6 +16,8 @@ import type { ICheckoutBillRequest, ICheckoutBillResponse } from '~~/lib/common/
 import type { ICreateRecipientAccountRequest, ICreateRecipientAccountResponse } from '~~/lib/common/types/http/bill/createRecipientAccount'
 import type { IGetRecipientAccountRequest, IGetRecipientAccountResponse } from '~~/lib/common/types/http/bill/getRecipientAccounts'
 import type { ISetBillingInformationAsDefaultRequest, ISetBillingInformationAsDefaultResponse } from '~~/lib/common/types/http/bill/setBillingInformationAsDefault'
+import type { IDeleteBillingInformationRequest, IDeleteBillingInformationResponse } from '~~/lib/common/types/http/bill/deleteBillingInformation'
+import type { IUpdateBillingInformationRequest, IUpdateBillingInformationResponse } from '~~/lib/common/types/http/bill/updateBillingInformation'
 
 export class BillRepositoryImpl extends BillRepository {
   private billRemoteDataSource: BillRemoteDataSourceImpl
@@ -86,5 +88,13 @@ export class BillRepositoryImpl extends BillRepository {
 
   setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
     return this.billRemoteDataSource.setBillingInformationAsDefault(request)
+  }
+
+  override updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse> {
+    return this.billRemoteDataSource.updateBillingInformation(request)
+  }
+
+  override deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse> {
+    return this.billRemoteDataSource.deleteBillingInformation(request)
   }
 }

@@ -63,6 +63,14 @@ import type {
   ISetBillingInformationAsDefaultRequest,
   ISetBillingInformationAsDefaultResponse
 } from '../../common/types/http/bill/setBillingInformationAsDefault'
+import type {
+  IUpdateBillingInformationRequest,
+  IUpdateBillingInformationResponse
+} from '../../common/types/http/bill/updateBillingInformation'
+import type {
+  IDeleteBillingInformationRequest,
+  IDeleteBillingInformationResponse
+} from '../../common/types/http/bill/deleteBillingInformation'
 
 abstract class BillRemoteDataSource {
   abstract createBill(request: ICreateBillRequest): Promise<ICreateBillResponse>
@@ -81,6 +89,8 @@ abstract class BillRemoteDataSource {
   abstract getAllRecipientAccounts(request: IGetRecipientAccountRequest): Promise<IGetRecipientAccountResponse>
   abstract createRecipientAccount(request: ICreateRecipientAccountRequest): Promise<ICreateRecipientAccountResponse>
   abstract setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse>
+  abstract updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse>
+  abstract deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse>
 }
 
 export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
@@ -219,9 +229,26 @@ export class BillRemoteDataSourceImpl extends BillRemoteDataSource {
     return response
   }
 
-  override setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
+  setBillingInformationAsDefault(request: ISetBillingInformationAsDefaultRequest): Promise<ISetBillingInformationAsDefaultResponse> {
     const response = this.fetcher(`/bills/recipient-accounts/${request.payload.id}/set-as-default`, {
       method: 'PUT',
+      ...request.options
+    })
+    return response
+  }
+
+  updateBillingInformation(request: IUpdateBillingInformationRequest): Promise<IUpdateBillingInformationResponse> {
+    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.recipientAccount.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(request.payload.recipientAccount),
+      ...request.options
+    })
+    return response
+  }
+
+  deleteBillingInformation(request: IDeleteBillingInformationRequest): Promise<IDeleteBillingInformationResponse> {
+    const response = this.fetcher(`/bills/recipient-accounts/${request.payload.id}`, {
+      method: 'DELETE',
       ...request.options
     })
     return response
