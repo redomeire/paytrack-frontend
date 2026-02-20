@@ -27,7 +27,8 @@ export default defineNuxtConfig({
     public: {
       apiBase: '/api/v1',
       appName: 'My Nuxt App',
-      appVersion: '1.0.0'
+      appVersion: '1.0.0',
+      absoluteAPIURL: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000'
     },
     session: {
       maxAge: 60 * 60 * 24 * 15, // 15 days
@@ -37,6 +38,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   nitro: {
     routeRules: {
+      '/api/v1/auth/google/redirect': {
+        redirect: `${process.env.NUXT_PUBLIC_API_URL}/api/v1/auth/google/redirect`
+      },
       '/api/v1/**': {
         proxy: `${process.env.NUXT_PUBLIC_API_URL}/api/v1/**`
       }
