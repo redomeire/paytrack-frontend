@@ -16,11 +16,10 @@ const props = defineProps<{
   provider: 'google' | 'github'
 }>()
 
-const config = useRuntimeConfig()
-const apiUrl = config.public.apiBase
+const absoluteApiURL = useRuntimeConfig().public.absoluteAPIURL
 
 async function handleRedirect() {
-  const url = `${apiUrl}/auth/${props.provider}/redirect`
+  const url = `${absoluteApiURL}/api/v1/auth/${props.provider}/redirect`
   await navigateTo(url, {
     external: true
   })
